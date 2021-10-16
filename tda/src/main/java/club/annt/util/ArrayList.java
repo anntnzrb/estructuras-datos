@@ -96,6 +96,9 @@ public class ArrayList<E> implements List<E> {
 
         /* mover referencia */
         elems = tmpArr;
+        /* actualizar nuevo tamaño */
+        size = newCap;
+        System.out.println(size);
 
         /* Alternativa usando System.arraycopy */
         //System.arraycopy(elems, 0, tmpArr, 0, oldCap);
@@ -120,7 +123,7 @@ public class ArrayList<E> implements List<E> {
             grow();
         }
 
-        /* Desplazar los nodos originales hacia la derecha */
+        /* desplazar los nodos originales hacia la derecha */
         //noinspection ManualArrayCopy
         for (int idx = size - 1; idx >= 0; --idx) {
             elems[idx + 1] = elems[idx];
@@ -158,7 +161,7 @@ public class ArrayList<E> implements List<E> {
     }
 
     /**
-     * Inserta el elemento dado en la posición indicada. Mueve hacia la
+     * Inserta el elemento dado en la posición indicada. Desplaza hacia la
      * derecha los elementos existentes.
      * <p>
      * Complejidad: O(n)
@@ -174,17 +177,22 @@ public class ArrayList<E> implements List<E> {
             grow();
         }
 
-        for (int i = idx, newIdx = idx + 1; i < ++size; ++i, ++newIdx) {
-            elems[newIdx] = elems[i];
+        ++size;
+        /* desplazar los nodos originales hacia la derecha */
+        for (int i = idx; i < size; ++i) {
+            elems[i] = elems[i + 1];
         }
 
         // TODO
 
-        elems[idx] = e;
+        //elems[idx] = e;
     }
 
     /**
      * Elimina el primer elemento del arreglo.
+     * Desplaza hacia la izquierda los elementos mayores al índice.
+     * <p>
+     * Complejidad: O(n)
      *
      * @return el elemento eliminado
      */
@@ -193,6 +201,8 @@ public class ArrayList<E> implements List<E> {
         if (isEmpty()) { return null; }
 
         final E oldVal = elems[0];
+
+        /* desplazar los nodos originales hacia la izquierda */
         --size;
         for (int idx = 0; idx < size; ) {
             elems[idx] = elems[++idx];
@@ -207,6 +217,8 @@ public class ArrayList<E> implements List<E> {
 
     /**
      * Elimina el último elemento del arreglo.
+     * <p>
+     * Complejidad: O(1)
      *
      * @return el elemento eliminado
      */
@@ -220,14 +232,33 @@ public class ArrayList<E> implements List<E> {
         return oldVal;
     }
 
+    /**
+     * Remueve el elemento del arreglo en el índice indicado.
+     * Desplaza hacia la izquierda los elementos mayores al índice.
+     * <p>
+     * Complejidad: O(n)
+     *
+     * @param idx el índice del elemento del arreglo a remover
+     * @return el elemento que fue removido de la lista
+     */
     @Override
     public E remove(int idx) {
         checkRange(idx);
+        if (isEmpty()) { return null; }
+
+        final E oldVal = elems[idx];
+
+        /* desplazar los nodos originales hacia la izquierda */
         --size;
+        while (idx < size) {
+            elems[idx] = elems[++idx];
+        }
 
-        // TODO
+        /* actualizar último elemento a null */
+        // FIXME :: necesario?
+        elems[size] = null;
 
-        return null;
+        return oldVal;
     }
 
     /**
@@ -247,7 +278,7 @@ public class ArrayList<E> implements List<E> {
 
     /**
      * Reemplaza el elemento del arreglo en el índice indicado.
-     *
+     * <p>
      * Complejidad: O(1)
      *
      * @param idx índice del elemento a reemplazar
