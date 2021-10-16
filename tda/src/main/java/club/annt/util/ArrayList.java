@@ -65,7 +65,7 @@ public class ArrayList<E> implements List<E> {
      */
     private void checkRange(int idx) {
         if (idx >= size) {
-            throw new ArrayIndexOutOfBoundsException();
+            throw new ArrayIndexOutOfBoundsException(idx);
         }
     }
 
@@ -75,33 +75,26 @@ public class ArrayList<E> implements List<E> {
      * @return <tt>true</tt> si el arreglo está lleno
      */
     private boolean isFull() {
-        return DEFAULT_CAPACITY == size;
+        return elems.length == size;
     }
 
     /**
      * Aumenta la capacidad del arreglo, multiplica su capacidad 1.5 veces.
      */
     private void grow() {
-        /* nueva capacidad del arreglo */
         final int newCap = size + (size >> 1);
-
-        /* crear nuevo arreglo con la nueva capacidad */
         final E[] tmpArr = (E[]) new Object[newCap];
-
-        /* recorrer ambos arreglos y copiar sus elementos en mismos índices */
         //noinspection ManualArrayCopy
-        for (int i = 0; i < size; ++i) {
-            tmpArr[i] = elems[i];
+        for (int idx = 0; idx < size; ++idx) {
+            tmpArr[idx] = elems[idx];
         }
-
-        /* mover referencia */
         elems = tmpArr;
-        /* actualizar nuevo tamaño */
-        size = newCap;
-        System.out.println(size);
+
+        // FIXME :: WTF?????????????????????????????????
+        //size = newCap;
 
         /* Alternativa usando System.arraycopy */
-        //System.arraycopy(elems, 0, tmpArr, 0, oldCap);
+        //System.arraycopy(elems, 0, tmpArr, 0, size);
     }
 
     /**
