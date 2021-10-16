@@ -40,8 +40,8 @@ public class Main {
         out.println("as = " + as);
         out.println("Elemento eliminado: " + oldVal + "\n");
 
-        out.println("Agregar un elemento en el índice 3 del arreglo bs");
-        bs.add(3, 111);
-        out.println("bs = " + bs);
+        //out.println("Agregar un elemento en el índice 3 del arreglo bs");
+        //bs.add(3, 111);
+        //out.println("bs = " + bs);
     }
 }

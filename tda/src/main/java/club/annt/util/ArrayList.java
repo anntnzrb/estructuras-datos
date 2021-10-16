@@ -1,5 +1,6 @@
 package club.annt.util;
 
+@SuppressWarnings("unchecked")
 public class ArrayList<E> implements List<E> {
     /**
      * Capacidad inicial del arreglo por defecto.
@@ -10,13 +11,23 @@ public class ArrayList<E> implements List<E> {
      */
     private E[] elems;
     /**
+     * Cantidad de elementos del arreglo.
+     */
+    private int capacity;
+
+    /**
      * Cantidad de elementos presentes en el arreglo (no su capacidad).
      */
     private int size;
 
-    public ArrayList() {
-        elems = (E[]) new Object[DEFAULT_CAPACITY];
+    public ArrayList(final int minCapacity) {
+        capacity = minCapacity;
+        elems = (E[]) new Object[capacity];
         size = 0;
+    }
+
+    public ArrayList() {
+        this(DEFAULT_CAPACITY);
     }
 
     /**
@@ -41,15 +52,14 @@ public class ArrayList<E> implements List<E> {
 
     /**
      * Remueve todos los elementos del arreglo.
+     *
+     * Complejidad: O(n)
      */
     @Override
     public void clear() {
         for (int i = 0; i < size; ++i) {
             elems[i] = null;
         }
-
-        /* alternative usando streams */
-        //IntStream.range(0, size).forEach(i -> elems[i] = null);
 
         /* alternative usando Arrays.fill */
         //Arrays.fill(elems, 0);
@@ -63,7 +73,7 @@ public class ArrayList<E> implements List<E> {
      *
      * @param idx índice a verificar
      */
-    private void checkRange(int idx) {
+    private void checkRange(final int idx) {
         if (idx >= size) {
             throw new ArrayIndexOutOfBoundsException(idx);
         }
@@ -75,7 +85,7 @@ public class ArrayList<E> implements List<E> {
      * @return <tt>true</tt> si el arreglo está lleno
      */
     private boolean isFull() {
-        return elems.length == size;
+        return capacity == size;
     }
 
     /**
@@ -89,12 +99,32 @@ public class ArrayList<E> implements List<E> {
             tmpArr[idx] = elems[idx];
         }
         elems = tmpArr;
-
-        // FIXME :: WTF?????????????????????????????????
-        //size = newCap;
+        capacity = newCap;
 
         /* Alternativa usando System.arraycopy */
         //System.arraycopy(elems, 0, tmpArr, 0, size);
+    }
+
+    /**
+     * Desplaza los nodos del arreglo hacia la izquierda.
+     *
+     * @param idx índice a partir del cual se iniciará el desplazamiento
+     */
+    private void shiftLeft(int idx) {
+        while (idx < (size - 1)) {
+            elems[idx] = elems[++idx];
+        }
+    }
+
+    /**
+     * Desplaza los nodos del arreglo hacia la derecha.
+     *
+     * @param idx índice a partir del cual se iniciará el desplazamiento
+     */
+    private void shiftRight(final int idx) {
+        for (int i = size; i > idx; ) {
+            elems[i] = elems[--i];
+        }
     }
 
     /**
@@ -106,7 +136,7 @@ public class ArrayList<E> implements List<E> {
      * @return <tt>true</tt> si se agregó satisfactoriamente
      */
     @Override
-    public boolean addFirst(E e) {
+    public boolean addFirst(final E e) {
         if (e == null) {
             return false;
         } else if (isEmpty()) {
@@ -117,17 +147,14 @@ public class ArrayList<E> implements List<E> {
         }
 
         /* desplazar los nodos originales hacia la derecha */
-        //noinspection ManualArrayCopy
-        for (int idx = size - 1; idx >= 0; --idx) {
-            elems[idx + 1] = elems[idx];
-        }
+        shiftRight(0);
+        ++size;
 
         /* Alternativa usando System.arraycopy */
         //System.arraycopy(elems, 0, elems, 1, size - 1 + 1);
 
         /* Insertar el elemento en el primer índice & actualizar tamaño */
         elems[0] = e;
-        ++size;
 
         return true;
     }
@@ -141,7 +168,7 @@ public class ArrayList<E> implements List<E> {
      * @return <tt>true</tt> si se agregó satisfactoriamente
      */
     @Override
-    public boolean addLast(E e) {
+    public boolean addLast(final E e) {
         if (e == null) {
             return false;
         } else if (isFull()) {
@@ -163,7 +190,7 @@ public class ArrayList<E> implements List<E> {
      * @param e   elemento a ser insertado
      */
     @Override
-    public void add(int idx, E e) {
+    public void add(final int idx, final E e) {
         checkRange(idx);
 
         if (isFull()) {
@@ -172,13 +199,9 @@ public class ArrayList<E> implements List<E> {
 
         ++size;
         /* desplazar los nodos originales hacia la derecha */
-        for (int i = idx; i < size; ++i) {
-            elems[i] = elems[i + 1];
-        }
+        shiftRight(idx);
 
-        // TODO
-
-        //elems[idx] = e;
+        elems[idx] = e;
     }
 
     /**
@@ -197,9 +220,7 @@ public class ArrayList<E> implements List<E> {
 
         /* desplazar los nodos originales hacia la izquierda */
         --size;
-        for (int idx = 0; idx < size; ) {
-            elems[idx] = elems[++idx];
-        }
+        shiftLeft(0);
 
         /* actualizar último elemento a null */
         // FIXME :: necesario?
@@ -235,7 +256,7 @@ public class ArrayList<E> implements List<E> {
      * @return el elemento que fue removido de la lista
      */
     @Override
-    public E remove(int idx) {
+    public E remove(final int idx) {
         checkRange(idx);
         if (isEmpty()) { return null; }
 
@@ -243,9 +264,7 @@ public class ArrayList<E> implements List<E> {
 
         /* desplazar los nodos originales hacia la izquierda */
         --size;
-        while (idx < size) {
-            elems[idx] = elems[++idx];
-        }
+        shiftLeft(idx);
 
         /* actualizar último elemento a null */
         // FIXME :: necesario?
@@ -263,7 +282,7 @@ public class ArrayList<E> implements List<E> {
      * @return el elemento del arreglo en la posición indicada
      */
     @Override
-    public E get(int idx) {
+    public E get(final int idx) {
         checkRange(idx);
 
         return elems[idx];
@@ -279,7 +298,7 @@ public class ArrayList<E> implements List<E> {
      * @return el elemento previo a ser reemplazado
      */
     @Override
-    public E set(int idx, E e) {
+    public E set(final int idx, final E e) {
         checkRange(idx);
 
         final E oldVal = elems[idx];
