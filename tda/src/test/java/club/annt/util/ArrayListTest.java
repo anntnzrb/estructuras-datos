@@ -2,13 +2,12 @@ package club.annt.util;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class ArrayListTest {
 
     @Test
-    void keepOnly() {
+    void testKeepOnly() {
         /*
         Implemente el método keepOnly (int from, int to) de la clase ArrayList. El
         método debe modificar al ArrayList que lo invoca manteniendo únicamente a
@@ -59,5 +58,45 @@ class ArrayListTest {
 
         assertTrue(xs.keepOnly(1, 3));
         assertFalse(ys.keepOnly(3, 1));
+    }
+
+    /**
+     * ["foo", "bar", "baz", "qux"]
+     * ==> reverse()
+     * ["qux", "baz", "bar", "foo"]
+     */
+    @Test
+    void testReverse() {
+        final List<String> xs = new ArrayList<>();
+        xs.addLast("foo");
+        xs.addLast("bar");
+        xs.addLast("baz");
+        xs.addLast("qux");
+        xs.reverse();
+
+        final List<String> ys = new ArrayList<>();
+        ys.addLast("qux");
+        ys.addLast("baz");
+        ys.addLast("bar");
+        ys.addLast("foo");
+
+        assertEquals(xs, ys);
+    }
+
+    @Test
+    void testToString() {
+        final List<Integer> xs = new ArrayList<>();
+        xs.addLast(1);
+        xs.addLast(2);
+        xs.addLast(3);
+
+        final List<Integer> ys = new ArrayList<>();
+        ys.addLast(0);
+
+        final List<Integer> zs = new ArrayList<>();
+
+        assertEquals("[1, 2, 3]", xs.toString());
+        assertEquals("[0]", ys.toString());
+        assertEquals("[]", zs.toString());
     }
 }

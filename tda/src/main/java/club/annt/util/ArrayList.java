@@ -1,5 +1,7 @@
 package club.annt.util;
 
+import java.util.Arrays;
+
 @SuppressWarnings("unchecked")
 public class ArrayList<E> implements List<E> {
     /**
@@ -307,7 +309,6 @@ public class ArrayList<E> implements List<E> {
         return oldVal;
     }
 
-
     /**
      * Modificado el arreglo dejando únicamente los elementos en el rango
      * proporcionado.
@@ -338,16 +339,56 @@ public class ArrayList<E> implements List<E> {
         return true;
     }
 
+    /**
+     * Invierte el orden de los elementos del arreglo.
+     * <p>
+     * Complejidad: O(n/2)
+     */
+    public void reverse() {
+        if (!isEmpty()) {
+            reverse(0, size - 1);
+        }
+    }
+
+    private void reverse(int i, int j) {
+        checkRange(i);
+        checkRange(j);
+
+        if (j >= i) {
+            final E tmp = elems[i];
+            elems[i] = elems[j];
+            elems[j] = tmp;
+            reverse(++i, --j);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) { return true; }
+        if (o == null || getClass() != o.getClass()) { return false; }
+        final ArrayList<?> arr = (ArrayList<?>) o;
+        return capacity == arr.capacity && size == arr.size
+                && Arrays.equals(elems, arr.elems);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String toString() {
         final StringBuilder str = new StringBuilder();
 
         str.append("[");
-        for (int idx = 0; idx < size; ++idx) {
-            if (idx != (size - 1)) {
-                str.append(elems[idx]).append(", ");
-            } else {
-                str.append(elems[idx]);
+        if (!isEmpty()) {
+            for (int idx = 0; idx < size; ++idx) {
+                if (idx != (size - 1)) {
+                    str.append(elems[idx]).append(", ");
+                } else {
+                    str.append(elems[idx]);
+                }
             }
         }
         str.append("]");

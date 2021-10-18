@@ -24,4 +24,6 @@ public interface List<E> {
     E set(int idx, E e);
 
     boolean keepOnly(final int from, final int to);
+
+    void reverse();
 }
