@@ -112,10 +112,14 @@ public class ArrayList<E> implements List<E> {
      *
      * @param idx índice a partir del cual se iniciará el desplazamiento
      */
-    private void shiftLeft(int idx) {
-        while (idx < (size - 1)) {
-            elems[idx] = elems[++idx];
-        }
+    private void shiftLeft(final int idx) {
+        --size;
+        System.arraycopy(elems, idx + 1, elems, idx, size - idx);
+
+        /* implementación imperativa (menos eficiente) */
+        //for (int i = idx; i < size; i++) {
+        //    elems[i] = elems[i + 1];
+        //}
     }
 
     /**
@@ -124,9 +128,14 @@ public class ArrayList<E> implements List<E> {
      * @param idx índice a partir del cual se iniciará el desplazamiento
      */
     private void shiftRight(final int idx) {
-        for (int i = size; i > idx; ) {
-            elems[i] = elems[--i];
-        }
+        ++size;
+        System.arraycopy(elems, idx, elems, idx + 1, size - idx);
+
+        /* implementación imperativa (menos eficiente) */
+        //for (int i = (size - 1); i >= idx; --i) {
+        //    elems[i + 1] = elems[i];
+        //}
+
     }
 
     /**
@@ -150,7 +159,6 @@ public class ArrayList<E> implements List<E> {
 
         /* desplazar los nodos originales hacia la derecha */
         shiftRight(0);
-        ++size;
 
         /* Alternativa usando System.arraycopy */
         //System.arraycopy(elems, 0, elems, 1, size - 1 + 1);
@@ -199,7 +207,6 @@ public class ArrayList<E> implements List<E> {
             grow();
         }
 
-        ++size;
         /* desplazar los nodos originales hacia la derecha */
         shiftRight(idx);
 
@@ -221,7 +228,6 @@ public class ArrayList<E> implements List<E> {
         final E oldVal = elems[0];
 
         /* desplazar los nodos originales hacia la izquierda */
-        --size;
         shiftLeft(0);
 
         /* actualizar último elemento a null */
@@ -265,7 +271,6 @@ public class ArrayList<E> implements List<E> {
         final E oldVal = elems[idx];
 
         /* desplazar los nodos originales hacia la izquierda */
-        --size;
         shiftLeft(idx);
 
         /* actualizar último elemento a null */
@@ -350,7 +355,7 @@ public class ArrayList<E> implements List<E> {
         }
     }
 
-    private void reverse(int i, int j) {
+    private void reverse(final int i, final int j) {
         checkRange(i);
         checkRange(j);
 
@@ -358,7 +363,7 @@ public class ArrayList<E> implements List<E> {
             final E tmp = elems[i];
             elems[i] = elems[j];
             elems[j] = tmp;
-            reverse(++i, --j);
+            reverse(i + 1, j - 1);
         }
     }
 
@@ -366,7 +371,7 @@ public class ArrayList<E> implements List<E> {
      * {@inheritDoc}
      */
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) { return true; }
         if (o == null || getClass() != o.getClass()) { return false; }
         final ArrayList<?> arr = (ArrayList<?>) o;
@@ -385,11 +390,31 @@ public class ArrayList<E> implements List<E> {
         if (!isEmpty()) {
             for (int idx = 0; idx < size; ++idx) {
                 str.append(elems[idx])
-                   .append((idx != (size - 1)) ? ", " : "");
+                   .append(idx != (size - 1) ? ", " : "");
             }
         }
         str.append("]");
 
         return str.toString();
+    }
+
+    @Override
+    public void insertAt(final List<E> xs, final int idx) {
+        checkRange(idx);
+
+        /* incrementar capacidad si es necesario */
+        final int xsSize = xs.size();
+        while (capacity < (xsSize + size)) {
+            grow();
+        }
+        size += xsSize;
+
+        for (int i = size; i - xsSize >= idx; --i) {
+            elems[i] = elems[i - xsSize];
+        }
+
+        for (int i = 0; i < xsSize; ++i) {
+            elems[idx + i] = xs.get(i);
+        }
     }
 }
