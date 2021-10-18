@@ -22,4 +22,6 @@ public interface List<E> {
     E get(int idx);
 
     E set(int idx, E e);
+
+    boolean keepOnly(final int from, final int to);
 }

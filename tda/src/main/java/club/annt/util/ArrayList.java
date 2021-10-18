@@ -52,7 +52,7 @@ public class ArrayList<E> implements List<E> {
 
     /**
      * Remueve todos los elementos del arreglo.
-     *
+     * <p>
      * Complejidad: O(n)
      */
     @Override
@@ -305,6 +305,37 @@ public class ArrayList<E> implements List<E> {
         elems[idx] = e;
 
         return oldVal;
+    }
+
+
+    /**
+     * Modificado el arreglo dejando únicamente los elementos en el rango
+     * proporcionado.
+     *
+     * @param from posición desde donde tomar los elementos del arreglo
+     * @param to   posición hasta donde tomar los elementos del arreglo
+     * @return {@code true} sí se realizó la operación correctamente
+     */
+    public boolean keepOnly(final int from, final int to) {
+        checkRange(from - 1);
+        checkRange(to - 1);
+        if (to < from) {
+            return false;
+        }
+
+        final int diffRange = to - from;
+        for (int i = 0, init = from; i <= diffRange; ++i, ++init) {
+            elems[i] = elems[init - 1];
+        }
+
+        for (int idx = to; idx < size; ++idx) {
+            elems[idx] = null;
+        }
+
+        /* actualizar tamaño */
+        size = diffRange + 1;
+
+        return true;
     }
 
     @Override
