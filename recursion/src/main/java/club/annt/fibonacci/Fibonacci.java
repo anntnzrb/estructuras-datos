@@ -8,13 +8,11 @@ public class Fibonacci {
      * @param n -ésimo elemento de la secuencia Fibonacci
      * @return El elemento n de la secuencia Fibonacci
      */
-    static long fibonacci(long n) {
-        if (n == 1) {
-            return 0;
-        } else if (n == 2) {
-            return 1;
-        } else {
-            return fibonacci(n - 1) + fibonacci(n - 2);
-        }
+    static long fibonacciNaive(long n) {
+        return n == 1
+                ? 0
+                : n == 2
+                ? 1
+                : fibonacciNaive(n - 1) + fibonacciNaive(n - 2);
     }
 }
