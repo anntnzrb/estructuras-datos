@@ -384,11 +384,8 @@ public class ArrayList<E> implements List<E> {
         str.append("[");
         if (!isEmpty()) {
             for (int idx = 0; idx < size; ++idx) {
-                if (idx != (size - 1)) {
-                    str.append(elems[idx]).append(", ");
-                } else {
-                    str.append(elems[idx]);
-                }
+                str.append(elems[idx])
+                   .append((idx != (size - 1)) ? ", " : "");
             }
         }
         str.append("]");
