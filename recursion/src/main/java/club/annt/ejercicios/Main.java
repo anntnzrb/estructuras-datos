@@ -25,13 +25,13 @@ public class Main {
      * @return cantidad de ocurrencias del número solicitado
      */
     public static int contarOcurrencias(final List<Integer> xs, final int num,
-                                        int idx) {
+                                        final int idx) {
         if (idx >= xs.size()) {
             return 0;
         } else if (xs.get(idx).equals(num)) {
-            return 1 + contarOcurrencias(xs, num, ++idx);
+            return 1 + contarOcurrencias(xs, num, idx + 1);
         } else {
-            return contarOcurrencias(xs, num, ++idx);
+            return contarOcurrencias(xs, num, idx + 1);
         }
     }
 
@@ -65,16 +65,16 @@ public class Main {
      * @param exp número exponente
      * @return resultado de la operación {@code num}<sup>{@code exp}</sup>
      */
-    public static float potencia(final float num, int exp) {
+    public static float potencia(final float num, final int exp) {
         if (exp == 1) {
             return num;
         } else if (exp == 0) {
             return 1;
         } else if (exp < 0) {
-            return potencia(num, ++exp) / num;
+            return potencia(num, exp + 1) / num;
         }
 
-        return potencia(num, --exp) * num;
+        return potencia(num, exp - 1) * num;
     }
 
     /**
@@ -86,7 +86,7 @@ public class Main {
      * @param idx índice por el cual se empieza la búsqueda
      */
     public static void booleanArray(final List<Integer> xs, final int num,
-                                    int idx) {
+                                    final int idx) {
         if (xs.size() > 0 && xs.size() > idx) {
             if (xs.get(idx) < num) {
                 xs.set(idx, 0);
@@ -94,7 +94,7 @@ public class Main {
                 xs.set(idx, 1);
             }
 
-            booleanArray(xs, num, ++idx);
+            booleanArray(xs, num, idx + 1);
         }
     }
 
@@ -104,25 +104,6 @@ public class Main {
     public static void booleanArray(final List<Integer> xs, final int num) {
         booleanArray(xs, num, 0);
     }
-
-    /*
-     * Buscar si un arreglo contiene un número.
-     * [1,2,3,4]
-     * 0 1 2 3
-     * \ i j
-     * j i -> parar el algoritmo
-     * [1,2,3,4,5]
-     * \0 1 2 3 4
-     * \    ij
-     * <p>
-     * Contiene al 1 -> true
-     * contiene al 4 -> false
-     * Casos Base:
-     * [] y se acabó el arreglo -> falso
-     * [1] busca 1 -> true
-     * [2] busca 1 -> false
-     * [2,1,1,1,1] busca 1 -> true
-     */
 
     /**
      * Buscar si un arreglo contiene un número.
@@ -151,14 +132,14 @@ public class Main {
      * @return {@code true} sí el número está presente en el arreglo
      */
     public static boolean buscarNumV1(final List<Integer> xs, final int num,
-                                      int idx) {
+                                      final int idx) {
         if (xs.size() == 0 || xs.size() <= idx) {
             return false;
         } else if (xs.get(idx) == num) {
             return true;
         }
 
-        return buscarNumV1(xs, num, ++idx);
+        return buscarNumV1(xs, num, idx + 1);
     }
 
     /**
@@ -175,12 +156,12 @@ public class Main {
      * - Complejidad: O(n/2)
      */
     public static boolean buscarNumV2(final List<Integer> xs, final int num,
-                                      int idx) {
+                                      final int idx) {
         int fdx = xs.size() - 1 - idx; /* 2do índice */
         if (fdx >= idx) {
             return xs.get(idx) == num
                     || xs.get(fdx) == num
-                    || buscarNumV2(xs, num, ++idx);
+                    || buscarNumV2(xs, num, idx + 1);
         }
 
         return false;
