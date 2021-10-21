@@ -68,8 +68,9 @@ public class ArrayList<E> implements List<E> {
     }
 
     /**
-     * Verifica si el índice se encuentra en el rango del arreglo.
-     * Este método se emplea previamente al acceso de un arreglo.
+     * Verifica si el índice se encuentra en el rango de la colección.
+     * Este método se emplea previamente a cualquier función que accede a
+     * los índices de una colección.
      *
      * @param idx índice a verificar
      */
@@ -206,12 +207,9 @@ public class ArrayList<E> implements List<E> {
     }
 
     /**
-     * Elimina el primer elemento del arreglo.
-     * Desplaza hacia la izquierda los elementos mayores al índice.
+     * {@inheritDoc}
      * <p>
      * Complejidad: O(n)
-     *
-     * @return el elemento eliminado
      */
     @Override
     public final E removeFirst() {
@@ -230,11 +228,9 @@ public class ArrayList<E> implements List<E> {
     }
 
     /**
-     * Elimina el último elemento del arreglo.
+     * {@inheritDoc}
      * <p>
      * Complejidad: O(1)
-     *
-     * @return el elemento eliminado
      */
     @Override
     public final E removeLast() {
@@ -247,13 +243,9 @@ public class ArrayList<E> implements List<E> {
     }
 
     /**
-     * Remueve el elemento del arreglo en el índice indicado.
-     * Desplaza hacia la izquierda los elementos mayores al índice.
+     * {@inheritDoc}
      * <p>
      * Complejidad: O(n)
-     *
-     * @param idx el índice del elemento del arreglo a remover
-     * @return el elemento que fue removido de la lista
      */
     @Override
     public final E remove(final int idx) {
@@ -273,12 +265,9 @@ public class ArrayList<E> implements List<E> {
     }
 
     /**
-     * Retorna el elemento del arreglo a partir del índice indicado.
+     * {@inheritDoc}
      * <p>
      * Complejidad: O(1)
-     *
-     * @param idx índice del elemento a retornar
-     * @return el elemento del arreglo en la posición indicada
      */
     @Override
     public final E get(final int idx) {

@@ -39,12 +39,36 @@ public interface List<E> {
 
     void add(final int idx, final E e);
 
+    /**
+     * Elimina el primer elemento del arreglo.
+     * Desplaza hacia la izquierda los elementos mayores al índice.
+     *
+     * @return el elemento eliminado
+     */
     E removeFirst();
 
+    /**
+     * Elimina el último elemento del arreglo.
+     *
+     * @return el elemento eliminado
+     */
     E removeLast();
 
+    /**
+     * Remueve el elemento del arreglo en el índice indicado.
+     * Desplaza hacia la izquierda los elementos mayores al índice.
+     *
+     * @param idx el índice del elemento del arreglo a remover
+     * @return el elemento que fue removido de la lista
+     */
     E remove(final int idx);
 
+    /**
+     * Retorna el elemento de la colección a partir del índice indicado.
+     *
+     * @param idx índice del elemento a retornar
+     * @return el elemento del arreglo en la posición indicada
+     */
     E get(final int idx);
 
     E set(final int idx, final E e);
