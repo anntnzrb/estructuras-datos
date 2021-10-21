@@ -33,32 +33,30 @@ public class ArrayList<E> implements List<E> {
     }
 
     /**
-     * Retorna el número de elementos en el arreglo.
-     *
-     * @return el número de elementos en el arreglo
+     * {@inheritDoc}
      */
     @Override
-    public int size() {
+    public final int size() {
         return size;
     }
 
     /**
-     * Verifica si el arreglo no contiene elementos.
-     *
-     * @return <tt>true</tt> si el arreglo no contiene elementos
+     * {@inheritDoc}
+     * <p>
+     * Complejidad: O(1)
      */
     @Override
-    public boolean isEmpty() {
+    public final boolean isEmpty() {
         return size == 0;
     }
 
     /**
-     * Remueve todos los elementos del arreglo.
+     * {@inheritDoc}
      * <p>
      * Complejidad: O(n)
      */
     @Override
-    public void clear() {
+    public final void clear() {
         for (int i = 0; i < size; ++i) {
             elems[i] = null;
         }
@@ -84,7 +82,7 @@ public class ArrayList<E> implements List<E> {
     /**
      * Verifica si el arreglo está lleno.
      *
-     * @return <tt>true</tt> si el arreglo está lleno
+     * @return {@code true} si el arreglo está lleno
      */
     private boolean isFull() {
         return capacity == size;
@@ -139,15 +137,12 @@ public class ArrayList<E> implements List<E> {
     }
 
     /**
-     * Agrega el elemento especificado al principio del arreglo.
+     * {@inheritDoc}
      * <p>
      * Complejidad: O(n)
-     *
-     * @param e elemento a ser agregado al arreglo
-     * @return <tt>true</tt> si se agregó satisfactoriamente
      */
     @Override
-    public boolean addFirst(final E e) {
+    public final boolean addFirst(final E e) {
         if (e == null) {
             return false;
         } else if (isEmpty()) {
@@ -170,15 +165,12 @@ public class ArrayList<E> implements List<E> {
     }
 
     /**
-     * Agrega el elemento especificado al final del arreglo.
+     * {@inheritDoc}
      * <p>
      * Complejidad: O(1)
-     *
-     * @param e elemento a ser agregado al arreglo
-     * @return <tt>true</tt> si se agregó satisfactoriamente
      */
     @Override
-    public boolean addLast(final E e) {
+    public final boolean addLast(final E e) {
         if (e == null) {
             return false;
         } else if (isFull()) {
@@ -222,7 +214,7 @@ public class ArrayList<E> implements List<E> {
      * @return el elemento eliminado
      */
     @Override
-    public E removeFirst() {
+    public final E removeFirst() {
         if (isEmpty()) { return null; }
 
         final E oldVal = elems[0];
@@ -245,7 +237,7 @@ public class ArrayList<E> implements List<E> {
      * @return el elemento eliminado
      */
     @Override
-    public E removeLast() {
+    public final E removeLast() {
         if (isEmpty()) { return null; }
 
         final E oldVal = elems[--size];
@@ -264,7 +256,7 @@ public class ArrayList<E> implements List<E> {
      * @return el elemento que fue removido de la lista
      */
     @Override
-    public E remove(final int idx) {
+    public final E remove(final int idx) {
         checkRange(idx);
         if (isEmpty()) { return null; }
 
@@ -289,7 +281,7 @@ public class ArrayList<E> implements List<E> {
      * @return el elemento del arreglo en la posición indicada
      */
     @Override
-    public E get(final int idx) {
+    public final E get(final int idx) {
         checkRange(idx);
 
         return elems[idx];
@@ -305,7 +297,7 @@ public class ArrayList<E> implements List<E> {
      * @return el elemento previo a ser reemplazado
      */
     @Override
-    public E set(final int idx, final E e) {
+    public final E set(final int idx, final E e) {
         checkRange(idx);
 
         final E oldVal = elems[idx];
@@ -315,14 +307,11 @@ public class ArrayList<E> implements List<E> {
     }
 
     /**
-     * Modificado el arreglo dejando únicamente los elementos en el rango
-     * proporcionado.
-     *
-     * @param from posición desde donde tomar los elementos del arreglo
-     * @param to   posición hasta donde tomar los elementos del arreglo
-     * @return {@code true} sí se realizó la operación correctamente
+     * {@inheritDoc}
+     * <p>
+     * Complejidad: O(n)
      */
-    public boolean keepOnly(final int from, final int to) {
+    public final boolean keepOnly(final int from, final int to) {
         checkRange(from - 1);
         checkRange(to - 1);
         if (to < from) {
@@ -349,7 +338,7 @@ public class ArrayList<E> implements List<E> {
      * <p>
      * Complejidad: O(n/2)
      */
-    public void reverse() {
+    public final void reverse() {
         if (!isEmpty()) {
             reverse(0, size - 1);
         }
@@ -368,38 +357,14 @@ public class ArrayList<E> implements List<E> {
     }
 
     /**
-     * {@inheritDoc}
+     * Inserta la colección {@code xs} en el índice especificado.
+     *
+     * @param xs  colleción a ser agregada
+     * @param idx índice donde hacer la inserción
+     * @return la lista modificada
      */
     @Override
-    public boolean equals(final Object o) {
-        if (this == o) { return true; }
-        if (o == null || getClass() != o.getClass()) { return false; }
-        final ArrayList<?> arr = (ArrayList<?>) o;
-        return capacity == arr.capacity && size == arr.size
-                && Arrays.equals(elems, arr.elems);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String toString() {
-        final StringBuilder str = new StringBuilder();
-
-        str.append("[");
-        if (!isEmpty()) {
-            for (int idx = 0; idx < size; ++idx) {
-                str.append(elems[idx])
-                   .append(idx != (size - 1) ? ", " : "");
-            }
-        }
-        str.append("]");
-
-        return str.toString();
-    }
-
-    @Override
-    public void insertAt(final List<E> xs, final int idx) {
+    public final List<E> insertAt(final List<E> xs, final int idx) {
         checkRange(idx);
 
         /* incrementar capacidad si es necesario */
@@ -409,12 +374,49 @@ public class ArrayList<E> implements List<E> {
         }
         size += xsSize;
 
+        /* desplazar los elementos hacia la derecha */
         for (int i = size; i - xsSize >= idx; --i) {
             elems[i] = elems[i - xsSize];
         }
 
+        /* insertar elementos de una colección en otra */
         for (int i = 0; i < xsSize; ++i) {
             elems[idx + i] = xs.get(i);
         }
+
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public final boolean equals(final Object o) {
+        if (this == o) { return true; }
+        if (o == null || getClass() != o.getClass()) { return false; }
+        final ArrayList<?> arr = (ArrayList<?>) o;
+        return capacity == arr.capacity && size == arr.size
+                && Arrays.equals(elems, arr.elems);
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Complejidad: O(n)
+     */
+    public final String toString() {
+        final StringBuilder str = new StringBuilder();
+
+        str.append("[");
+        for (int idx = 0; idx < size; ++idx) {
+            if (idx != (size - 1)) {
+                str.append(elems[idx]).append(", ");
+            } else {
+                str.append(elems[idx]);
+            }
+        }
+        str.append("]");
+
+        return str.toString();
     }
 }
