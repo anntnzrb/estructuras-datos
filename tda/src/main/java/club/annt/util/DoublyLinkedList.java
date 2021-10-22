@@ -15,9 +15,17 @@ public class DoublyLinkedList<E> implements List<E> {
         first = last = null;
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Complejidad: O(n)
+     */
     @Override
-    public int size() {
-        return 0;
+    public final int size() {
+        int count = 0;
+        for (Node<E> n = first; n != null; n = n.next, ++count) ;
+
+        return count;
     }
 
     /**
@@ -49,6 +57,46 @@ public class DoublyLinkedList<E> implements List<E> {
     }
 
     /**
+     * Retorna el nodo en el índice indicado.
+     * <p>
+     * Complejidad: O(n)
+     *
+     * @param idx índice del nodo a buscar
+     * @return nodo en el índice indicado
+     */
+    private Node<E> node(final int idx) {
+        checkRange(idx);
+
+        /* reducir complejidad */
+        if (isEmpty()) {
+            return null;
+        } else if (idx == 0) {
+            return first;
+        } else if (idx == (this.size() - 1)) {
+            return last;
+        }
+
+        /* índice menor que mitad de colección -> buscar desde inicio
+         * caso contrario -> buscar desde el final
+         */
+        Node<E> n;
+        final int size = this.size();
+        if (idx < (size >> 1)) {
+            n = first;
+            for (int i = 0; i < idx; ++i) {
+                n = n != null ? n.next : null;
+            }
+        } else {
+            n = last;
+            for (int i = (size - 1); i > idx; --i) {
+                n = n != null ? n.prev : null;
+            }
+        }
+
+        return n;
+    }
+
+    /**
      * {@inheritDoc}
      * <p>
      * Complejidad: O(1)
@@ -59,9 +107,18 @@ public class DoublyLinkedList<E> implements List<E> {
             return false;
         }
 
+        /* newNode === newFirst */
         final Node<E> newNode = new Node<>(e);
-        first.prev = newNode;
+
+        if (isEmpty()) {
+            first = last = newNode;
+            return true;
+        }
+
         newNode.next = first;
+        //isEmpty() se encarga si first == null
+        //noinspection ConstantConditions
+        first.prev = newNode;
         first = newNode;
 
         return true;
@@ -78,7 +135,14 @@ public class DoublyLinkedList<E> implements List<E> {
             return false;
         }
 
+        /* newNode === newLast */
         final Node<E> newNode = new Node<>(e);
+
+        if (isEmpty()) {
+            first = last = newNode;
+            return true;
+        }
+
         newNode.prev = last;
         last.next = newNode;
         last = newNode;
@@ -86,6 +150,11 @@ public class DoublyLinkedList<E> implements List<E> {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Complejidad: O(n)
+     */
     @Override
     public final void add(final int idx, final E e) {
         checkRange(idx);
@@ -103,7 +172,7 @@ public class DoublyLinkedList<E> implements List<E> {
 
         final Node<E> newNode = new Node<>(e);
         Node<E> p = first;
-        for (int i = 0; i < idx; ++i) {
+        for (int i = 1; i < idx; ++i) {
             p = p.next;
         }
 
@@ -111,27 +180,100 @@ public class DoublyLinkedList<E> implements List<E> {
         newNode.next = p.next;
         p.next = newNode;
         newNode.next.prev = newNode;
-
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Complejidad: O(1)
+     */
     @Override
-    public E removeFirst() {
-        return null;
+    public final E removeFirst() {
+        if (isEmpty()) {
+            return null;
+        } else if (first == last) {
+            first.item = null;
+            first = last = null;
+
+            return null;
+        }
+
+        final E oldVal = first.item;
+        final Node<E> newFirst = first.next;
+        first.item = null;
+        first.next = null;
+        first = newFirst;
+        newFirst.prev = null;
+
+        return oldVal;
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Complejidad: O(1)
+     */
     @Override
-    public E removeLast() {
-        return null;
+    public final E removeLast() {
+        if (isEmpty()) {
+            return null;
+        } else if (first == last) {
+            first.item = null;
+            first = last = null;
+
+            return null;
+        }
+
+        final E oldVal = last.item;
+        final Node<E> newLast = last.prev;
+        last.item = null;
+        last.prev = null;
+        last = newLast;
+        newLast.next = null;
+
+        return oldVal;
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Complejidad: O(n)
+     */
     @Override
-    public E remove(int idx) {
-        return null;
+    public final E remove(final int idx) {
+        checkRange(idx);
+
+        if (isEmpty()) {
+            return null;
+            /* removeFirst() y removeLast() tienen complejidad O(1) */
+        } else if (idx == 0) {
+            removeFirst();
+        } else if (idx == (this.size() - 1)) {
+            removeLast();
+        }
+
+        Node<E> p = first;
+        for (int i = 0; i < idx; ++i) {
+            p = p.next;
+        }
+        p.prev.next = p.next;
+        p.next.prev = p.prev;
+        p.prev = null;
+        p.next = null;
+
+        return p.item;
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Complejidad: O(n)
+     */
     @Override
-    public E get(int idx) {
-        return null;
+    public final E get(final int idx) {
+        checkRange(idx);
+
+        return node(idx).item;
     }
 
     @Override
@@ -152,6 +294,29 @@ public class DoublyLinkedList<E> implements List<E> {
     @Override
     public List<E> insertAt(List<E> xs, int idx) {
         return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Complejidad: O(n)
+     */
+    public final String toString() {
+        final StringBuilder str = new StringBuilder();
+
+        str.append("[");
+        if (!isEmpty()) {
+            for (Node<E> n = first; n != null; n = n.next) {
+                if (n != last) {
+                    str.append(n.item).append(", ");
+                } else {
+                    str.append(n.item);
+                }
+            }
+        }
+        str.append("]");
+
+        return str.toString();
     }
 
     /**
@@ -179,4 +344,5 @@ public class DoublyLinkedList<E> implements List<E> {
             this.next = next;
         }
     }
+
 }

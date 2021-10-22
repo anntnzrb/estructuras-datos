@@ -23,9 +23,7 @@ public class LinkedList<E> implements List<E> {
     @Override
     public final int size() {
         int count = 0;
-        for (Node<E> x = first; x != null; x = x.next) {
-            ++count;
-        }
+        for (Node<E> n = first; n != null; n = n.next, ++count) ;
 
         return count;
     }

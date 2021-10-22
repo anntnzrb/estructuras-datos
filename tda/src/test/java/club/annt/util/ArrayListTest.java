@@ -151,10 +151,11 @@ class ArrayListTest {
         xs.addLast(5);
         xs.addLast(6);
 
+        assertEquals(6, xs.size());
         assertNotEquals(xs.get(2), 11);
-        xs.set(2, 11);
+        xs.add(2, 11);
+        assertEquals(7, xs.size());
         assertEquals(xs.get(2), 11);
-
     }
 
     @Test
@@ -175,5 +176,41 @@ class ArrayListTest {
         IntStream.rangeClosed(0, 1000)
                  .forEach(xs::addLast);
         assertTrue(xs.size() > 1000);
+    }
+
+    @Test
+    void testRemove() {
+        final List<Integer> xs = new ArrayList<>();
+        IntStream.rangeClosed(0, 6)
+                 .forEach(xs::addLast);
+
+        assertEquals(7, xs.size());
+        int rmVal = xs.remove(3);
+        assertEquals(6, xs.size());
+        assertEquals(3, rmVal);
+    }
+
+    @Test
+    void testRemoveFirst() {
+        final List<Integer> xs = new ArrayList<>();
+        IntStream.rangeClosed(0, 6)
+                 .forEach(xs::addLast);
+
+        assertEquals(7, xs.size());
+        int rmVal = xs.removeFirst();
+        assertEquals(6, xs.size());
+        assertEquals(0, rmVal);
+    }
+
+    @Test
+    void testRemoveLast() {
+        final List<Integer> xs = new ArrayList<>();
+        IntStream.rangeClosed(0, 6)
+                 .forEach(xs::addLast);
+
+        assertEquals(7, xs.size());
+        int rmVal = xs.removeLast();
+        assertEquals(6, xs.size());
+        assertEquals(6, rmVal);
     }
 }
