@@ -37,6 +37,13 @@ public interface List<E> {
      */
     boolean addLast(final E e);
 
+    /**
+     * Inserta el elemento dado en la posición indicada. Desplaza hacia la
+     * derecha los elementos existentes.
+     *
+     * @param idx indice al cual el elemento será insertado
+     * @param e   elemento a ser insertado
+     */
     void add(final int idx, final E e);
 
     /**

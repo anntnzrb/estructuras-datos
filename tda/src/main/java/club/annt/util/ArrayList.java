@@ -184,13 +184,9 @@ public class ArrayList<E> implements List<E> {
     }
 
     /**
-     * Inserta el elemento dado en la posición indicada. Desplaza hacia la
-     * derecha los elementos existentes.
+     * {@inheritDoc}
      * <p>
      * Complejidad: O(n)
-     *
-     * @param idx indice al cual el elemento será insertado
-     * @param e   elemento a ser insertado
      */
     @Override
     public void add(final int idx, final E e) {

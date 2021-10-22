@@ -122,6 +122,11 @@ public class LinkedList<E> implements List<E> {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Complejidad: ???
+     */
     @Override
     public final void add(final int idx, final E e) {
 
@@ -315,8 +320,8 @@ public class LinkedList<E> implements List<E> {
             this(null, null);
         }
 
-        public Node(final E item) {
-            this(item, null);
+        public Node(final E elem) {
+            this(elem, null);
         }
 
         public Node(final E item, final Node<E> next) {
