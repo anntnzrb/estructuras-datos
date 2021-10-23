@@ -26,6 +26,14 @@ public class DoublyCircularLinkedList<E> implements List<E> {
         last.next = n;
     }
 
+    private Node<E> getLast() {
+        return last;
+    }
+
+    private void setLast(final Node<E> n) {
+        last = n;
+    }
+
     /**
      * {@inheritDoc}
      * <p>
@@ -43,12 +51,12 @@ public class DoublyCircularLinkedList<E> implements List<E> {
      */
     @Override
     public boolean isEmpty() {
-        return last == null;
+        return getLast() == null;
     }
 
     @Override
     public void clear() {
-
+        // TODO
     }
 
     /**
@@ -62,6 +70,45 @@ public class DoublyCircularLinkedList<E> implements List<E> {
         if (idx >= size) {
             throw new ArrayIndexOutOfBoundsException(idx);
         }
+    }
+
+    /**
+     * Retorna el nodo en el índice indicado.
+     * <p>
+     * Complejidad: O(n)
+     *
+     * @param idx índice del nodo a buscar
+     * @return nodo en el índice indicado
+     */
+    private Node<E> node(final int idx) {
+        checkRange(idx);
+
+        /* reducir complejidad */
+        if (isEmpty()) {
+            return null;
+        } else if (idx == 0) {
+            return getFirst();
+        } else if (idx == (size - 1)) {
+            return getLast();
+        }
+
+        /* índice menor que mitad de colección -> buscar desde inicio
+         * caso contrario -> buscar desde el final
+         */
+        Node<E> n;
+        if (idx < (size >> 1)) {
+            n = getFirst();
+            for (int i = 0; i < idx; ++i) {
+                n = n != null ? n.next : null;
+            }
+        } else {
+            n = getLast();
+            for (int i = (size - 1); i > idx; --i) {
+                n = n != null ? n.prev : null;
+            }
+        }
+
+        return n;
     }
 
     /**
@@ -79,13 +126,13 @@ public class DoublyCircularLinkedList<E> implements List<E> {
         final Node<E> newNode = new Node<>(e);
 
         if (isEmpty()) {
-            last = newNode;
+            setLast(newNode);
             setFirst(newNode);
             ++size;
             return true;
         }
 
-        newNode.prev = last;
+        newNode.prev = getLast();
         newNode.next = getFirst();
         getFirst().prev = newNode;
         setFirst(newNode);
@@ -109,17 +156,17 @@ public class DoublyCircularLinkedList<E> implements List<E> {
         final Node<E> newNode = new Node<>(e);
 
         if (isEmpty()) {
-            last = newNode;
+            setLast(newNode);
             setFirst(newNode);
             ++size;
             return true;
         }
 
-        newNode.prev = last;
+        newNode.prev = getLast();
         newNode.next = getFirst();
         getFirst().prev = newNode;
         setFirst(newNode);
-        last = newNode;
+        setLast(newNode);
 
         ++size;
         return true;
@@ -159,43 +206,112 @@ public class DoublyCircularLinkedList<E> implements List<E> {
         ++size;
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Complejidad: O(1)
+     */
     @Override
-    public E removeFirst() {
-        return null;
+    public final E removeFirst() {
+        if (isEmpty()) {
+            return null;
+        } else if (getFirst() == getLast()) {
+            final E oldVal = getFirst().item;
+            getFirst().item = null;
+            setFirst(null);
+            setLast(null);
+
+            --size;
+
+            return oldVal;
+        }
+
+        final E oldVal = getFirst().item;
+        final Node<E> newFirst = getFirst().next;
+        getFirst().item = null;
+        getFirst().next = null;
+        setFirst(newFirst);
+        getLast().next = newFirst;
+        newFirst.prev = getLast();
+
+        --size;
+
+        return oldVal;
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Complejidad: O(1)
+     */
     @Override
-    public E removeLast() {
-        return null;
+    public final E removeLast() {
+        if (isEmpty()) {
+            return null;
+        } else if (getFirst() == getLast()) {
+            final E oldVal = getLast().item;
+            getLast().item = null;
+            setFirst(null);
+            setLast(null);
+
+            --size;
+
+            return oldVal;
+        }
+
+        final E oldVal = getLast().item;
+        final Node<E> newLast = getLast().prev;
+        getLast().item = null;
+        getLast().next = null;
+        setLast(newLast);
+        getFirst().prev = newLast;
+        newLast.next = getFirst();
+
+        --size;
+
+        return oldVal;
     }
 
     @Override
     public E remove(int idx) {
+        // TODO
+
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Complejidad: O(n)
+     */
     @Override
-    public E get(int idx) {
-        return null;
+    public final E get(final int idx) {
+        return node(idx).item;
     }
 
     @Override
     public E set(int idx, E e) {
+        // TODO
+
         return null;
     }
 
     @Override
     public boolean keepOnly(int from, int to) {
+        // TODO
+
         return false;
     }
 
     @Override
     public void reverse() {
-
+        // TODO
     }
 
     @Override
     public List<E> insertAt(List<E> xs, int idx) {
+        // TODO
+
         return null;
     }
 
@@ -208,16 +324,16 @@ public class DoublyCircularLinkedList<E> implements List<E> {
         if (isEmpty()) {
             return "[]";
         } else if (size == 1) {
-            return "[" + last.item + "]";
+            return "[" + getLast().item + "]";
         }
 
         final StringBuilder str = new StringBuilder();
 
         str.append("[");
-        for (Node<E> n = getFirst(); n != last; n = n.next) {
+        for (Node<E> n = getFirst(); n != getLast(); n = n.next) {
             str.append(n.item).append(", ");
         }
-        str.append(last.item);
+        str.append(getLast().item);
         str.append("]");
 
         return str.toString();

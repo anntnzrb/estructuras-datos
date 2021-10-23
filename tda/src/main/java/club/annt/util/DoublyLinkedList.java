@@ -204,10 +204,11 @@ public class DoublyLinkedList<E> implements List<E> {
         if (isEmpty()) {
             return null;
         } else if (first == last) {
+            final E oldVal = first.item;
             first.item = null;
             first = last = null;
 
-            return null;
+            return oldVal;
         }
 
         //isEmpty() se encarga si first == null
@@ -232,10 +233,11 @@ public class DoublyLinkedList<E> implements List<E> {
         if (isEmpty()) {
             return null;
         } else if (first == last) {
-            first.item = null;
+            final E oldVal = last.item;
+            last.item = null;
             first = last = null;
 
-            return null;
+            return oldVal;
         }
 
         final E oldVal = last.item;
@@ -285,8 +287,6 @@ public class DoublyLinkedList<E> implements List<E> {
      */
     @Override
     public final E get(final int idx) {
-        checkRange(idx);
-
         return node(idx).item;
     }
 

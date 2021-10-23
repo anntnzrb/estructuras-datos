@@ -95,26 +95,62 @@ class DoublyLinkedListTest {
 
     @Test
     void testRemoveFirst() {
+        /* vars */
+        int rmVal;
+
+        /* xs */
         final List<Integer> xs = new DoublyLinkedList<>();
         IntStream.rangeClosed(0, 6)
                  .forEach(xs::addLast);
 
         assertEquals(7, xs.size());
-        int rmVal = xs.removeFirst();
+        rmVal = xs.removeFirst();
         assertEquals(6, xs.size());
         assertEquals(0, rmVal);
+
+        /* ys */
+        final List<Integer> ys = new DoublyLinkedList<>();
+        assertEquals(0, ys.size());
+        ys.removeFirst();
+        assertEquals(0, ys.size());
+
+        /* zs */
+        final List<Integer> zs = new DoublyLinkedList<>();
+        zs.addLast(99);
+        assertEquals(1, zs.size());
+        rmVal = zs.removeFirst();
+        assertEquals(0, zs.size());
+        assertEquals(99, rmVal);
     }
 
     @Test
     void testRemoveLast() {
+        /* vars */
+        int rmVal;
+
+        /* xs */
         final List<Integer> xs = new DoublyLinkedList<>();
         IntStream.rangeClosed(0, 6)
                  .forEach(xs::addLast);
 
         assertEquals(7, xs.size());
-        int rmVal = xs.removeLast();
+        rmVal = xs.removeLast();
         assertEquals(6, xs.size());
         assertEquals(6, rmVal);
+
+        /* ys */
+        final List<Integer> ys = new DoublyLinkedList<>();
+        assertEquals(0, ys.size());
+        ys.removeFirst();
+        assertEquals(0, ys.size());
+
+        /* zs */
+        final List<Integer> zs = new DoublyLinkedList<>();
+        zs.addLast(99);
+        assertEquals(1, zs.size());
+        rmVal = zs.removeLast();
+        assertEquals(0, zs.size());
+        assertEquals(99, rmVal);
     }
 
     @Test
