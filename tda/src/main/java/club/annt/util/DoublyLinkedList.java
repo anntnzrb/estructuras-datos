@@ -38,9 +38,21 @@ public class DoublyLinkedList<E> implements List<E> {
         return first == null && last == null;
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Complejidad: O(n)
+     */
     @Override
     public void clear() {
-
+        for (Node<E> n = first; n != null; ) {
+            final Node<E> nextNode = n.next;
+            n.item = null;
+            n.prev = null;
+            n.next = null;
+            n = nextNode;
+        }
+        first = last = null;
     }
 
     /**
@@ -198,6 +210,8 @@ public class DoublyLinkedList<E> implements List<E> {
             return null;
         }
 
+        //isEmpty() se encarga si first == null
+        //noinspection ConstantConditions
         final E oldVal = first.item;
         final Node<E> newFirst = first.next;
         first.item = null;
@@ -278,21 +292,27 @@ public class DoublyLinkedList<E> implements List<E> {
 
     @Override
     public E set(int idx, E e) {
+        // TODO
+
         return null;
     }
 
     @Override
     public boolean keepOnly(int from, int to) {
+        // TODO
+
         return false;
     }
 
     @Override
     public void reverse() {
-
+        // TODO
     }
 
     @Override
     public List<E> insertAt(List<E> xs, int idx) {
+        // TODO
+
         return null;
     }
 
@@ -344,5 +364,4 @@ public class DoublyLinkedList<E> implements List<E> {
             this.next = next;
         }
     }
-
 }

@@ -16,7 +16,7 @@ public interface List<E> {
     boolean isEmpty();
 
     /**
-     * Remueve todos los elementos del arreglo.
+     * Remueve todos los elementos de la colección.
      */
     void clear();
 

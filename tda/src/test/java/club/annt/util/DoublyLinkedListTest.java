@@ -4,10 +4,22 @@ import org.junit.jupiter.api.Test;
 
 import java.util.stream.IntStream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class DoublyLinkedListTest {
+
+    @Test
+    void testClear() {
+        final List<Integer> xs = new DoublyLinkedList<>();
+        xs.addLast(1);
+
+        /* contiene elementos */
+        assertFalse(xs.isEmpty());
+
+        /* no contiene elementos */
+        xs.clear();
+        assertTrue(xs.isEmpty());
+    }
 
     @Test
     void testGet() {
@@ -103,5 +115,22 @@ class DoublyLinkedListTest {
         int rmVal = xs.removeLast();
         assertEquals(6, xs.size());
         assertEquals(6, rmVal);
+    }
+
+    @Test
+    void testToString() {
+        final List<Integer> xs = new DoublyLinkedList<>();
+        xs.addLast(1);
+        xs.addLast(2);
+        xs.addLast(3);
+
+        final List<Integer> ys = new DoublyLinkedList<>();
+        ys.addLast(0);
+
+        final List<Integer> zs = new DoublyLinkedList<>();
+
+        assertEquals("[1, 2, 3]", xs.toString());
+        assertEquals("[0]", ys.toString());
+        assertEquals("[]", zs.toString());
     }
 }
