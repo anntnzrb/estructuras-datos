@@ -2,8 +2,7 @@ package club.annt.util;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class DoublyCircularLinkedListTest {
 
@@ -52,5 +51,15 @@ class DoublyCircularLinkedListTest {
         assertEquals("[1, 2, 3]", xs.toString());
         assertEquals("[0]", ys.toString());
         assertEquals("[]", zs.toString());
+    }
+
+    @Test
+    void testIsEmpty() {
+        final List<Integer> xs = new DoublyCircularLinkedList<>();
+        final List<String> ys = new DoublyCircularLinkedList<>();
+        ys.addLast("hi");
+
+        assertTrue(xs.isEmpty());
+        assertFalse(ys.isEmpty());
     }
 }

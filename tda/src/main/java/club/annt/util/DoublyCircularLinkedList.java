@@ -4,10 +4,6 @@ public class DoublyCircularLinkedList<E> implements List<E> {
     /**
      * Puntero al último nodo.
      */
-    private Node<E> first;
-    /**
-     * Puntero al último nodo.
-     */
     private Node<E> last;
 
     /**
@@ -19,6 +15,15 @@ public class DoublyCircularLinkedList<E> implements List<E> {
     public DoublyCircularLinkedList() {
         last = null;
         size = 0;
+    }
+
+    /* getters & setters */
+    private Node<E> getFirst() {
+        return last.next;
+    }
+
+    private void setFirst(final Node<E> n) {
+        last.next = n;
     }
 
     /**
@@ -38,7 +43,7 @@ public class DoublyCircularLinkedList<E> implements List<E> {
      */
     @Override
     public boolean isEmpty() {
-        return first == null && last == null;
+        return last == null;
     }
 
     @Override
@@ -74,15 +79,16 @@ public class DoublyCircularLinkedList<E> implements List<E> {
         final Node<E> newNode = new Node<>(e);
 
         if (isEmpty()) {
-            first = last = newNode;
+            last = newNode;
+            setFirst(newNode);
             ++size;
             return true;
         }
 
         newNode.prev = last;
-        newNode.next = first;
-        first.prev = newNode;
-        first = newNode;
+        newNode.next = getFirst();
+        getFirst().prev = newNode;
+        setFirst(newNode);
 
         ++size;
         return true;
@@ -103,15 +109,16 @@ public class DoublyCircularLinkedList<E> implements List<E> {
         final Node<E> newNode = new Node<>(e);
 
         if (isEmpty()) {
-            first = last = newNode;
+            last = newNode;
+            setFirst(newNode);
             ++size;
             return true;
         }
 
         newNode.prev = last;
-        newNode.next = first;
-        first.prev = newNode;
-        last.next = newNode;
+        newNode.next = getFirst();
+        getFirst().prev = newNode;
+        setFirst(newNode);
         last = newNode;
 
         ++size;
@@ -139,7 +146,7 @@ public class DoublyCircularLinkedList<E> implements List<E> {
         }
 
         final Node<E> newNode = new Node<>(e);
-        Node<E> p = first;
+        Node<E> p = getFirst();
         for (int i = 1; i < idx; i++) {
             p = p.next;
         }
@@ -207,7 +214,7 @@ public class DoublyCircularLinkedList<E> implements List<E> {
         final StringBuilder str = new StringBuilder();
 
         str.append("[");
-        for (Node<E> n = last.next; n != last; n = n.next) {
+        for (Node<E> n = getFirst(); n != last; n = n.next) {
             str.append(n.item).append(", ");
         }
         str.append(last.item);
