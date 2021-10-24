@@ -99,6 +99,18 @@ class CircularDoublyLinkedListTest {
     }
 
     @Test
+    void testRemove() {
+        final List<Integer> xs = new CircularDoublyLinkedList<>();
+        IntStream.rangeClosed(0, 6)
+                 .forEach(xs::addLast);
+
+        assertEquals(7, xs.size());
+        int rmVal = xs.remove(3);
+        assertEquals(6, xs.size());
+        assertEquals(3, rmVal);
+    }
+
+    @Test
     void testToString() {
         final List<Integer> xs = new CircularDoublyLinkedList<>();
         xs.addLast(1);

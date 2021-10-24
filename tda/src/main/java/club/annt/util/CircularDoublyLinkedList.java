@@ -272,11 +272,38 @@ public class CircularDoublyLinkedList<E> implements List<E> {
         return oldVal;
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Complejidad: O(n)
+     */
     @Override
-    public E remove(int idx) {
-        // TODO
+    public final E remove(final int idx) {
+        checkRange(idx);
 
-        return null;
+        /* reducir complejidad */
+        if (isEmpty()) {
+            return null;
+        } else if (idx == 0) {
+            removeFirst();
+        } else if (idx == (size - 1)) {
+            removeLast();
+        }
+
+        Node<E> p = getFirst();
+        for (int i = 0; i < idx; ++i) {
+            p = p.next;
+        }
+        p.prev.next = p.next;
+        p.next.prev = p.prev;
+
+        final E oldVal = p.item;
+        p.item = null;
+        p.prev = p.next = null;
+
+        --size;
+
+        return oldVal;
     }
 
     /**

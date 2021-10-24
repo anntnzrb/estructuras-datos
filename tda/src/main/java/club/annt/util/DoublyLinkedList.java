@@ -274,10 +274,12 @@ public class DoublyLinkedList<E> implements List<E> {
         }
         p.prev.next = p.next;
         p.next.prev = p.prev;
-        p.prev = null;
-        p.next = null;
 
-        return p.item;
+        final E oldVal = p.item;
+        p.item = null;
+        p.prev = p.next = null;
+
+        return oldVal;
     }
 
     /**
