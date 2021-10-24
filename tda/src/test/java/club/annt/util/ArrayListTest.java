@@ -249,4 +249,18 @@ class ArrayListTest {
         assertEquals(0, zs.size());
         assertEquals(99, rmVal);
     }
+
+    @Test
+    void iterator() {
+        final List<Integer> xs = new ArrayList<>();
+        IntStream.rangeClosed(0, 6)
+                 .forEach(xs::addLast);
+
+        final List<Integer> ys = new ArrayList<>();
+
+        /* xs es no vacío */
+        assertTrue(xs.iterator().hasNext());
+        /* ys es vacío */
+        assertFalse(ys.iterator().hasNext());
+    }
 }

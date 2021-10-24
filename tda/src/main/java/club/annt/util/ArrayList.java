@@ -1,6 +1,7 @@
 package club.annt.util;
 
 import java.util.Arrays;
+import java.util.Iterator;
 
 @SuppressWarnings("unchecked")
 public class ArrayList<E> implements List<E> {
@@ -390,6 +391,12 @@ public class ArrayList<E> implements List<E> {
      * Complejidad: O(n)
      */
     public final String toString() {
+        if (isEmpty()) {
+            return "[]";
+        } else if (size == 1) {
+            return "[" + elems[0] + "]";
+        }
+
         final StringBuilder str = new StringBuilder();
 
         str.append("[");
@@ -403,5 +410,37 @@ public class ArrayList<E> implements List<E> {
         str.append("]");
 
         return str.toString();
+    }
+
+    /**
+     * Retorna un Iterator de elementos de {@code E}.
+     *
+     * @return un Iterator.
+     */
+    @Override
+    public Iterator<E> iterator() {
+        return new Iterator<E>() {
+            private int cursor = 0;
+
+            /**
+             * {@inheritDoc}
+             * <p>
+             * Complejidad: O(1)
+             */
+            @Override
+            public boolean hasNext() {
+                return cursor != size;
+            }
+
+            /**
+             * {@inheritDoc}
+             * <p>
+             * Complejidad: O(1)
+             */
+            @Override
+            public E next() {
+                return elems[cursor++];
+            }
+        };
     }
 }

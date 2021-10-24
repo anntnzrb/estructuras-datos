@@ -1,5 +1,7 @@
 package club.annt.util;
 
+import java.util.Iterator;
+
 public class CircularDoublyLinkedList<E> implements List<E> {
     /**
      * Puntero al último nodo.
@@ -364,6 +366,36 @@ public class CircularDoublyLinkedList<E> implements List<E> {
         str.append("]");
 
         return str.toString();
+    }
+
+    /**
+     * Retorna un Iterator de elementos de {@code E}.
+     *
+     * @return un Iterator.
+     */
+    @Override
+    public Iterator<E> iterator() {
+        return new Iterator<E>() {
+            /**
+             * {@inheritDoc}
+             * <p>
+             * Complejidad: ???
+             */
+            @Override
+            public boolean hasNext() {
+                return false;
+            }
+
+            /**
+             * {@inheritDoc}
+             * <p>
+             * Complejidad: ???
+             */
+            @Override
+            public E next() {
+                return null;
+            }
+        };
     }
 
     /**

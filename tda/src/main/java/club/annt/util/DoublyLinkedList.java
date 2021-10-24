@@ -1,5 +1,7 @@
 package club.annt.util;
 
+import java.util.Iterator;
+
 public class DoublyLinkedList<E> implements List<E> {
     /**
      * Puntero al primer nodo.
@@ -324,21 +326,60 @@ public class DoublyLinkedList<E> implements List<E> {
      * Complejidad: O(n)
      */
     public final String toString() {
+        if (isEmpty()) {
+            return "[]";
+        } else if (size() == 1) {
+            return "[" + last.item + "]";
+        }
+
         final StringBuilder str = new StringBuilder();
 
         str.append("[");
-        if (!isEmpty()) {
-            for (Node<E> n = first; n != null; n = n.next) {
-                if (n != last) {
-                    str.append(n.item).append(", ");
-                } else {
-                    str.append(n.item);
-                }
+        for (Node<E> n = first; n != null; n = n.next) {
+            if (n != last) {
+                str.append(n.item).append(", ");
+            } else {
+                str.append(n.item);
             }
         }
         str.append("]");
 
         return str.toString();
+    }
+
+    /**
+     * Retorna un Iterator de elementos de {@code E}.
+     *
+     * @return un Iterator.
+     */
+    @Override
+    public Iterator<E> iterator() {
+        return new Iterator<E>() {
+            private Node<E> itFirst = first;
+
+            /**
+             * {@inheritDoc}
+             * <p>
+             * Complejidad: O(1)
+             */
+            @Override
+            public boolean hasNext() {
+                return !isEmpty();
+            }
+
+            /**
+             * {@inheritDoc}
+             * <p>
+             * Complejidad: O(1)
+             */
+            @Override
+            public E next() {
+                final E elem = itFirst.item;
+                itFirst = itFirst.next;
+
+                return elem;
+            }
+        };
     }
 
     /**

@@ -169,4 +169,18 @@ class DoublyLinkedListTest {
         assertEquals("[0]", ys.toString());
         assertEquals("[]", zs.toString());
     }
+
+    @Test
+    void iterator() {
+        final List<Integer> xs = new DoublyLinkedList<>();
+        IntStream.rangeClosed(0, 6)
+                 .forEach(xs::addLast);
+
+        final List<Integer> ys = new DoublyLinkedList<>();
+
+        /* xs es no vacío */
+        assertTrue(xs.iterator().hasNext());
+        /* ys es vacío */
+        assertFalse(ys.iterator().hasNext());
+    }
 }

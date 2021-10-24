@@ -1,6 +1,6 @@
 package club.annt.util;
 
-public interface List<E> {
+public interface List<E> extends Iterable<E> {
     /**
      * Retorna el número de elementos en el arreglo.
      *
