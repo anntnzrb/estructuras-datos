@@ -6,7 +6,7 @@ import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class LinkedListTest {
+class SimplyLinkedListTest {
 
     @Test
     void testReverse() {
@@ -15,7 +15,7 @@ class LinkedListTest {
 
     @Test
     void testSize() {
-        final List<Integer> xs = new LinkedList<>();
+        final List<Integer> xs = new SimplyLinkedList<>();
         xs.addLast(1);
         xs.addLast(2);
         xs.addLast(3);
@@ -35,8 +35,8 @@ class LinkedListTest {
 
     @Test
     void testIsEmpty() {
-        final List<Integer> xs = new LinkedList<>();
-        final List<String> ys = new LinkedList<>();
+        final List<Integer> xs = new SimplyLinkedList<>();
+        final List<String> ys = new SimplyLinkedList<>();
         ys.addLast("hi");
 
         assertTrue(xs.isEmpty());
@@ -50,7 +50,7 @@ class LinkedListTest {
 
     @Test
     void testAddFirst() {
-        final List<Integer> xs = new LinkedList<>();
+        final List<Integer> xs = new SimplyLinkedList<>();
         xs.addLast(1);
         xs.addLast(2);
         xs.addLast(3);
@@ -63,7 +63,7 @@ class LinkedListTest {
 
     @Test
     void testAddLast() {
-        final List<Integer> xs = new LinkedList<>();
+        final List<Integer> xs = new SimplyLinkedList<>();
         xs.addLast(1);
         xs.addLast(2);
         xs.addLast(3);
@@ -96,12 +96,12 @@ class LinkedListTest {
 
     @Test
     void testGet() {
-        final List<Integer> xs = new LinkedList<>();
+        final List<Integer> xs = new SimplyLinkedList<>();
         xs.addLast(1);
         xs.addLast(2);
         xs.addLast(3);
 
-        final List<String> ys = new LinkedList<>();
+        final List<String> ys = new SimplyLinkedList<>();
         ys.addLast("foo");
         ys.addLast("bar");
         ys.addLast("baz");
@@ -128,15 +128,15 @@ class LinkedListTest {
 
     @Test
     void testToString() {
-        final List<Integer> xs = new LinkedList<>();
+        final List<Integer> xs = new SimplyLinkedList<>();
         xs.addLast(1);
         xs.addLast(2);
         xs.addLast(3);
 
-        final List<Integer> ys = new LinkedList<>();
+        final List<Integer> ys = new SimplyLinkedList<>();
         ys.addLast(0);
 
-        final List<Integer> zs = new LinkedList<>();
+        final List<Integer> zs = new SimplyLinkedList<>();
 
         assertEquals("[1, 2, 3]", xs.toString());
         assertEquals("[0]", ys.toString()); // FIXME :: Out of memory?

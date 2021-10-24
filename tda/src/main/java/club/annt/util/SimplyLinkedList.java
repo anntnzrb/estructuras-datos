@@ -1,6 +1,6 @@
 package club.annt.util;
 
-public class LinkedList<E> implements List<E> {
+public class SimplyLinkedList<E> implements List<E> {
     /**
      * Puntero al primer nodo.
      */
@@ -11,7 +11,7 @@ public class LinkedList<E> implements List<E> {
     private Node<E> last;
 
     /* constructores */
-    public LinkedList() {
+    public SimplyLinkedList() {
         first = last = null;
     }
 
@@ -266,7 +266,7 @@ public class LinkedList<E> implements List<E> {
     @Override
     public final void reverse() {
         if (!isEmpty()) {
-            final LinkedList<E> tmpLList = new LinkedList<>();
+            final SimplyLinkedList<E> tmpLList = new SimplyLinkedList<>();
             while (!this.isEmpty()) {
                 tmpLList.addFirst(this.removeFirst());
             }
@@ -305,7 +305,7 @@ public class LinkedList<E> implements List<E> {
     }
 
     /**
-     * Clase Node para Single LinkedList.
+     * Clase Node para Single SimplyLinkedList.
      *
      * @param <E> tipo de dato para el Node
      */

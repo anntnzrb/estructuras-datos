@@ -6,11 +6,11 @@ import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class DoublyCircularLinkedListTest {
+class CircularDoublyLinkedListTest {
 
     @Test
     void testAddLast() {
-        final List<Integer> xs = new DoublyCircularLinkedList<>();
+        final List<Integer> xs = new CircularDoublyLinkedList<>();
         xs.addLast(1);
         xs.addLast(2);
         xs.addLast(3);
@@ -23,7 +23,7 @@ class DoublyCircularLinkedListTest {
 
     @Test
     void testAdd() {
-        final List<Integer> xs = new DoublyCircularLinkedList<>();
+        final List<Integer> xs = new CircularDoublyLinkedList<>();
         xs.addLast(1);
         xs.addLast(2);
         xs.addLast(3);
@@ -44,7 +44,7 @@ class DoublyCircularLinkedListTest {
         int rmVal;
 
         /* xs */
-        final List<Integer> xs = new DoublyCircularLinkedList<>();
+        final List<Integer> xs = new CircularDoublyLinkedList<>();
         IntStream.rangeClosed(0, 6)
                  .forEach(xs::addLast);
 
@@ -54,13 +54,13 @@ class DoublyCircularLinkedListTest {
         assertEquals(0, rmVal);
 
         /* ys */
-        final List<Integer> ys = new DoublyCircularLinkedList<>();
+        final List<Integer> ys = new CircularDoublyLinkedList<>();
         assertEquals(0, ys.size());
         ys.removeFirst();
         assertEquals(0, ys.size());
 
         /* zs */
-        final List<Integer> zs = new DoublyCircularLinkedList<>();
+        final List<Integer> zs = new CircularDoublyLinkedList<>();
         zs.addLast(99);
         assertEquals(1, zs.size());
         rmVal = zs.removeFirst();
@@ -74,7 +74,7 @@ class DoublyCircularLinkedListTest {
         int rmVal;
 
         /* xs */
-        final List<Integer> xs = new DoublyCircularLinkedList<>();
+        final List<Integer> xs = new CircularDoublyLinkedList<>();
         IntStream.rangeClosed(0, 6)
                  .forEach(xs::addLast);
 
@@ -84,13 +84,13 @@ class DoublyCircularLinkedListTest {
         assertEquals(6, rmVal);
 
         /* ys */
-        final List<Integer> ys = new DoublyCircularLinkedList<>();
+        final List<Integer> ys = new CircularDoublyLinkedList<>();
         assertEquals(0, ys.size());
         ys.removeFirst();
         assertEquals(0, ys.size());
 
         /* zs */
-        final List<Integer> zs = new DoublyCircularLinkedList<>();
+        final List<Integer> zs = new CircularDoublyLinkedList<>();
         zs.addLast(99);
         assertEquals(1, zs.size());
         rmVal = zs.removeLast();
@@ -100,15 +100,15 @@ class DoublyCircularLinkedListTest {
 
     @Test
     void testToString() {
-        final List<Integer> xs = new DoublyCircularLinkedList<>();
+        final List<Integer> xs = new CircularDoublyLinkedList<>();
         xs.addLast(1);
         xs.addLast(2);
         xs.addLast(3);
 
-        final List<Integer> ys = new DoublyCircularLinkedList<>();
+        final List<Integer> ys = new CircularDoublyLinkedList<>();
         ys.addLast(0);
 
-        final List<Integer> zs = new DoublyCircularLinkedList<>();
+        final List<Integer> zs = new CircularDoublyLinkedList<>();
 
         assertEquals("[1, 2, 3]", xs.toString());
         assertEquals("[0]", ys.toString());
@@ -117,8 +117,8 @@ class DoublyCircularLinkedListTest {
 
     @Test
     void testIsEmpty() {
-        final List<Integer> xs = new DoublyCircularLinkedList<>();
-        final List<String> ys = new DoublyCircularLinkedList<>();
+        final List<Integer> xs = new CircularDoublyLinkedList<>();
+        final List<String> ys = new CircularDoublyLinkedList<>();
         ys.addLast("hi");
 
         assertTrue(xs.isEmpty());

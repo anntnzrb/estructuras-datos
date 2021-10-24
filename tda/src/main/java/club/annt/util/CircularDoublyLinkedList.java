@@ -1,6 +1,6 @@
 package club.annt.util;
 
-public class DoublyCircularLinkedList<E> implements List<E> {
+public class CircularDoublyLinkedList<E> implements List<E> {
     /**
      * Puntero al último nodo.
      */
@@ -12,7 +12,7 @@ public class DoublyCircularLinkedList<E> implements List<E> {
     private int size;
 
     /* constructores */
-    public DoublyCircularLinkedList() {
+    public CircularDoublyLinkedList() {
         last = null;
         size = 0;
     }

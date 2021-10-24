@@ -340,7 +340,7 @@ public class DoublyLinkedList<E> implements List<E> {
     }
 
     /**
-     * Clase Node para Doubly LinkedList.
+     * Clase Node para Doubly SimplyLinkedList.
      *
      * @param <E> tipo de dato para el Node
      */
