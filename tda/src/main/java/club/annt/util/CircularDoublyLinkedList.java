@@ -21,11 +21,11 @@ public class CircularDoublyLinkedList<E> implements List<E> {
 
     /* getters & setters */
     private Node<E> getFirst() {
-        return last.next;
+        return last.getNext();
     }
 
     private void setFirst(final Node<E> n) {
-        last.next = n;
+        last.setNext(n);
     }
 
     private Node<E> getLast() {
@@ -101,12 +101,12 @@ public class CircularDoublyLinkedList<E> implements List<E> {
         if (idx < (size >> 1)) {
             n = getFirst();
             for (int i = 0; i < idx; ++i) {
-                n = n != null ? n.next : null;
+                n = n != null ? n.getNext() : null;
             }
         } else {
             n = getLast();
             for (int i = (size - 1); i > idx; --i) {
-                n = n != null ? n.prev : null;
+                n = n != null ? n.getPrev() : null;
             }
         }
 
@@ -134,9 +134,9 @@ public class CircularDoublyLinkedList<E> implements List<E> {
             return true;
         }
 
-        newNode.prev = getLast();
-        newNode.next = getFirst();
-        getFirst().prev = newNode;
+        newNode.setPrev(getLast());
+        newNode.setNext(getFirst());
+        getFirst().setPrev(newNode);
         setFirst(newNode);
 
         ++size;
@@ -164,9 +164,9 @@ public class CircularDoublyLinkedList<E> implements List<E> {
             return true;
         }
 
-        newNode.prev = getLast();
-        newNode.next = getFirst();
-        getFirst().prev = newNode;
+        newNode.setPrev(getLast());
+        newNode.setNext(getFirst());
+        getFirst().setPrev(newNode);
         setFirst(newNode);
         setLast(newNode);
 
@@ -197,13 +197,13 @@ public class CircularDoublyLinkedList<E> implements List<E> {
         final Node<E> newNode = new Node<>(e);
         Node<E> p = getFirst();
         for (int i = 1; i < idx; i++) {
-            p = p.next;
+            p = p.getNext();
         }
 
-        newNode.prev = p;
-        newNode.next = p.next;
-        p.next = newNode;
-        newNode.next.prev = newNode;
+        newNode.setPrev(p);
+        newNode.setNext(p.getNext());
+        p.setNext(newNode);
+        newNode.getNext().setPrev(newNode);
 
         ++size;
     }
@@ -218,8 +218,8 @@ public class CircularDoublyLinkedList<E> implements List<E> {
         if (isEmpty()) {
             return null;
         } else if (getFirst() == getLast()) {
-            final E oldVal = getFirst().item;
-            getFirst().item = null;
+            final E oldVal = getFirst().getData();
+            getFirst().setData(null);
             setFirst(null);
             setLast(null);
 
@@ -228,13 +228,13 @@ public class CircularDoublyLinkedList<E> implements List<E> {
             return oldVal;
         }
 
-        final E oldVal = getFirst().item;
-        final Node<E> newFirst = getFirst().next;
-        getFirst().item = null;
-        getFirst().next = null;
+        final E oldVal = getFirst().getData();
+        final Node<E> newFirst = getFirst().getNext();
+        getFirst().setData(null);
+        getFirst().setNext(null);
         setFirst(newFirst);
-        getLast().next = newFirst;
-        newFirst.prev = getLast();
+        getLast().setNext(newFirst);
+        newFirst.setPrev(getLast());
 
         --size;
 
@@ -251,8 +251,8 @@ public class CircularDoublyLinkedList<E> implements List<E> {
         if (isEmpty()) {
             return null;
         } else if (getFirst() == getLast()) {
-            final E oldVal = getLast().item;
-            getLast().item = null;
+            final E oldVal = getLast().getData();
+            getLast().setData(null);
             setFirst(null);
             setLast(null);
 
@@ -261,13 +261,13 @@ public class CircularDoublyLinkedList<E> implements List<E> {
             return oldVal;
         }
 
-        final E oldVal = getLast().item;
-        final Node<E> newLast = getLast().prev;
-        getLast().item = null;
-        getLast().next = null;
+        final E oldVal = getLast().getData();
+        final Node<E> newLast = getLast().getPrev();
+        getLast().setData(null);
+        getLast().setNext(null);
         setLast(newLast);
-        getFirst().prev = newLast;
-        newLast.next = getFirst();
+        getFirst().setPrev(newLast);
+        newLast.setNext(getFirst());
 
         --size;
 
@@ -294,14 +294,15 @@ public class CircularDoublyLinkedList<E> implements List<E> {
 
         Node<E> p = getFirst();
         for (int i = 0; i < idx; ++i) {
-            p = p.next;
+            p = p.getNext();
         }
-        p.prev.next = p.next;
-        p.next.prev = p.prev;
+        p.getPrev().setNext(p.getNext());
+        p.getNext().setPrev(p.getPrev());
 
-        final E oldVal = p.item;
-        p.item = null;
-        p.prev = p.next = null;
+        final E oldVal = p.getData();
+        p.setData(null);
+        p.setPrev(null);
+        p.setNext(null);
 
         --size;
 
@@ -315,7 +316,7 @@ public class CircularDoublyLinkedList<E> implements List<E> {
      */
     @Override
     public final E get(final int idx) {
-        return node(idx).item;
+        return node(idx).getData();
     }
 
     @Override
@@ -353,16 +354,16 @@ public class CircularDoublyLinkedList<E> implements List<E> {
         if (isEmpty()) {
             return "[]";
         } else if (size == 1) {
-            return "[" + getLast().item + "]";
+            return "[" + getLast().getData() + "]";
         }
 
         final StringBuilder str = new StringBuilder();
 
         str.append("[");
-        for (Node<E> n = getFirst(); n != getLast(); n = n.next) {
-            str.append(n.item).append(", ");
+        for (Node<E> n = getFirst(); n != getLast(); n = n.getNext()) {
+            str.append(n.getData()).append(", ");
         }
-        str.append(getLast().item);
+        str.append(getLast().getData());
         str.append("]");
 
         return str.toString();
@@ -396,31 +397,5 @@ public class CircularDoublyLinkedList<E> implements List<E> {
                 return null;
             }
         };
-    }
-
-    /**
-     * Clase Node para Doubly CircularList.
-     *
-     * @param <E> tipo de dato para el Node
-     */
-    private static class Node<E> {
-        E item;
-        Node<E> next;
-        Node<E> prev;
-
-        /* constructores */
-        public Node() {
-            this(null, null, null);
-        }
-
-        public Node(final E elem) {
-            this(null, elem, null);
-        }
-
-        public Node(final Node<E> prev, final E item, final Node<E> next) {
-            this.prev = prev;
-            this.item = item;
-            this.next = next;
-        }
     }
 }

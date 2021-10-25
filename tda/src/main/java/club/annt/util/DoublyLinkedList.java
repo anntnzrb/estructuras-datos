@@ -52,10 +52,10 @@ public class DoublyLinkedList<E> implements List<E> {
     @Override
     public void clear() {
         for (Node<E> n = first; n != null; ) {
-            final Node<E> nextNode = n.next;
-            n.item = null;
-            n.prev = null;
-            n.next = null;
+            final Node<E> nextNode = n.getNext();
+            n.setData(null);
+            n.setPrev(null);
+            n.setNext(null);
             n = nextNode;
         }
         first = last = null;
@@ -101,12 +101,12 @@ public class DoublyLinkedList<E> implements List<E> {
         if (idx < (size >> 1)) {
             n = first;
             for (int i = 0; i < idx; ++i) {
-                n = n != null ? n.next : null;
+                n = n != null ? n.getNext() : null;
             }
         } else {
             n = last;
             for (int i = (size - 1); i > idx; --i) {
-                n = n != null ? n.prev : null;
+                n = n != null ? n.getPrev() : null;
             }
         }
 
@@ -134,10 +134,10 @@ public class DoublyLinkedList<E> implements List<E> {
             return true;
         }
 
-        newNode.next = first;
+        newNode.setNext(first);
         //isEmpty() se encarga si first == null
         //noinspection ConstantConditions
-        first.prev = newNode;
+        first.setPrev(newNode);
         first = newNode;
 
         ++size;
@@ -166,8 +166,8 @@ public class DoublyLinkedList<E> implements List<E> {
             return true;
         }
 
-        newNode.prev = last;
-        last.next = newNode;
+        newNode.setPrev(last);
+        last.setNext(newNode);
         last = newNode;
 
         ++size;
@@ -198,13 +198,13 @@ public class DoublyLinkedList<E> implements List<E> {
         final Node<E> newNode = new Node<>(e);
         Node<E> p = first;
         for (int i = 1; i < idx; ++i) {
-            p = p.next;
+            p = p.getNext();
         }
 
-        newNode.prev = p;
-        newNode.next = p.next;
-        p.next = newNode;
-        newNode.next.prev = newNode;
+        newNode.setPrev(p);
+        newNode.setNext(p.getNext());
+        p.setNext(newNode);
+        newNode.getNext().setPrev(newNode);
 
         ++size;
     }
@@ -219,8 +219,8 @@ public class DoublyLinkedList<E> implements List<E> {
         if (isEmpty()) {
             return null;
         } else if (first == last) {
-            final E oldVal = first.item;
-            first.item = null;
+            final E oldVal = first.getData();
+            first.setData(null);
             first = last = null;
             --size;
 
@@ -229,12 +229,12 @@ public class DoublyLinkedList<E> implements List<E> {
 
         //isEmpty() se encarga si first == null
         //noinspection ConstantConditions
-        final E oldVal = first.item;
-        final Node<E> newFirst = first.next;
-        first.item = null;
-        first.next = null;
+        final E oldVal = first.getData();
+        final Node<E> newFirst = first.getNext();
+        last.setData(null);
+        first.setNext(null);
         first = newFirst;
-        newFirst.prev = null;
+        newFirst.setPrev(null);
 
         --size;
 
@@ -251,20 +251,20 @@ public class DoublyLinkedList<E> implements List<E> {
         if (isEmpty()) {
             return null;
         } else if (first == last) {
-            final E oldVal = last.item;
-            last.item = null;
+            final E oldVal = last.getData();
+            last.setData(null);
             first = last = null;
             --size;
 
             return oldVal;
         }
 
-        final E oldVal = last.item;
-        final Node<E> newLast = last.prev;
-        last.item = null;
-        last.prev = null;
+        final E oldVal = last.getData();
+        final Node<E> newLast = last.getPrev();
+        last.setData(null);
+        last.setPrev(null);
         last = newLast;
-        newLast.next = null;
+        newLast.setNext(null);
 
         --size;
 
@@ -291,14 +291,15 @@ public class DoublyLinkedList<E> implements List<E> {
 
         Node<E> p = first;
         for (int i = 0; i < idx; ++i) {
-            p = p.next;
+            p = p.getNext();
         }
-        p.prev.next = p.next;
-        p.next.prev = p.prev;
+        p.getPrev().setNext(p.getNext());
+        p.getNext().setPrev(p.getPrev());
 
-        final E oldVal = p.item;
-        p.item = null;
-        p.prev = p.next = null;
+        final E oldVal = p.getData();
+        p.setData(null);
+        p.setPrev(null);
+        p.setNext(null);
 
         --size;
 
@@ -312,7 +313,7 @@ public class DoublyLinkedList<E> implements List<E> {
      */
     @Override
     public final E get(final int idx) {
-        return node(idx).item;
+        return node(idx).getData();
     }
 
     @Override
@@ -350,17 +351,17 @@ public class DoublyLinkedList<E> implements List<E> {
         if (isEmpty()) {
             return "[]";
         } else if (size == 1) {
-            return "[" + last.item + "]";
+            return "[" + last.getData() + "]";
         }
 
         final StringBuilder str = new StringBuilder();
 
         str.append("[");
-        for (Node<E> n = first; n != null; n = n.next) {
+        for (Node<E> n = first; n != null; n = n.getNext()) {
             if (n != last) {
-                str.append(n.item).append(", ");
+                str.append(n.getData()).append(", ");
             } else {
-                str.append(n.item);
+                str.append(n.getData());
             }
         }
         str.append("]");
@@ -376,7 +377,7 @@ public class DoublyLinkedList<E> implements List<E> {
     @Override
     public Iterator<E> iterator() {
         return new Iterator<E>() {
-            private Node<E> itFirst = first;
+            private Node<E> ptr = first;
 
             /**
              * {@inheritDoc}
@@ -395,37 +396,11 @@ public class DoublyLinkedList<E> implements List<E> {
              */
             @Override
             public E next() {
-                final E elem = itFirst.item;
-                itFirst = itFirst.next;
+                final E elem = ptr.getData();
+                ptr = ptr.getNext();
 
                 return elem;
             }
         };
-    }
-
-    /**
-     * Clase Node para Doubly SimplyLinkedList.
-     *
-     * @param <E> tipo de dato para el Node
-     */
-    private static class Node<E> {
-        E item;
-        Node<E> next;
-        Node<E> prev;
-
-        /* constructores */
-        public Node() {
-            this(null, null, null);
-        }
-
-        public Node(final E elem) {
-            this(null, elem, null);
-        }
-
-        public Node(final Node<E> prev, final E item, final Node<E> next) {
-            this.prev = prev;
-            this.item = item;
-            this.next = next;
-        }
     }
 }

@@ -314,30 +314,35 @@ public class SimplyLinkedList<E> implements List<E> {
     @Override
     public Iterator<E> iterator() {
         return new Iterator<E>() {
+            private Node<E> ptr = first;
+
             /**
              * {@inheritDoc}
              * <p>
-             * Complejidad: ???
+             * Complejidad: O(1)
              */
             @Override
             public boolean hasNext() {
-                return false;
+                return ptr != null;
             }
 
             /**
              * {@inheritDoc}
              * <p>
-             * Complejidad: ???
+             * Complejidad: O(1)
              */
             @Override
             public E next() {
-                return null;
+                final E elem = ptr.item;
+                ptr = ptr.next;
+
+                return elem;
             }
         };
     }
 
     /**
-     * Clase Node para Single SimplyLinkedList.
+     * Clase Node para Singly LinkedList.
      *
      * @param <E> tipo de dato para el Node
      */
