@@ -6,20 +6,20 @@ import java.util.Iterator;
 @SuppressWarnings("unchecked")
 public class ArrayList<E> implements List<E> {
     /**
-     * Capacidad inicial del arreglo por defecto.
+     * Capacidad inicial de la colección por defecto.
      */
     private static final int DEFAULT_CAPACITY = 10;
     /**
-     * Buffer del arreglo en donde se almacenan los elementos del ArrayList.
+     * Buffer de la colección en donde se almacenan los elementos del ArrayList.
      */
     private E[] elems;
     /**
-     * Cantidad de elementos del arreglo.
+     * Cantidad de elementos de la colección.
      */
     private int capacity;
 
     /**
-     * Cantidad de elementos presentes en el arreglo (no su capacidad).
+     * Cantidad de elementos presentes en la colección (no su capacidad).
      */
     private int size;
 
@@ -82,16 +82,16 @@ public class ArrayList<E> implements List<E> {
     }
 
     /**
-     * Verifica si el arreglo está lleno.
+     * Verifica si la colección está llena.
      *
-     * @return {@code true} si el arreglo está lleno
+     * @return {@code true} si la colección está llena
      */
     private boolean isFull() {
         return capacity == size;
     }
 
     /**
-     * Aumenta la capacidad del arreglo, multiplica su capacidad 1.5 veces.
+     * Aumenta la capacidad de la colección, multiplica su capacidad 1.5 veces.
      */
     private void grow() {
         final int newCap = size + (size >> 1);
@@ -108,7 +108,7 @@ public class ArrayList<E> implements List<E> {
     }
 
     /**
-     * Desplaza los nodos del arreglo hacia la izquierda.
+     * Desplaza los nodos de la colección hacia la izquierda.
      *
      * @param idx índice a partir del cual se iniciará el desplazamiento
      */
@@ -123,7 +123,7 @@ public class ArrayList<E> implements List<E> {
     }
 
     /**
-     * Desplaza los nodos del arreglo hacia la derecha.
+     * Desplaza los nodos de la colección hacia la derecha.
      *
      * @param idx índice a partir del cual se iniciará el desplazamiento
      */
@@ -274,7 +274,7 @@ public class ArrayList<E> implements List<E> {
     }
 
     /**
-     * Reemplaza el elemento del arreglo en el índice indicado.
+     * Reemplaza el elemento de la colección en el índice indicado.
      * <p>
      * Complejidad: O(1)
      *
@@ -320,7 +320,7 @@ public class ArrayList<E> implements List<E> {
     }
 
     /**
-     * Invierte el orden de los elementos del arreglo.
+     * Invierte el orden de los elementos de la colección.
      * <p>
      * Complejidad: O(n/2)
      */

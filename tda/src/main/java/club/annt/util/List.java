@@ -2,9 +2,9 @@ package club.annt.util;
 
 public interface List<E> extends Iterable<E> {
     /**
-     * Retorna el número de elementos en el arreglo.
+     * Retorna el número de elementos en la colección.
      *
-     * @return el número de elementos en el arreglo
+     * @return el número de elementos en la colección
      */
     int size();
 
@@ -21,18 +21,18 @@ public interface List<E> extends Iterable<E> {
     void clear();
 
     /**
-     * Agrega el elemento especificado al principio del arreglo.
+     * Agrega el elemento especificado al principio de la colección.
      *
-     * @param e elemento a ser agregado al arreglo
+     * @param e elemento a ser agregado a la colección
      * @return {@code true} si se agregó satisfactoriamente
      */
     boolean addFirst(final E e);
 
     /**
-     * Agrega el elemento especificado al final del arreglo.
+     * Agrega el elemento especificado al final de la colección.
      * <p>
      *
-     * @param e elemento a ser agregado al arreglo
+     * @param e elemento a ser agregado a la colección
      * @return {@code true} si se agregó satisfactoriamente
      */
     boolean addLast(final E e);
@@ -47,7 +47,7 @@ public interface List<E> extends Iterable<E> {
     void add(final int idx, final E e);
 
     /**
-     * Elimina el primer elemento del arreglo.
+     * Elimina el primer elemento de la colección.
      * Desplaza hacia la izquierda los elementos mayores al índice.
      *
      * @return el elemento eliminado
@@ -55,17 +55,17 @@ public interface List<E> extends Iterable<E> {
     E removeFirst();
 
     /**
-     * Elimina el último elemento del arreglo.
+     * Elimina el último elemento de la colección.
      *
      * @return el elemento eliminado
      */
     E removeLast();
 
     /**
-     * Remueve el elemento del arreglo en el índice indicado.
+     * Remueve el elemento de la colección en el índice indicado.
      * Desplaza hacia la izquierda los elementos mayores al índice.
      *
-     * @param idx el índice del elemento del arreglo a remover
+     * @param idx el índice del elemento de la colección a remover
      * @return el elemento que fue removido de la lista
      */
     E remove(final int idx);
@@ -74,18 +74,18 @@ public interface List<E> extends Iterable<E> {
      * Retorna el elemento de la colección a partir del índice indicado.
      *
      * @param idx índice del elemento a retornar
-     * @return el elemento del arreglo en la posición indicada
+     * @return el elemento de la colección en la posición indicada
      */
     E get(final int idx);
 
     E set(final int idx, final E e);
 
     /**
-     * Modifica el arreglo dejando únicamente los elementos en el rango
+     * Modifica la colección dejando únicamente los elementos en el rango
      * proporcionado.
      *
-     * @param from posición desde donde tomar los elementos del arreglo
-     * @param to   posición hasta donde tomar los elementos del arreglo
+     * @param from posición desde donde tomar los elementos de la colección
+     * @param to   posición hasta donde tomar los elementos de la colección
      * @return {@code true} sí se realizó la operación correctamente
      */
     boolean keepOnly(final int from, final int to);
