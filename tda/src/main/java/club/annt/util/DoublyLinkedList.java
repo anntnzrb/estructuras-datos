@@ -7,14 +7,21 @@ public class DoublyLinkedList<E> implements List<E> {
      * Puntero al primer nodo.
      */
     private Node<E> first;
+
     /**
      * Puntero al último nodo.
      */
     private Node<E> last;
 
+    /**
+     * Cantidad de elementos presentes en la colección.
+     */
+    private int size;
+
     /* constructores */
     public DoublyLinkedList() {
         first = last = null;
+        size = 0;
     }
 
     /**
@@ -24,10 +31,7 @@ public class DoublyLinkedList<E> implements List<E> {
      */
     @Override
     public final int size() {
-        int count = 0;
-        for (Node<E> n = first; n != null; n = n.next, ++count) ;
-
-        return count;
+        return size;
     }
 
     /**
@@ -65,7 +69,7 @@ public class DoublyLinkedList<E> implements List<E> {
      * @param idx índice a verificar
      */
     private void checkRange(final int idx) {
-        if (idx >= this.size()) {
+        if (idx >= size) {
             throw new ArrayIndexOutOfBoundsException(idx);
         }
     }
@@ -86,7 +90,7 @@ public class DoublyLinkedList<E> implements List<E> {
             return null;
         } else if (idx == 0) {
             return first;
-        } else if (idx == (this.size() - 1)) {
+        } else if (idx == (size - 1)) {
             return last;
         }
 
@@ -94,7 +98,6 @@ public class DoublyLinkedList<E> implements List<E> {
          * caso contrario -> buscar desde el final
          */
         Node<E> n;
-        final int size = this.size();
         if (idx < (size >> 1)) {
             n = first;
             for (int i = 0; i < idx; ++i) {
@@ -126,6 +129,8 @@ public class DoublyLinkedList<E> implements List<E> {
 
         if (isEmpty()) {
             first = last = newNode;
+            ++size;
+
             return true;
         }
 
@@ -134,6 +139,8 @@ public class DoublyLinkedList<E> implements List<E> {
         //noinspection ConstantConditions
         first.prev = newNode;
         first = newNode;
+
+        ++size;
 
         return true;
     }
@@ -154,12 +161,16 @@ public class DoublyLinkedList<E> implements List<E> {
 
         if (isEmpty()) {
             first = last = newNode;
+            ++size;
+
             return true;
         }
 
         newNode.prev = last;
         last.next = newNode;
         last = newNode;
+
+        ++size;
 
         return true;
     }
@@ -180,7 +191,7 @@ public class DoublyLinkedList<E> implements List<E> {
         /* addFirst() y addLast() tienen complejidad O(1) */
         if (idx == 0) {
             addFirst(e);
-        } else if (idx == (this.size() - 1)) {
+        } else if (idx == (size - 1)) {
             addLast(e);
         }
 
@@ -194,6 +205,8 @@ public class DoublyLinkedList<E> implements List<E> {
         newNode.next = p.next;
         p.next = newNode;
         newNode.next.prev = newNode;
+
+        ++size;
     }
 
     /**
@@ -209,6 +222,7 @@ public class DoublyLinkedList<E> implements List<E> {
             final E oldVal = first.item;
             first.item = null;
             first = last = null;
+            --size;
 
             return oldVal;
         }
@@ -221,6 +235,8 @@ public class DoublyLinkedList<E> implements List<E> {
         first.next = null;
         first = newFirst;
         newFirst.prev = null;
+
+        --size;
 
         return oldVal;
     }
@@ -238,6 +254,7 @@ public class DoublyLinkedList<E> implements List<E> {
             final E oldVal = last.item;
             last.item = null;
             first = last = null;
+            --size;
 
             return oldVal;
         }
@@ -248,6 +265,8 @@ public class DoublyLinkedList<E> implements List<E> {
         last.prev = null;
         last = newLast;
         newLast.next = null;
+
+        --size;
 
         return oldVal;
     }
@@ -266,7 +285,7 @@ public class DoublyLinkedList<E> implements List<E> {
             /* removeFirst() y removeLast() tienen complejidad O(1) */
         } else if (idx == 0) {
             removeFirst();
-        } else if (idx == (this.size() - 1)) {
+        } else if (idx == (size - 1)) {
             removeLast();
         }
 
@@ -280,6 +299,8 @@ public class DoublyLinkedList<E> implements List<E> {
         final E oldVal = p.item;
         p.item = null;
         p.prev = p.next = null;
+
+        --size;
 
         return oldVal;
     }
@@ -328,7 +349,7 @@ public class DoublyLinkedList<E> implements List<E> {
     public final String toString() {
         if (isEmpty()) {
             return "[]";
-        } else if (size() == 1) {
+        } else if (size == 1) {
             return "[" + last.item + "]";
         }
 
