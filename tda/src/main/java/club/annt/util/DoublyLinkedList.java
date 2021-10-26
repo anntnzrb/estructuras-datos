@@ -350,7 +350,9 @@ public class DoublyLinkedList<E> implements List<E> {
         if (isEmpty()) {
             return "[]";
         } else if (size == 1) {
-            return "[" + last.getData() + "]";
+            if (first != null) {
+                return "[" + first.getData() + "]";
+            }
         }
 
         final StringBuilder str = new StringBuilder();

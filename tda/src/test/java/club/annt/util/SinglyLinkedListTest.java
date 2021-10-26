@@ -6,11 +6,11 @@ import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class SimplyLinkedListTest {
+class SinglyLinkedListTest {
 
     @Test
     void testClear() {
-        final List<Integer> xs = new SimplyLinkedList<>();
+        final List<Integer> xs = new SinglyLinkedList<>();
         xs.addLast(1);
 
         /* contiene elementos */
@@ -23,12 +23,12 @@ class SimplyLinkedListTest {
 
     @Test
     void testGet() {
-        final List<Integer> xs = new SimplyLinkedList<>();
+        final List<Integer> xs = new SinglyLinkedList<>();
         xs.addLast(1);
         xs.addLast(2);
         xs.addLast(3);
 
-        final List<String> ys = new SimplyLinkedList<>();
+        final List<String> ys = new SinglyLinkedList<>();
         ys.addLast("foo");
         ys.addLast("bar");
         ys.addLast("baz");
@@ -40,7 +40,7 @@ class SimplyLinkedListTest {
 
     @Test
     void testAddFirst() {
-        final List<Integer> xs = new SimplyLinkedList<>();
+        final List<Integer> xs = new SinglyLinkedList<>();
         xs.addLast(1);
         xs.addLast(2);
         xs.addLast(3);
@@ -53,7 +53,7 @@ class SimplyLinkedListTest {
 
     @Test
     void testAddLast() {
-        final List<Integer> xs = new SimplyLinkedList<>();
+        final List<Integer> xs = new SinglyLinkedList<>();
         xs.addLast(1);
         xs.addLast(2);
         xs.addLast(3);
@@ -66,7 +66,7 @@ class SimplyLinkedListTest {
 
     @Test
     void testAdd() {
-        final List<Integer> xs = new SimplyLinkedList<>();
+        final List<Integer> xs = new SinglyLinkedList<>();
         xs.addLast(1);
         xs.addLast(2);
         xs.addLast(3);
@@ -83,7 +83,7 @@ class SimplyLinkedListTest {
 
     @Test
     void testRemove() {
-        final List<Integer> xs = new SimplyLinkedList<>();
+        final List<Integer> xs = new SinglyLinkedList<>();
         IntStream.rangeClosed(0, 6)
                  .forEach(xs::addLast);
 
@@ -99,7 +99,7 @@ class SimplyLinkedListTest {
         int rmVal;
 
         /* xs */
-        final List<Integer> xs = new SimplyLinkedList<>();
+        final List<Integer> xs = new SinglyLinkedList<>();
         IntStream.rangeClosed(0, 6)
                  .forEach(xs::addLast);
 
@@ -109,13 +109,13 @@ class SimplyLinkedListTest {
         assertEquals(0, rmVal);
 
         /* ys */
-        final List<Integer> ys = new SimplyLinkedList<>();
+        final List<Integer> ys = new SinglyLinkedList<>();
         assertEquals(0, ys.size());
         ys.removeFirst();
         assertEquals(0, ys.size());
 
         /* zs */
-        final List<Integer> zs = new SimplyLinkedList<>();
+        final List<Integer> zs = new SinglyLinkedList<>();
         zs.addLast(99);
         assertEquals(1, zs.size());
         rmVal = zs.removeFirst();
@@ -129,7 +129,7 @@ class SimplyLinkedListTest {
         int rmVal;
 
         /* xs */
-        final List<Integer> xs = new SimplyLinkedList<>();
+        final List<Integer> xs = new SinglyLinkedList<>();
         IntStream.rangeClosed(0, 6)
                  .forEach(xs::addLast);
 
@@ -139,13 +139,13 @@ class SimplyLinkedListTest {
         assertEquals(6, rmVal);
 
         /* ys */
-        final List<Integer> ys = new SimplyLinkedList<>();
+        final List<Integer> ys = new SinglyLinkedList<>();
         assertEquals(0, ys.size());
         ys.removeFirst();
         assertEquals(0, ys.size());
 
         /* zs */
-        final List<Integer> zs = new SimplyLinkedList<>();
+        final List<Integer> zs = new SinglyLinkedList<>();
         zs.addLast(99);
         assertEquals(1, zs.size());
         rmVal = zs.removeLast();
@@ -155,15 +155,15 @@ class SimplyLinkedListTest {
 
     @Test
     void testToString() {
-        final List<Integer> xs = new SimplyLinkedList<>();
+        final List<Integer> xs = new SinglyLinkedList<>();
         xs.addLast(1);
         xs.addLast(2);
         xs.addLast(3);
 
-        final List<Integer> ys = new SimplyLinkedList<>();
+        final List<Integer> ys = new SinglyLinkedList<>();
         ys.addLast(0);
 
-        final List<Integer> zs = new SimplyLinkedList<>();
+        final List<Integer> zs = new SinglyLinkedList<>();
 
         assertEquals("[1, 2, 3]", xs.toString());
         assertEquals("[0]", ys.toString());
@@ -172,11 +172,11 @@ class SimplyLinkedListTest {
 
     @Test
     void iterator() {
-        final List<Integer> xs = new SimplyLinkedList<>();
+        final List<Integer> xs = new SinglyLinkedList<>();
         IntStream.rangeClosed(0, 6)
                  .forEach(xs::addLast);
 
-        final List<Integer> ys = new SimplyLinkedList<>();
+        final List<Integer> ys = new SinglyLinkedList<>();
 
         /* xs es no vacío */
         assertTrue(xs.iterator().hasNext());

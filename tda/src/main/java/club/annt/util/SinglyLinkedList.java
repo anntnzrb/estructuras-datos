@@ -46,7 +46,13 @@ public class SinglyLinkedList<E> implements List<E> {
 
     @Override
     public final void clear() {
-        // TODO
+        for (SinglyNode<E> n = first; n != null; ) {
+            final SinglyNode<E> nextNode = n.getNext();
+            n.setData(null);
+            n.setNext(null);
+            n = nextNode;
+        }
+        first = last = null;
     }
 
     /**
@@ -153,15 +159,15 @@ public class SinglyLinkedList<E> implements List<E> {
         }
 
         final SinglyNode<E> newNode = new SinglyNode<>(e);
-        // TODO
 
         /* se empieza a recorrer desde idx = 1 */
         int i = 1;
-        for (SinglyNode<E> n = first.getNext();
+        for (SinglyNode<E> n = first;
              n != null;
              n = n.getNext(), ++i) {
             if (idx == i) {
-
+                newNode.setNext(n.getNext());
+                n.setNext(newNode);
             }
         }
 
@@ -175,19 +181,25 @@ public class SinglyLinkedList<E> implements List<E> {
      */
     @Override
     public final E removeFirst() {
+        /* reducir complejidad */
         if (isEmpty()) {
             return null;
-        } else if (first == null || last == null) {
-            return null;
         } else if (first == last) {
+            final E oldVal = first.getData();
             first = last = null;
+            --size;
+
+            return oldVal;
         }
 
         final E oldVal = first.getData();
-        final SinglyNode<E> next = first.getNext();
+        final SinglyNode<E> newFirst = first.getNext();
+        if (newFirst == null) { last = null; }
         first.setData(null);
-        first = next;
-        if (next == null) { last = null; }
+        first.setNext(null);
+        first = newFirst;
+
+        --size;
 
         return oldVal;
     }
@@ -206,16 +218,23 @@ public class SinglyLinkedList<E> implements List<E> {
         if (isEmpty()) {
             return null;
         } else if (first == last) {
+            final E oldVal = last.getData();
             first = last = null;
+            --size;
+
+            return oldVal;
         }
 
         final SinglyNode<E> prevNode = getPrevious(last);
         if (prevNode == null) { return null; }
 
+        final E oldVal = last.getData();
         last = prevNode;
         last.setNext(null);
 
-        return last.getData();
+        --size;
+
+        return oldVal;
     }
 
     /**
@@ -225,8 +244,33 @@ public class SinglyLinkedList<E> implements List<E> {
      */
     @Override
     public final E remove(final int idx) {
-        // TODO
-        return null;
+        checkRange(idx);
+
+        /* reducir complejidad */
+        if (isEmpty()) {
+            return null;
+        } else if (idx == 0) {
+            removeFirst();
+        } else if (idx == (size - 1)) {
+            removeLast();
+        }
+
+        SinglyNode<E> ptr = first;
+        for (int i = 1; i < idx; ++i) {
+            ptr = ptr.getNext();
+        }
+
+        final SinglyNode<E> rmNode = ptr.getNext();
+        final E oldVal = rmNode.getData();
+        ptr.setNext(rmNode.getNext());
+
+        --size;
+
+        /* limpieza */
+        rmNode.setNext(null);
+        rmNode.setData(null);
+
+        return oldVal;
     }
 
     /**
@@ -273,21 +317,8 @@ public class SinglyLinkedList<E> implements List<E> {
      */
     @Override
     public final boolean keepOnly(final int from, final int to) {
-        if (to < from) {
-            return false;
-        }
-
-        int count = 1;
-        for (SinglyNode<E> n = first; n != null; n = n.getNext(), ++count) {
-            if (count == from) {
-                first = n;
-            } else if (count == to) {
-                last = n;
-                last.setNext(null);
-            }
-        }
-
-        return true;
+        // TODO
+        return false;
     }
 
     @Override
@@ -307,17 +338,22 @@ public class SinglyLinkedList<E> implements List<E> {
      * Complejidad: O(n)
      */
     public final String toString() {
-        // TODO
+        if (isEmpty()) {
+            return "[]";
+        } else if (size == 1) {
+            if (first != null) {
+                return "[" + first.getData() + "]";
+            }
+        }
+
         final StringBuilder str = new StringBuilder();
 
         str.append("[");
-        if (!isEmpty()) {
-            for (SinglyNode<E> n = first; n != null; n = n.getNext()) {
-                if (n != last) {
-                    str.append(n.getData()).append(", ");
-                } else {
-                    str.append(n.getData());
-                }
+        for (SinglyNode<E> n = first; n != null; n = n.getNext()) {
+            if (n != last) {
+                str.append(n.getData()).append(", ");
+            } else {
+                str.append(n.getData());
             }
         }
         str.append("]");
