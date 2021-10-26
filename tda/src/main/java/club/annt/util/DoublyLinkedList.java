@@ -184,11 +184,10 @@ public class DoublyLinkedList<E> implements List<E> {
     public final void add(final int idx, final E e) {
         checkRange(idx);
 
+        /* reducir complejidad */
         if (e == null) {
             return;
         }
-
-        /* addFirst() y addLast() tienen complejidad O(1) */
         if (idx == 0) {
             addFirst(e);
         } else if (idx == (size - 1)) {

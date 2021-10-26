@@ -2,19 +2,26 @@ package club.annt.util;
 
 import java.util.Iterator;
 
-public class SimplyLinkedList<E> implements List<E> {
+public class SinglyLinkedList<E> implements List<E> {
     /**
      * Puntero al primer nodo.
      */
-    private Node<E> first;
+    private SinglyNode<E> first;
+
     /**
      * Puntero al último nodo.
      */
-    private Node<E> last;
+    private SinglyNode<E> last;
+
+    /**
+     * Cantidad de elementos presentes en la colección.
+     */
+    private int size;
 
     /* constructores */
-    public SimplyLinkedList() {
+    public SinglyLinkedList() {
         first = last = null;
+        size = 0;
     }
 
     /**
@@ -24,10 +31,7 @@ public class SimplyLinkedList<E> implements List<E> {
      */
     @Override
     public final int size() {
-        int count = 0;
-        for (Node<E> n = first; n != null; n = n.next, ++count) ;
-
-        return count;
+        return size;
     }
 
     /**
@@ -42,7 +46,7 @@ public class SimplyLinkedList<E> implements List<E> {
 
     @Override
     public final void clear() {
-
+        // TODO
     }
 
     /**
@@ -53,7 +57,7 @@ public class SimplyLinkedList<E> implements List<E> {
      * @param idx índice a verificar
      */
     private void checkRange(final int idx) {
-        if (idx >= this.size()) {
+        if (idx >= size) {
             throw new ArrayIndexOutOfBoundsException(idx);
         }
     }
@@ -66,15 +70,15 @@ public class SimplyLinkedList<E> implements List<E> {
      * @param node nodo cual se solicitará el nodo anterior
      * @return nodo en la posición anterior al solicitado
      */
-    private Node<E> getPrevious(final Node<E> node) {
+    private SinglyNode<E> getPrevious(final SinglyNode<E> node) {
         if (isEmpty()) {
             return null;
         } else if (first == node) {
             return null;
         }
 
-        for (Node<E> n = first; n != null; n = n.next) {
-            if (n.next == node) { return n; }
+        for (SinglyNode<E> n = first; n != null; n = n.getNext()) {
+            if (n.getNext() == node) { return n; }
         }
 
         return null;
@@ -87,16 +91,20 @@ public class SimplyLinkedList<E> implements List<E> {
      */
     @Override
     public final boolean addFirst(final E e) {
-        final Node<E> newNode = new Node<>(e);
+        final SinglyNode<E> newNode = new SinglyNode<>(e);
 
         if (e == null) {
             return false;
         } else if (isEmpty()) {
             first = last = newNode;
+            ++size;
+            return true;
         }
 
-        newNode.next = first;
+        newNode.setNext(first);
         first = newNode;
+
+        ++size;
 
         return true;
     }
@@ -108,16 +116,21 @@ public class SimplyLinkedList<E> implements List<E> {
      */
     @Override
     public final boolean addLast(final E e) {
-        Node<E> newNode = new Node<>(e);
+        SinglyNode<E> newNode = new SinglyNode<>(e);
 
         if (e == null) {
             return false;
         } else if (isEmpty()) {
             first = last = newNode;
+            ++size;
+
+            return true;
         }
 
-        last.next = newNode;
+        last.setNext(newNode);
         last = newNode;
+
+        ++size;
 
         return true;
     }
@@ -129,7 +142,30 @@ public class SimplyLinkedList<E> implements List<E> {
      */
     @Override
     public final void add(final int idx, final E e) {
+        /* reducir complejidad */
+        if (e == null) {
+            return;
+        }
+        if (idx == 0) {
+            addFirst(e);
+        } else if (idx == (size - 1)) {
+            addLast(e);
+        }
 
+        final SinglyNode<E> newNode = new SinglyNode<>(e);
+        // TODO
+
+        /* se empieza a recorrer desde idx = 1 */
+        int i = 1;
+        for (SinglyNode<E> n = first.getNext();
+             n != null;
+             n = n.getNext(), ++i) {
+            if (idx == i) {
+
+            }
+        }
+
+        ++size;
     }
 
     /**
@@ -147,9 +183,9 @@ public class SimplyLinkedList<E> implements List<E> {
             first = last = null;
         }
 
-        final E oldVal = first.item;
-        final Node<E> next = first.next;
-        first.item = null;
+        final E oldVal = first.getData();
+        final SinglyNode<E> next = first.getNext();
+        first.setData(null);
         first = next;
         if (next == null) { last = null; }
 
@@ -163,7 +199,7 @@ public class SimplyLinkedList<E> implements List<E> {
      * <p>
      * NOTA:
      * <p>
-     * Complejidad: O(n) por {@link #getPrevious(Node)}
+     * Complejidad: O(n) por {@link #getPrevious(SinglyNode)}
      */
     @Override
     public final E removeLast() {
@@ -173,13 +209,13 @@ public class SimplyLinkedList<E> implements List<E> {
             first = last = null;
         }
 
-        final Node<E> prevNode = getPrevious(last);
+        final SinglyNode<E> prevNode = getPrevious(last);
         if (prevNode == null) { return null; }
 
         last = prevNode;
-        last.next = null;
+        last.setNext(null);
 
-        return last.item;
+        return last.getData();
     }
 
     /**
@@ -189,32 +225,8 @@ public class SimplyLinkedList<E> implements List<E> {
      */
     @Override
     public final E remove(final int idx) {
-        checkRange(idx);
-
-        if (idx == 0) {
-            final E oldVal = first.item;
-            this.removeFirst();
-            return oldVal;
-        } else if (idx == (this.size() - 1)) {
-            final E oldVal = last.item;
-            this.removeLast();
-            return oldVal;
-        }
-
-
-        /* crear un nuevo nodo que tenga el valor del nodo siguiente al que
-         * se va a eliminar
-         */
-        Node<E> newLastNode = first.next;
-        for (int i = 1; i < (idx - 1); ++i) {
-            newLastNode = newLastNode.next;
-        }
-
-        final Node<E> oldNode = newLastNode.next;
-        newLastNode.next = oldNode.next;
-        oldNode.next = null;
-
-        return oldNode.item;
+        // TODO
+        return null;
     }
 
     /**
@@ -226,10 +238,22 @@ public class SimplyLinkedList<E> implements List<E> {
     public final E get(final int idx) {
         checkRange(idx);
 
-        int jdx = 0; /* índice secundario */
-        for (Node<E> n = first; n != null; n = n.next, ++jdx) {
-            if (idx == jdx) {
-                return n.item;
+        /* reducir complejidad */
+        if (isEmpty()) {
+            return null;
+        } else if (idx == 0) {
+            return first != null ? first.getData() : null;
+        } else if (idx == (size - 1)) {
+            return last != null ? last.getData() : null;
+        }
+
+        /* se empieza a recorrer desde idx = 1 */
+        int i = 1;
+        for (SinglyNode<E> n = first != null ? first.getNext() : null;
+             n != null;
+             n = n.getNext(), ++i) {
+            if (idx == i) {
+                return n.getData();
             }
         }
 
@@ -238,6 +262,7 @@ public class SimplyLinkedList<E> implements List<E> {
 
     @Override
     public final E set(final int idx, final E e) {
+        // TODO
         return null;
     }
 
@@ -253,12 +278,12 @@ public class SimplyLinkedList<E> implements List<E> {
         }
 
         int count = 1;
-        for (Node<E> n = first; n != null; n = n.next, ++count) {
+        for (SinglyNode<E> n = first; n != null; n = n.getNext(), ++count) {
             if (count == from) {
                 first = n;
             } else if (count == to) {
                 last = n;
-                last.next = null;
+                last.setNext(null);
             }
         }
 
@@ -267,19 +292,12 @@ public class SimplyLinkedList<E> implements List<E> {
 
     @Override
     public final void reverse() {
-        if (!isEmpty()) {
-            final SimplyLinkedList<E> tmpLList = new SimplyLinkedList<>();
-            while (!this.isEmpty()) {
-                tmpLList.addFirst(this.removeFirst());
-            }
-
-            this.first = tmpLList.first;
-            this.last = tmpLList.last;
-        }
+        // TODO
     }
 
     @Override
     public final List<E> insertAt(final List<E> xs, final int idx) {
+        // TODO
         return null;
     }
 
@@ -289,15 +307,16 @@ public class SimplyLinkedList<E> implements List<E> {
      * Complejidad: O(n)
      */
     public final String toString() {
+        // TODO
         final StringBuilder str = new StringBuilder();
 
         str.append("[");
         if (!isEmpty()) {
-            for (Node<E> n = first; n != null; n = n.next) {
+            for (SinglyNode<E> n = first; n != null; n = n.getNext()) {
                 if (n != last) {
-                    str.append(n.item).append(", ");
+                    str.append(n.getData()).append(", ");
                 } else {
-                    str.append(n.item);
+                    str.append(n.getData());
                 }
             }
         }
@@ -314,7 +333,7 @@ public class SimplyLinkedList<E> implements List<E> {
     @Override
     public Iterator<E> iterator() {
         return new Iterator<E>() {
-            private Node<E> ptr = first;
+            private SinglyNode<E> cursor = first;
 
             /**
              * {@inheritDoc}
@@ -323,7 +342,7 @@ public class SimplyLinkedList<E> implements List<E> {
              */
             @Override
             public boolean hasNext() {
-                return ptr != null;
+                return cursor != null;
             }
 
             /**
@@ -333,35 +352,11 @@ public class SimplyLinkedList<E> implements List<E> {
              */
             @Override
             public E next() {
-                final E elem = ptr.item;
-                ptr = ptr.next;
+                final E elem = cursor.getData();
+                cursor = cursor.getNext();
 
                 return elem;
             }
         };
-    }
-
-    /**
-     * Clase Node para Singly LinkedList.
-     *
-     * @param <E> tipo de dato para el Node
-     */
-    private static class Node<E> {
-        E item;
-        Node<E> next;
-
-        /* constructores */
-        public Node() {
-            this(null, null);
-        }
-
-        public Node(final E elem) {
-            this(elem, null);
-        }
-
-        public Node(final E item, final Node<E> next) {
-            this.item = item;
-            this.next = next;
-        }
     }
 }
