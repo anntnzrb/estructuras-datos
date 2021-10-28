@@ -44,6 +44,11 @@ public class SinglyLinkedList<E> implements List<E> {
         return first == null && last == null;
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Complejidad: O(n)
+     */
     @Override
     public final void clear() {
         if (isEmpty()) { return; }
@@ -61,6 +66,8 @@ public class SinglyLinkedList<E> implements List<E> {
      * Verifica si el índice se encuentra en el rango de la colección.
      * Este método se emplea previamente a cualquier función que accede a
      * los índices de una colección.
+     * <p>
+     * Complejidad: O(1)
      *
      * @param idx índice a verificar
      */
@@ -146,7 +153,7 @@ public class SinglyLinkedList<E> implements List<E> {
     /**
      * {@inheritDoc}
      * <p>
-     * Complejidad: ???
+     * Complejidad: O(n)
      */
     @Override
     public final void add(final int idx, final E e) {
@@ -208,10 +215,6 @@ public class SinglyLinkedList<E> implements List<E> {
 
     /**
      * {@inheritDoc}
-     * <p>
-     * Complejidad: O(1)
-     * <p>
-     * NOTA:
      * <p>
      * Complejidad: O(n) por {@link #getPrevious(SinglyNode)}
      */
@@ -312,11 +315,6 @@ public class SinglyLinkedList<E> implements List<E> {
         return null;
     }
 
-    /**
-     * {@inheritDoc}
-     * <p>
-     * Complejidad: O(n)
-     */
     @Override
     public final boolean keepOnly(final int from, final int to) {
         // TODO
@@ -365,6 +363,8 @@ public class SinglyLinkedList<E> implements List<E> {
 
     /**
      * Retorna un Iterator de elementos de {@code E}.
+     * <p>
+     * Complejidad: O(1)
      *
      * @return un Iterator.
      */

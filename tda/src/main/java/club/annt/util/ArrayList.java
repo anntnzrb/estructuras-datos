@@ -23,6 +23,7 @@ public class ArrayList<E> implements List<E> {
      */
     private int size;
 
+    /* constructores */
     public ArrayList(final int minCapacity) {
         capacity = minCapacity;
         elems = (E[]) new Object[capacity];
@@ -35,6 +36,8 @@ public class ArrayList<E> implements List<E> {
 
     /**
      * {@inheritDoc}
+     * <p>
+     * Complejidad: O(1)
      */
     @Override
     public final int size() {
@@ -74,6 +77,8 @@ public class ArrayList<E> implements List<E> {
      * Verifica si el índice se encuentra en el rango de la colección.
      * Este método se emplea previamente a cualquier función que accede a
      * los índices de una colección.
+     * <p>
+     * Complejidad: O(1)
      *
      * @param idx índice a verificar
      */
@@ -85,6 +90,8 @@ public class ArrayList<E> implements List<E> {
 
     /**
      * Verifica si la colección está llena.
+     * <p>
+     * Complejidad: O(1)
      *
      * @return {@code true} si la colección está llena
      */
@@ -94,6 +101,8 @@ public class ArrayList<E> implements List<E> {
 
     /**
      * Aumenta la capacidad de la colección, multiplica su capacidad 1.5 veces.
+     * <p>
+     * Complejidad: O(n)
      */
     private void grow() {
         final int newCap = size + (size >> 1);
@@ -111,6 +120,8 @@ public class ArrayList<E> implements List<E> {
 
     /**
      * Desplaza los nodos de la colección hacia la izquierda.
+     * <p>
+     * Complejidad: O(n)
      *
      * @param idx índice a partir del cual se iniciará el desplazamiento
      */
@@ -126,6 +137,8 @@ public class ArrayList<E> implements List<E> {
 
     /**
      * Desplaza los nodos de la colección hacia la derecha.
+     * <p>
+     * Complejidad: O(n)
      *
      * @param idx índice a partir del cual se iniciará el desplazamiento
      */
@@ -346,6 +359,8 @@ public class ArrayList<E> implements List<E> {
 
     /**
      * Inserta la colección {@code xs} en el índice especificado.
+     * <p>
+     * Complejidad: O(n)
      *
      * @param xs  colleción a ser agregada
      * @param idx índice donde hacer la inserción
@@ -377,6 +392,8 @@ public class ArrayList<E> implements List<E> {
 
     /**
      * {@inheritDoc}
+     * <p>
+     * Complejidad: O(1)
      */
     @Override
     public final boolean equals(final Object o) {
@@ -416,6 +433,8 @@ public class ArrayList<E> implements List<E> {
 
     /**
      * Retorna un Iterator de elementos de {@code E}.
+     * <p>
+     * Complejidad: O(1)
      *
      * @return un Iterator.
      */

@@ -67,6 +67,8 @@ public class DoublyLinkedList<E> implements List<E> {
      * Verifica si el índice se encuentra en el rango de la colección.
      * Este método se emplea previamente a cualquier función que accede a
      * los índices de una colección.
+     * <p>
+     * Complejidad: O(1)
      *
      * @param idx índice a verificar
      */
@@ -374,6 +376,8 @@ public class DoublyLinkedList<E> implements List<E> {
 
     /**
      * Retorna un Iterator de elementos de {@code E}.
+     * <p>
+     * Complejidad: O(1)
      *
      * @return un Iterator.
      */
@@ -389,7 +393,7 @@ public class DoublyLinkedList<E> implements List<E> {
              */
             @Override
             public boolean hasNext() {
-                return !isEmpty();
+                return first != last;
             }
 
             /**

@@ -56,6 +56,11 @@ public class CircularDoublyLinkedList<E> implements List<E> {
         return getLast() == null;
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Complejidad: O(n)
+     */
     @Override
     public void clear() {
         if (isEmpty()) { return; }
@@ -75,6 +80,8 @@ public class CircularDoublyLinkedList<E> implements List<E> {
      * Verifica si el índice se encuentra en el rango de la colección.
      * Este método se emplea previamente a cualquier función que accede a
      * los índices de una colección.
+     * <p>
+     * Complejidad: O(1)
      *
      * @param idx índice a verificar
      */
@@ -381,30 +388,37 @@ public class CircularDoublyLinkedList<E> implements List<E> {
 
     /**
      * Retorna un Iterator de elementos de {@code E}.
+     * <p>
+     * Complejidad: O(1)
      *
      * @return un Iterator.
      */
     @Override
     public Iterator<E> iterator() {
         return new Iterator<E>() {
+            private Node<E> ptr = getFirst();
+
             /**
              * {@inheritDoc}
              * <p>
-             * Complejidad: ???
+             * Complejidad: O(1)
              */
             @Override
             public boolean hasNext() {
-                return false;
+                return getFirst() != getLast();
             }
 
             /**
              * {@inheritDoc}
              * <p>
-             * Complejidad: ???
+             * Complejidad: O(1)
              */
             @Override
             public E next() {
-                return null;
+                final E elem = ptr.getData();
+                ptr = ptr.getNext();
+
+                return elem;
             }
         };
     }
