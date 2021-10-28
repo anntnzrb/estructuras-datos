@@ -51,6 +51,8 @@ public class DoublyLinkedList<E> implements List<E> {
      */
     @Override
     public void clear() {
+        if (isEmpty()) { return; }
+
         for (Node<E> n = first; n != null; ) {
             final Node<E> nextNode = n.getNext();
             n.setData(null);

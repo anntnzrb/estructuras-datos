@@ -46,6 +46,8 @@ public class SinglyLinkedList<E> implements List<E> {
 
     @Override
     public final void clear() {
+        if (isEmpty()) { return; }
+
         for (SinglyNode<E> n = first; n != null; ) {
             final SinglyNode<E> nextNode = n.getNext();
             n.setData(null);

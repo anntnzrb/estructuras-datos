@@ -58,7 +58,17 @@ public class CircularDoublyLinkedList<E> implements List<E> {
 
     @Override
     public void clear() {
-        // TODO
+        if (isEmpty()) { return; }
+
+        // FIXME :: NPE
+        for (Node<E> n = getFirst(); n != getLast(); n = n.getNext()) {
+            final Node<E> nextNode = n.getNext();
+            n.setData(null);
+            n.setPrev(null);
+            n.setNext(null);
+            n = nextNode;
+        }
+        last = null;
     }
 
     /**

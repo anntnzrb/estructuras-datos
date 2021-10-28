@@ -58,6 +58,8 @@ public class ArrayList<E> implements List<E> {
      */
     @Override
     public final void clear() {
+        if (isEmpty()) { return; }
+
         for (int i = 0; i < size; ++i) {
             elems[i] = null;
         }
