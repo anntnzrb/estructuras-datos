@@ -2,7 +2,7 @@ package club.annt.stack;
 
 import java.util.Stack;
 
-public class Postfix {
+public class Notacion {
 
     /**
      * Convierte la expresión dada de notación in-fija a post-fija.
@@ -40,6 +40,44 @@ public class Postfix {
         return str.toString();
     }
 
+    public static Number evalPostfixExpr(final String expr) {
+        final Stack<Number> numStack = new Stack<>();
+
+        for (int idx = 0; idx < expr.length(); idx++) {
+            final char caracter = expr.charAt(idx);
+
+            if (isOperando(caracter)) {
+                /* agregar al stack si no es un operador */
+                numStack.push(Character.getNumericValue(caracter));
+            } else {
+                /* evaluar los dos últimos operandos con el operador actual */
+                numStack.push(evalOp(caracter, numStack.pop(),
+                        numStack.pop()));
+            }
+        }
+
+        /* peek() y pop() sirven igualmente pero se vacía para ayudar al GC */
+        return numStack.pop();
+    }
+
+    private static Number evalOp(final char op, final Number x,
+                                 final Number y) {
+        switch (op) {
+            case '^':
+                return Math.pow(x.floatValue(), y.floatValue());
+            case '*':
+                return x.floatValue() * y.floatValue();
+            case '/':
+                return x.floatValue() / y.floatValue();
+            case '+':
+                return x.floatValue() + y.floatValue();
+            case '-':
+                return x.floatValue() - y.floatValue();
+            default:
+                return 0;
+        }
+    }
+
     private static boolean isOperando(final char c) {
         return !isOperador(c);
     }
@@ -50,6 +88,8 @@ public class Postfix {
 
     private static byte getPrioridad(final char c) {
         switch (c) {
+            case '^':
+                return 3;
             case '*':
             case '/':
                 return 2;
