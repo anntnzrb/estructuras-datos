@@ -234,7 +234,7 @@ public class DoublyLinkedList<E> implements List<E> {
         //noinspection ConstantConditions
         final E oldVal = first.getData();
         final Node<E> newFirst = first.getNext();
-        last.setData(null);
+        first.setData(null);
         first.setNext(null);
         first = newFirst;
         newFirst.setPrev(null);
@@ -393,7 +393,7 @@ public class DoublyLinkedList<E> implements List<E> {
              */
             @Override
             public boolean hasNext() {
-                return first != last;
+                return ptr != null;
             }
 
             /**

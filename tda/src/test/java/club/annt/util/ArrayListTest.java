@@ -187,12 +187,24 @@ class ArrayListTest {
     void testToString() {
         /* as */
         assertEquals("[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]", as.toString());
+        as.removeLast();
+        as.removeFirst();
+        as.remove(3);
+        as.add(1, 7);
+        assertEquals("[1, 7, 2, 3, 5, 6, 7, 8]", as.toString());
 
         /* bs */
+        assertEquals("[0]", bs.toString());
+        bs.addLast(1);
+        bs.removeLast();
+        bs.addFirst(1);
+        bs.removeFirst();
         assertEquals("[0]", bs.toString());
 
         /* zs */
         assertEquals("[]", zs.toString());
+        zs.addLast(3);
+        assertEquals("[3]", zs.toString());
     }
 
     @Test
