@@ -350,6 +350,7 @@ public class DoublyLinkedList<E> implements List<E> {
      * <p>
      * Complejidad: O(n)
      */
+    @Override
     public final String toString() {
         if (isEmpty()) {
             return "[]";
