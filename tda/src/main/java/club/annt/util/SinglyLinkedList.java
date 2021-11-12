@@ -163,8 +163,7 @@ public class SinglyLinkedList<E> implements List<E> {
         }
         if (idx == 0) {
             addFirst(e);
-        } else if (idx == (size - 1)) {
-            addLast(e);
+            return;
         }
 
         final SinglyNode<E> newNode = new SinglyNode<>(e);

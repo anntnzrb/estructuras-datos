@@ -194,8 +194,7 @@ public class DoublyLinkedList<E> implements List<E> {
         }
         if (idx == 0) {
             addFirst(e);
-        } else if (idx == (size - 1)) {
-            addLast(e);
+            return;
         }
 
         final Node<E> newNode = new Node<>(e);

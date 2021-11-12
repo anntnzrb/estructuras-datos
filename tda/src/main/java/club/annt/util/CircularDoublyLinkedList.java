@@ -207,8 +207,7 @@ public class CircularDoublyLinkedList<E> implements List<E> {
         /* addFirst() y addLast() tienen complejidad O(1) */
         if (idx == 0) {
             addFirst(e);
-        } else if (idx == (size - 1)) {
-            addLast(e);
+            return;
         }
 
         final Node<E> newNode = new Node<>(e);
