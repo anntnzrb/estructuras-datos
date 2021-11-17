@@ -323,7 +323,7 @@ public class Book {
                            "https://s3.amazonaws.com/AKIAJC5RLADLUMVRPFDQ.book-thumb-images/campbell.jpg",
                            400));
         books.add(new Book("The Quick Python Book, Second Edition",
-                           210,
+                           2010,
                            "193518220X",
                            "https://s3.amazonaws.com/AKIAJC5RLADLUMVRPFDQ.book-thumb-images/ceder.jpg",
                            360));

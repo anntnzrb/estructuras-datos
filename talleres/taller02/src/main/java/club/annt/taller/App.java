@@ -3,8 +3,6 @@ package club.annt.taller;
 import club.annt.taller.model.Book;
 import javafx.application.Application;
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -19,7 +17,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-import java.util.List;
+import java.util.*;
 
 public class App extends Application {
     private final List<Book>    allBooks       = Book.loadBooks();
@@ -40,7 +38,7 @@ public class App extends Application {
     }
 
     @Override
-    public void start(final Stage primaryStage) throws Exception {
+    public final void start(final Stage primaryStage) throws Exception {
 
         final VBox mainContainer = new VBox(10);
         mainContainer.setAlignment(Pos.CENTER);
@@ -60,7 +58,6 @@ public class App extends Application {
         setActions();
 
         displayBooks(allBooks);
-//        displayBooks(allBooks.subList(0, 17));
 
         primaryStage.setWidth(1050);
         primaryStage.setHeight(600);
@@ -69,10 +66,7 @@ public class App extends Application {
         primaryStage.setTitle("Galería de Libros");
         primaryStage.show();
 
-        for (final Book book : allBooks) {
-            book.downloadCover();
-        }
-
+        allBooks.forEach(Book::downloadCover);
     }
 
     private HBox createToolBar() {
@@ -92,11 +86,13 @@ public class App extends Application {
 
     private Button createAllButton() {
         final Button button = new Button("Mostrar todos");
+
         return button;
     }
 
     private Button createUniqueButton() {
         final Button button = new Button("Remover repetidos");
+
         return button;
     }
 
@@ -111,6 +107,7 @@ public class App extends Application {
         hbox.getChildren().add(new Label("Ordenar por:"));
         hbox.getChildren().add(rb1);
         hbox.getChildren().add(rb2);
+
         return hbox;
     }
 
@@ -123,6 +120,7 @@ public class App extends Application {
         label.setTextFill(Color.web("#872323"));
         label.setFont(Font.font("Cambria", 20));
         label.setStyle("-fx-font-weight: bold");
+
         return label;
     }
 
@@ -132,6 +130,7 @@ public class App extends Application {
         sp.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED); // Vertical
         // scroll bar
         sp.setFitToWidth(true);
+
         return sp;
     }
 
@@ -141,16 +140,20 @@ public class App extends Application {
         tilePane.setPadding(new Insets(15, 15, 15, 15));
         tilePane.setVgap(30);
         tilePane.setHgap(20);
+
         return tilePane;
     }
 
     private void displayBooks(final List<Book> books) {
         booksDisplayed = books;
         updateBookCont();
-        for (final Book book : books) {
-            final Pane bookView = createBookView(book);
-            gallery.getChildren().addAll(bookView);
-        }
+        booksDisplayed = books;
+        gallery.getChildren().clear();
+        updateBookCont();
+        books.stream()
+             .map(this::createBookView)
+             .forEachOrdered(bookView -> gallery.getChildren()
+                                                .addAll(bookView));
     }
 
     private Pane createBookView(final Book book) {
@@ -177,7 +180,7 @@ public class App extends Application {
         yearLabel.setStyle("-fx-font-weight: bold");
         vbox.getChildren().add(yearLabel);
 
-        yearLabel.setOnMouseClicked(event -> {
+        yearLabel.setOnMouseClicked(e -> {
             currentYear = yearLabel.getText();
             showBooksOfYear(yearLabel.getText());
         });
@@ -186,21 +189,14 @@ public class App extends Application {
     }
 
     private void setActions() {
-
-        allButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(final ActionEvent e) {
-                filterRepeated = false;
-                showAllBooks();
-            }
+        allButton.setOnAction(e -> {
+            filterRepeated = false;
+            showAllBooks();
         });
 
-        uniqueButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(final ActionEvent e) {
-                filterRepeated = true;
-                removeRepeatedBooks();
-            }
+        uniqueButton.setOnAction(e -> {
+            filterRepeated = true;
+            removeRepeatedBooks();
         });
 
         sortingOptions.selectedToggleProperty()
@@ -208,63 +204,77 @@ public class App extends Application {
                           final RadioButton selection =
                                   (RadioButton) sortingOptions.getSelectedToggle();
                           if (selection != null) {
-                              if (selection.getText()
-                                           .equalsIgnoreCase("Alfabéticamente"
-                                           )) {
-                                  sorting = SortDirection.ALPHABETICALLY;
-                              } else {
-                                  sorting = SortDirection.BY_YEAR;
-                              }
+                              sorting = selection.getText()
+                                                 .equalsIgnoreCase("Alfabéticamente")
+                                        ? SortDirection.ALPHABETICALLY
+                                        : SortDirection.BY_YEAR;
                               sortBooks();
                           }
                       });
-
     }
 
-    /**********************************************************/
+    /* ************************************************************************
+     * METODOS QUE USTED DEBE IMPLEMENTAR EN LA PRÁCTICA
+     * ********************************************************************** */
 
     private void showAllBooks() {
-        final Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Information Dialog");
-        alert.setHeaderText(null);
-        alert.setContentText("Mostrar TODOS los libros");
-        alert.show();
+        displayBooks(allBooks);
     }
 
-
-    /**********************************************************/
-    // METODOS QUE USTED DEBE IMPLEMENTAR EN LA PRÁCTICA
     private void removeRepeatedBooks() {
-        final Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Information Dialog");
-        alert.setHeaderText(null);
-        alert.setContentText("Solo mostrar libros ÚNICOS (sin repeticiones)");
-        alert.show();
+        /* retornar una lista (ArrayList) que contenga los libros no repetidos
+         * HashSet por su naturaleza no acepta elementos repetidos.
+         *
+         * NOTA: Algunas colecciones tienen un constructor que acepta otra
+         * colección.
+         */
+        displayBooks(new ArrayList<>(new HashSet<>(booksDisplayed)));
     }
 
     private void sortBooks() {
-
-        final Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Information Dialog");
-        alert.setHeaderText(null);
-
+        final List<Book> sortedList = new ArrayList<>();
         if (sorting == SortDirection.ALPHABETICALLY) {
-            alert.setContentText("Ordenar los libros mostrados "
-                                 + "ALFABÉTICAMENTE");
+            final Queue<Book> pq = new PriorityQueue<>((b1, b2) -> {
+                return b1.getTitle().compareTo(b2.getTitle()) == 0
+                       ? Integer.compare(b1.getYear(), b2.getYear())
+                       : b1.getTitle().compareTo(b2.getTitle());
+            });
+
+            pq.addAll(booksDisplayed);
+            while (!pq.isEmpty()) {
+                sortedList.add(pq.poll());
+            }
+
         } else if (sorting == SortDirection.BY_YEAR) {
-            alert.setContentText("Ordenar los libros mostrados por AÑO");
+            final Queue<Book> pq = new PriorityQueue<>((b1, b2) -> {
+                return b1.getYear() == b2.getYear()
+                       ? b1.getTitle().compareTo(b2.getTitle())
+                       : Integer.compare(b1.getYear(), b2.getYear());
+            });
+
+            pq.addAll(booksDisplayed);
+            while (!pq.isEmpty()) {
+                sortedList.add(pq.poll());
+            }
         }
 
-        alert.show();
+        displayBooks(sortedList);
     }
 
     private void showBooksOfYear(final String year) {
+        final Map<Integer, List<Book>> booksPerYear = new HashMap<>();
 
-        final Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Information Dialog");
-        alert.setHeaderText(null);
-        alert.setContentText("Mostrar únicamente los libros del año " + year);
-        alert.show();
+        booksDisplayed.forEach(b -> {
+            if (booksPerYear.containsKey(b.getYear())) {
+                booksPerYear.get(b.getYear()).add(b);
+            } else {
+                final List<Book> tmp = new ArrayList<>();
+                tmp.add(b);
+                booksPerYear.put(b.getYear(), tmp);
+            }
+        });
+
+        displayBooks(booksPerYear.get(Integer.parseInt(year)));
     }
 
     private enum SortDirection {
