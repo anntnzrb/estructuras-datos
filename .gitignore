@@ -14,3 +14,6 @@ bin
 
 # nvim
 .nvimlog
+
+# misc
+talleres/taller02/covers/*.jpg
