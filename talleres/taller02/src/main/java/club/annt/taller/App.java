@@ -2,7 +2,6 @@ package club.annt.taller;
 
 import club.annt.taller.model.Book;
 import javafx.application.Application;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -200,12 +199,13 @@ public class App extends Application {
         });
 
         sortingOptions.selectedToggleProperty()
-                      .addListener((ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) -> {
+                      .addListener((obs, oldVal, newVal) -> {
                           final RadioButton selection =
                                   (RadioButton) sortingOptions.getSelectedToggle();
                           if (selection != null) {
                               sorting = selection.getText()
-                                                 .equalsIgnoreCase("Alfabéticamente")
+                                                 .equalsIgnoreCase(
+                                                         "Alfabéticamente")
                                         ? SortDirection.ALPHABETICALLY
                                         : SortDirection.BY_YEAR;
                               sortBooks();
@@ -222,36 +222,45 @@ public class App extends Application {
     }
 
     private void removeRepeatedBooks() {
-        /* retornar una lista (ArrayList) que contenga los libros no repetidos
-         * HashSet por su naturaleza no acepta elementos repetidos.
+        /*
+         * usando Sets:
          *
-         * NOTA: Algunas colecciones tienen un constructor que acepta otra
-         * colección.
+         * se crea un HashSet con la lista de libros, se eliminarán los
+         * repetidos automáticamente.
+         *
+         * a continuación, éste HashSet se pasa como parámetro del constructor
+         * de ArrayList (puede ser otro tipo de lista).
+         *
+         * NOTA: algunas colecciones aceptan otras colecciones por a través
+         * del parámetro de su constructor
          */
         displayBooks(new ArrayList<>(new HashSet<>(booksDisplayed)));
+
+        /* usando Streams */
+        //displayBooks(booksDisplayed.stream().distinct().collect(Collectors.toList()));
     }
 
     private void sortBooks() {
         final List<Book> sortedList = new ArrayList<>();
         if (sorting == SortDirection.ALPHABETICALLY) {
-            final Queue<Book> pq = new PriorityQueue<>((b1, b2) -> {
-                return b1.getTitle().compareTo(b2.getTitle()) == 0
-                       ? Integer.compare(b1.getYear(), b2.getYear())
-                       : b1.getTitle().compareTo(b2.getTitle());
-            });
+            final Queue<Book> pq = new PriorityQueue<>(
+                    (b1, b2) -> b1.getTitle().compareTo(b2.getTitle()) == 0
+                                ? Integer.compare(b1.getYear(), b2.getYear())
+                                : b1.getTitle().compareTo(b2.getTitle()));
 
+            /* agregar los elementos a lista a partir de la Queue ordenada */
             pq.addAll(booksDisplayed);
             while (!pq.isEmpty()) {
                 sortedList.add(pq.poll());
             }
 
         } else if (sorting == SortDirection.BY_YEAR) {
-            final Queue<Book> pq = new PriorityQueue<>((b1, b2) -> {
-                return b1.getYear() == b2.getYear()
-                       ? b1.getTitle().compareTo(b2.getTitle())
-                       : Integer.compare(b1.getYear(), b2.getYear());
-            });
+            final Queue<Book> pq = new PriorityQueue<>(
+                    (b1, b2) -> b1.getYear() == b2.getYear()
+                                ? b1.getTitle().compareTo(b2.getTitle())
+                                : Integer.compare(b1.getYear(), b2.getYear()));
 
+            /* agregar los elementos a lista a partir de la Queue ordenada */
             pq.addAll(booksDisplayed);
             while (!pq.isEmpty()) {
                 sortedList.add(pq.poll());
@@ -264,13 +273,22 @@ public class App extends Application {
     private void showBooksOfYear(final String year) {
         final Map<Integer, List<Book>> booksPerYear = new HashMap<>();
 
+        /*
+         * recorrer cada libro, si el año de dicho libro ya está almacenado
+         * en una Key del Map, entonces agregarlo en el Value (colección) de
+         * dicha Key.
+         *
+         * por otro lado, si el año no está como una Key del Map, crear una
+         * nueva colección donde se agregue el libro para ese año. finalmente
+         * agregar el año correspondiente y el arreglo creado al Map.
+         */
         booksDisplayed.forEach(b -> {
             if (booksPerYear.containsKey(b.getYear())) {
                 booksPerYear.get(b.getYear()).add(b);
             } else {
-                final List<Book> tmp = new ArrayList<>();
-                tmp.add(b);
-                booksPerYear.put(b.getYear(), tmp);
+                final List<Book> bookList = new ArrayList<>();
+                bookList.add(b);
+                booksPerYear.put(b.getYear(), bookList);
             }
         });
 
