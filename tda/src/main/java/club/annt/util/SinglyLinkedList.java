@@ -1,5 +1,6 @@
 package club.annt.util;
 
+import java.util.Comparator;
 import java.util.Iterator;
 
 public class SinglyLinkedList<E> implements List<E> {
@@ -51,7 +52,9 @@ public class SinglyLinkedList<E> implements List<E> {
      */
     @Override
     public final void clear() {
-        if (isEmpty()) { return; }
+        if (isEmpty()) {
+            return;
+        }
 
         for (SinglyNode<E> n = first; n != null; ) {
             final SinglyNode<E> nextNode = n.getNext();
@@ -93,7 +96,9 @@ public class SinglyLinkedList<E> implements List<E> {
         }
 
         for (SinglyNode<E> n = first; n != null; n = n.getNext()) {
-            if (n.getNext() == node) { return n; }
+            if (n.getNext() == node) {
+                return n;
+            }
         }
 
         return null;
@@ -202,7 +207,9 @@ public class SinglyLinkedList<E> implements List<E> {
 
         final E oldVal = first.getData();
         final SinglyNode<E> newFirst = first.getNext();
-        if (newFirst == null) { last = null; }
+        if (newFirst == null) {
+            last = null;
+        }
         first.setData(null);
         first.setNext(null);
         first = newFirst;
@@ -230,7 +237,9 @@ public class SinglyLinkedList<E> implements List<E> {
         }
 
         final SinglyNode<E> prevNode = getPrevious(last);
-        if (prevNode == null) { return null; }
+        if (prevNode == null) {
+            return null;
+        }
 
         final E oldVal = last.getData();
         last = prevNode;
@@ -331,6 +340,12 @@ public class SinglyLinkedList<E> implements List<E> {
         return null;
     }
 
+    @Override
+    public boolean sortedInsert(E e, Comparator<E> cmp) {
+        // TODO
+        return false;
+    }
+
     /**
      * {@inheritDoc}
      * <p>
@@ -370,7 +385,7 @@ public class SinglyLinkedList<E> implements List<E> {
      */
     @Override
     public Iterator<E> iterator() {
-        return new Iterator<E>() {
+        return new Iterator<>() {
             private SinglyNode<E> cursor = first;
 
             /**
@@ -392,6 +407,48 @@ public class SinglyLinkedList<E> implements List<E> {
             public E next() {
                 final E elem = cursor.getData();
                 cursor = cursor.getNext();
+
+                return elem;
+            }
+        };
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Complejidad: O(n)
+     */
+    @Override
+    public Iterator<E> iteratorStep(final int start, final int step) {
+        return new Iterator<>() {
+            private SinglyNode<E> cursor = first;
+            private int pos = 0;
+
+            @Override
+            public boolean hasNext() {
+                if (start < 0 || step < 0 || start > size || step > size) {
+                    return false;
+                }
+
+                return pos < size;
+            }
+
+            @Override
+            public E next() {
+                /* mover cursor al nodo que se pide */
+                if (cursor == first) {
+                    for (; pos < start; ++pos) {
+                        cursor = cursor.getNext();
+                    }
+                }
+
+                final E elem = cursor.getData();
+
+                for (int i = 0; i < step; ++i, ++pos) {
+                    if (cursor != null) {
+                        cursor = cursor.getNext();
+                    }
+                }
 
                 return elem;
             }

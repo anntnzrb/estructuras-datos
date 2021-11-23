@@ -1,5 +1,6 @@
 package club.annt.util;
 
+import java.util.Comparator;
 import java.util.Iterator;
 
 public class DoublyLinkedList<E> implements List<E> {
@@ -51,7 +52,9 @@ public class DoublyLinkedList<E> implements List<E> {
      */
     @Override
     public void clear() {
-        if (isEmpty()) { return; }
+        if (isEmpty()) {
+            return;
+        }
 
         for (Node<E> n = first; n != null; ) {
             final Node<E> nextNode = n.getNext();
@@ -341,6 +344,44 @@ public class DoublyLinkedList<E> implements List<E> {
     public List<E> insertAt(List<E> xs, int idx) {
         // TODO
 
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Complejidad: O(n)
+     */
+    @Override
+    public boolean sortedInsert(final E e, final Comparator<E> cmp) {
+        if (e == null) {
+            return false;
+        }
+
+        int i = 0;
+        for (Node<E> ptr = first; ptr != null; ++i) {
+            /* si se ha comparado todo y estamos al final, agregar al final */
+            if (ptr == last) {
+                addLast(e);
+                return true;
+
+                /* si el valor actual es mayor al elemento pasado, agregar */
+            } else if (cmp.compare(ptr.getData(), e) >= 0) {
+                add(i, e);
+                return true;
+
+                /* si el valor actual es menor al elemento pasado, avanzar */
+            } else {
+                ptr = ptr.getNext();
+            }
+        }
+
+        return false;
+    }
+
+    @Override
+    public Iterator<E> iteratorStep(int start, int step) {
+        // TODO
         return null;
     }
 

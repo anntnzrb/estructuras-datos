@@ -212,4 +212,19 @@ class DoublyLinkedListTest {
         // TODO
     }
 
+    @Test
+    void testSortedInsert() {
+        final List<Integer> xs = new DoublyLinkedList<>();
+        xs.addLast(3);
+        xs.addLast(5);
+        xs.addLast(8);
+        xs.addLast(10);
+        xs.addLast(12);
+
+        xs.sortedInsert(13, Integer::compareTo);
+        xs.sortedInsert(9, Integer::compareTo);
+        xs.sortedInsert(0, Integer::compareTo);
+
+        assertEquals("[0, 3, 5, 8, 9, 10, 12, 13]", xs.toString());
+    }
 }

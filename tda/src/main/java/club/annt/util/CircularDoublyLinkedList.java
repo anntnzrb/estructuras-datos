@@ -1,5 +1,6 @@
 package club.annt.util;
 
+import java.util.Comparator;
 import java.util.Iterator;
 
 public class CircularDoublyLinkedList<E> implements List<E> {
@@ -359,6 +360,18 @@ public class CircularDoublyLinkedList<E> implements List<E> {
     public List<E> insertAt(List<E> xs, int idx) {
         // TODO
 
+        return null;
+    }
+
+    @Override
+    public boolean sortedInsert(E e, Comparator<E> cmp) {
+        // TODO
+        return false;
+    }
+
+    @Override
+    public Iterator<E> iteratorStep(int start, int step) {
+        // TODO
         return null;
     }
 

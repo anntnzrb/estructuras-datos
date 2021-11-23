@@ -1,6 +1,7 @@
 package club.annt.util;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Iterator;
 
 @SuppressWarnings("unchecked")
@@ -390,6 +391,18 @@ public class ArrayList<E> implements List<E> {
         }
 
         return this;
+    }
+
+    @Override
+    public boolean sortedInsert(E e, Comparator<E> cmp) {
+        // TODO
+        return false;
+    }
+
+    @Override
+    public Iterator<E> iteratorStep(int start, int step) {
+        // TODO
+        return null;
     }
 
     /**

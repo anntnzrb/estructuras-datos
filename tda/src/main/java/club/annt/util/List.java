@@ -1,5 +1,8 @@
 package club.annt.util;
 
+import java.util.Comparator;
+import java.util.Iterator;
+
 public interface List<E> extends Iterable<E> {
     /**
      * Retorna el número de elementos en la colección.
@@ -83,6 +86,8 @@ public interface List<E> extends Iterable<E> {
     /**
      * Modifica la colección dejando únicamente los elementos en el rango
      * proporcionado.
+     * <p>
+     * NOTA: Este método es parte de un ejercicio de exámen exclusivamente.
      *
      * @param from posición desde donde tomar los elementos de la colección
      * @param to   posición hasta donde tomar los elementos de la colección
@@ -93,4 +98,27 @@ public interface List<E> extends Iterable<E> {
     void reverse();
 
     List<E> insertAt(final List<E> xs, final int idx);
+
+    /**
+     * Agrega un elemento a la colección de forma ordenada
+     * (a partir de un {@link Comparator}).
+     * <p>
+     * NOTA: Este método es parte de un ejercicio de exámen exclusivamente.
+     *
+     * @param e   elemento a agregar
+     * @param cmp {@link Comparator}
+     * @return {@code true} sí se realizó la operación correctamente
+     */
+    boolean sortedInsert(final E e, final Comparator<E> cmp);
+
+    /**
+     * Iterador que puede partir de un inicio y saltarse elementos.
+     * <p>
+     * NOTA: Este método es parte de un ejercicio de exámen exclusivamente.
+     *
+     * @param start elemento donde empezar a iterar
+     * @param step  salto entre elementos
+     * @return @{@link Iterator}
+     */
+    Iterator<E> iteratorStep(final int start, final int step);
 }

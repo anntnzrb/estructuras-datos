@@ -3,7 +3,7 @@ package club.annt.util;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Stack;
+import java.util.Iterator;
 import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -213,4 +213,19 @@ class SinglyLinkedListTest {
         // TODO
     }
 
+    @Test
+    void testIteratorStep() {
+        final List<Integer> xs = new SinglyLinkedList<>();
+        xs.addLast(46);
+        xs.addLast(51);
+        xs.addLast(26);
+        xs.addLast(22);
+        xs.addLast(92);
+        xs.addLast(14);
+
+        final Iterator<Integer> it = xs.iteratorStep(0, 4);
+        while (it.hasNext()) {
+            System.out.println(it.next());
+        }
+    }
 }
