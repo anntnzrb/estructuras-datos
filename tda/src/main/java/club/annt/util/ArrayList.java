@@ -5,7 +5,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 
 @SuppressWarnings("unchecked")
-public class ArrayList<E> implements List<E> {
+public final class ArrayList<E> implements List<E> {
     /**
      * Capacidad inicial de la colección por defecto.
      */
@@ -41,7 +41,7 @@ public class ArrayList<E> implements List<E> {
      * Complejidad: O(1)
      */
     @Override
-    public final int size() {
+    public int size() {
         return size;
     }
 
@@ -51,7 +51,7 @@ public class ArrayList<E> implements List<E> {
      * Complejidad: O(1)
      */
     @Override
-    public final boolean isEmpty() {
+    public boolean isEmpty() {
         return size == 0;
     }
 
@@ -61,7 +61,7 @@ public class ArrayList<E> implements List<E> {
      * Complejidad: O(n)
      */
     @Override
-    public final void clear() {
+    public void clear() {
         if (isEmpty()) { return; }
 
         for (int i = 0; i < size; ++i) {
@@ -403,6 +403,12 @@ public class ArrayList<E> implements List<E> {
     public Iterator<E> iteratorStep(int start, int step) {
         // TODO
         return null;
+    }
+
+    @Override
+    public boolean isReverse(List<E> xs) {
+        // TODO
+        return false;
     }
 
     /**

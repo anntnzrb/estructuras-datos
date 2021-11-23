@@ -375,6 +375,12 @@ public class CircularDoublyLinkedList<E> implements List<E> {
         return null;
     }
 
+    @Override
+    public boolean isReverse(List<E> xs) {
+        // TODO
+        return false;
+    }
+
     /**
      * {@inheritDoc}
      * <p>

@@ -322,14 +322,14 @@ public class DoublyLinkedList<E> implements List<E> {
     }
 
     @Override
-    public E set(int idx, E e) {
+    public E set(final int idx, final E e) {
         // TODO
 
         return null;
     }
 
     @Override
-    public boolean keepOnly(int from, int to) {
+    public boolean keepOnly(final int from, final int to) {
         // TODO
 
         return false;
@@ -341,7 +341,7 @@ public class DoublyLinkedList<E> implements List<E> {
     }
 
     @Override
-    public List<E> insertAt(List<E> xs, int idx) {
+    public List<E> insertAt(final List<E> xs, final int idx) {
         // TODO
 
         return null;
@@ -380,9 +380,42 @@ public class DoublyLinkedList<E> implements List<E> {
     }
 
     @Override
-    public Iterator<E> iteratorStep(int start, int step) {
+    public Iterator<E> iteratorStep(final int start, final int step) {
         // TODO
         return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Complejidad: O(n/2)
+     */
+    @Override
+    public boolean isReverse(final List<E> xs) {
+        if (size != xs.size()) {
+            return false;
+        }
+
+        Node<E> ptrStart = first;
+        Node<E> ptrEnd = last;
+
+        E firstElem;
+        E lastElem;
+
+        while (!xs.isEmpty()) {
+            firstElem = xs.removeFirst();
+            lastElem = xs.isEmpty() ? firstElem : xs.removeLast();
+
+            if (ptrStart.getData().equals(lastElem)
+                && ptrEnd.getData().equals(firstElem)) {
+                ptrStart = ptrStart.getNext();
+                ptrEnd = ptrEnd.getPrev();
+            } else {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**

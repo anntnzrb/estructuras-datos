@@ -1,4 +1,4 @@
-package club.annt.leccion;
+package club.annt.leccion.ejii;
 
 public final class Distancia {
     private final String ciudadOrigin;

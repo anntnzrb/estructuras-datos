@@ -1,14 +1,11 @@
-package club.annt.leccion;
+package club.annt.leccion.ejii;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import java.util.Comparator;
+import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
-import java.util.*;
-
-/**
- * Revisar instrucciones en el archivo assets/l02-ej2.png
- */
-final class EjII {
+public final class EjjII {
     /**
      * Map que representa la existencia de un camino directo entre pares de
      * ciudades.
@@ -16,9 +13,7 @@ final class EjII {
      * De preferencia emplear la interfaz Map y usar HashMap concretamente al
      * instanciar.
      */
-    private Map<String, Map<String, Integer>> caminos;
-
-    private static Queue<Distancia> lleganA(
+    static Queue<Distancia> lleganA(
             final Map<String, Map<String, Integer>> caminos,
             final String ciudadDestino) {
         /* se pasa el Comparator al constructor de PQ, de forma explícita:
@@ -55,49 +50,5 @@ final class EjII {
         // }
 
         return distPQ;
-    }
-
-    @BeforeEach
-    void setUp() {
-        caminos = new HashMap<>();
-
-        /* Esmeraldas */
-        final Map<String, Integer> camEsmeraldas = new HashMap<>();
-        camEsmeraldas.put("Pedernales", 190);
-        camEsmeraldas.put("Muisne", 83);
-        camEsmeraldas.put("Macará", 1);
-
-        /* Muisne */
-        final Map<String, Integer> camMuisne = new HashMap<>();
-        camMuisne.put("Quevedo", 339);
-        camMuisne.put("Pedernales", 121);
-
-        /* Muisne */
-        final Map<String, Integer> camAmbato = new HashMap<>();
-        camAmbato.put("Azogues", 280);
-        camAmbato.put("Babahoyo", 212);
-        camAmbato.put("Pedernales", 318);
-
-        /* finalmente agregar al Map caminos */
-        caminos.put("Esmeraldas", camEsmeraldas);
-        caminos.put("Muisne", camMuisne);
-        caminos.put("Ambato", camAmbato);
-    }
-
-    @Test
-    void res() {
-        final Queue<Distancia> distPQ1 = lleganA(caminos, "Pedernales");
-
-        /* no se puede testear con assertEquals() ya que toString del Queue
-         * no respetará su orden.
-         */
-        while (!distPQ1.isEmpty()) {
-            System.out.println(distPQ1.poll());
-        }
-    }
-
-    @Test
-    void mostrarMap() {
-        System.out.println(caminos);
     }
 }

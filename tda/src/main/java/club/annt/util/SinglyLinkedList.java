@@ -25,6 +25,17 @@ public class SinglyLinkedList<E> implements List<E> {
         size = 0;
     }
 
+    public static <E> boolean isReverse(final List<E> xs, final List<E> ys) {
+        if (xs.size() != ys.size()) {
+            return false;
+        } else if (xs.isEmpty()) {
+            return true;
+        } else if (xs.removeFirst().equals(ys.removeLast())) {
+            return isReverse(xs, ys);
+        }
+        return false;
+    }
+
     /**
      * {@inheritDoc}
      * <p>
@@ -136,7 +147,7 @@ public class SinglyLinkedList<E> implements List<E> {
      */
     @Override
     public final boolean addLast(final E e) {
-        SinglyNode<E> newNode = new SinglyNode<>(e);
+        final SinglyNode<E> newNode = new SinglyNode<>(e);
 
         if (e == null) {
             return false;
@@ -341,7 +352,7 @@ public class SinglyLinkedList<E> implements List<E> {
     }
 
     @Override
-    public boolean sortedInsert(E e, Comparator<E> cmp) {
+    public boolean sortedInsert(final E e, final Comparator<E> cmp) {
         // TODO
         return false;
     }
@@ -422,7 +433,7 @@ public class SinglyLinkedList<E> implements List<E> {
     public Iterator<E> iteratorStep(final int start, final int step) {
         return new Iterator<>() {
             private SinglyNode<E> cursor = first;
-            private int pos = 0;
+            private int pos;
 
             @Override
             public boolean hasNext() {
@@ -453,5 +464,11 @@ public class SinglyLinkedList<E> implements List<E> {
                 return elem;
             }
         };
+    }
+
+    @Override
+    public boolean isReverse(final List<E> xs) {
+        // TODO
+        return false;
     }
 }

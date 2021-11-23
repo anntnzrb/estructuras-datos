@@ -227,4 +227,23 @@ class DoublyLinkedListTest {
 
         assertEquals("[0, 3, 5, 8, 9, 10, 12, 13]", xs.toString());
     }
+
+    @Test
+    void testIsReverseImperativo() {
+        final List<Integer> xs = new DoublyLinkedList<>();
+        xs.addLast(22);
+        xs.addLast(2);
+        xs.addLast(77);
+        xs.addLast(6);
+        xs.addLast(30);
+
+        final List<Integer> ys = new DoublyLinkedList<>();
+        ys.addLast(30);
+        ys.addLast(6);
+        ys.addLast(77);
+        ys.addLast(2);
+        ys.addLast(22);
+
+        assertTrue(xs.isReverse(ys));
+    }
 }

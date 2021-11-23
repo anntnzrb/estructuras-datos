@@ -228,4 +228,24 @@ class SinglyLinkedListTest {
             System.out.println(it.next());
         }
     }
+
+    @Test
+    void isReverseRecursivo() {
+        final SinglyLinkedList<Integer> xs = new SinglyLinkedList<>();
+        xs.addLast(22);
+        xs.addLast(2);
+        xs.addLast(77);
+        xs.addLast(6);
+        xs.addLast(30);
+
+        final SinglyLinkedList<Integer> ys = new SinglyLinkedList<>();
+        ys.addLast(30);
+        ys.addLast(6);
+        ys.addLast(77);
+        ys.addLast(2);
+        ys.addLast(22);
+
+        assertTrue(SinglyLinkedList.isReverse(xs, ys));
+
+    }
 }

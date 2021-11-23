@@ -121,4 +121,13 @@ public interface List<E> extends Iterable<E> {
      * @return @{@link Iterator}
      */
     Iterator<E> iteratorStep(final int start, final int step);
+
+    /**
+     * Verifica si la colección es el reverso de la colección pasada por
+     * parámetro.
+     *
+     * @param xs colección a ser procesada
+     * @return {@code true} sí se realizó la operación correctamente
+     */
+   boolean isReverse(final List<E> xs);
 }
