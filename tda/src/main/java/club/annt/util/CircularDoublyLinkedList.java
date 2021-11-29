@@ -3,7 +3,8 @@ package club.annt.util;
 import java.util.Comparator;
 import java.util.Iterator;
 
-public class CircularDoublyLinkedList<E> implements List<E> {
+@SuppressWarnings("ClassWithTooManyMethods")
+public final class CircularDoublyLinkedList<E> implements List<E> {
     /**
      * Puntero al último nodo.
      */
@@ -25,16 +26,16 @@ public class CircularDoublyLinkedList<E> implements List<E> {
         return last.getNext();
     }
 
-    private void setFirst(final Node<E> n) {
-        last.setNext(n);
+    private void setFirst(final Node<E> node) {
+        last.setNext(node);
     }
 
     private Node<E> getLast() {
         return last;
     }
 
-    private void setLast(final Node<E> n) {
-        last = n;
+    private void setLast(final Node<E> node) {
+        last = node;
     }
 
     /**
@@ -54,7 +55,7 @@ public class CircularDoublyLinkedList<E> implements List<E> {
      */
     @Override
     public boolean isEmpty() {
-        return getLast() == null;
+        return last == null;
     }
 
     /**
@@ -64,15 +65,17 @@ public class CircularDoublyLinkedList<E> implements List<E> {
      */
     @Override
     public void clear() {
-        if (isEmpty()) { return; }
+        if (isEmpty()) {
+            return;
+        }
 
         // FIXME :: NPE
-        for (Node<E> n = getFirst(); n != getLast(); n = n.getNext()) {
-            final Node<E> nextNode = n.getNext();
-            n.setData(null);
-            n.setPrev(null);
-            n.setNext(null);
-            n = nextNode;
+        for (Node<E> ptr = getFirst(); ptr != last; ptr = ptr.getNext()) {
+            final Node<E> nextNode = ptr.getNext();
+            ptr.setData(null);
+            ptr.setPrev(null);
+            ptr.setNext(null);
+            ptr = nextNode;
         }
         last = null;
     }
@@ -86,7 +89,7 @@ public class CircularDoublyLinkedList<E> implements List<E> {
      *
      * @param idx índice a verificar
      */
-    private void checkRange(final int idx) {
+    private void rangeCheck(final int idx) {
         if (idx >= size) {
             throw new ArrayIndexOutOfBoundsException(idx);
         }
@@ -101,7 +104,7 @@ public class CircularDoublyLinkedList<E> implements List<E> {
      * @return nodo en el índice indicado
      */
     private Node<E> node(final int idx) {
-        checkRange(idx);
+        rangeCheck(idx);
 
         /* reducir complejidad */
         if (isEmpty()) {
@@ -109,26 +112,26 @@ public class CircularDoublyLinkedList<E> implements List<E> {
         } else if (idx == 0) {
             return getFirst();
         } else if (idx == (size - 1)) {
-            return getLast();
+            return last;
         }
 
         /* índice menor que mitad de colección -> buscar desde inicio
          * caso contrario -> buscar desde el final
          */
-        Node<E> n;
+        Node<E> node;
         if (idx < (size >> 1)) {
-            n = getFirst();
+            node = getFirst();
             for (int i = 0; i < idx; ++i) {
-                n = n != null ? n.getNext() : null;
+                node = node != null ? node.getNext() : null;
             }
         } else {
-            n = getLast();
+            node = last;
             for (int i = (size - 1); i > idx; --i) {
-                n = n != null ? n.getPrev() : null;
+                node = node != null ? node.getPrev() : null;
             }
         }
 
-        return n;
+        return node;
     }
 
     /**
@@ -137,7 +140,7 @@ public class CircularDoublyLinkedList<E> implements List<E> {
      * Complejidad: O(1)
      */
     @Override
-    public final boolean addFirst(final E e) {
+    public boolean addFirst(final E e) {
         if (e == null) {
             return false;
         }
@@ -146,13 +149,13 @@ public class CircularDoublyLinkedList<E> implements List<E> {
         final Node<E> newNode = new Node<>(e);
 
         if (isEmpty()) {
-            setLast(newNode);
+            last = newNode;
             setFirst(newNode);
             ++size;
             return true;
         }
 
-        newNode.setPrev(getLast());
+        newNode.setPrev(last);
         newNode.setNext(getFirst());
         getFirst().setPrev(newNode);
         setFirst(newNode);
@@ -167,7 +170,7 @@ public class CircularDoublyLinkedList<E> implements List<E> {
      * Complejidad: O(1)
      */
     @Override
-    public final boolean addLast(final E e) {
+    public boolean addLast(final E e) {
         if (e == null) {
             return false;
         }
@@ -176,17 +179,17 @@ public class CircularDoublyLinkedList<E> implements List<E> {
         final Node<E> newNode = new Node<>(e);
 
         if (isEmpty()) {
-            setLast(newNode);
+            last = newNode;
             setFirst(newNode);
             ++size;
             return true;
         }
 
-        newNode.setPrev(getLast());
+        newNode.setPrev(last);
         newNode.setNext(getFirst());
         getFirst().setPrev(newNode);
         setFirst(newNode);
-        setLast(newNode);
+        last = newNode;
 
         ++size;
         return true;
@@ -198,8 +201,8 @@ public class CircularDoublyLinkedList<E> implements List<E> {
      * Complejidad: O(n)
      */
     @Override
-    public final void add(final int idx, final E e) {
-        checkRange(idx);
+    public void add(final int idx, final E e) {
+        rangeCheck(idx);
 
         if (e == null) {
             return;
@@ -231,14 +234,14 @@ public class CircularDoublyLinkedList<E> implements List<E> {
      * Complejidad: O(1)
      */
     @Override
-    public final E removeFirst() {
+    public E removeFirst() {
         if (isEmpty()) {
             return null;
-        } else if (getFirst() == getLast()) {
+        } else if (getFirst() == last) {
             final E oldVal = getFirst().getData();
             getFirst().setData(null);
             setFirst(null);
-            setLast(null);
+            last = null;
 
             --size;
 
@@ -250,8 +253,8 @@ public class CircularDoublyLinkedList<E> implements List<E> {
         getFirst().setData(null);
         getFirst().setNext(null);
         setFirst(newFirst);
-        getLast().setNext(newFirst);
-        newFirst.setPrev(getLast());
+        last.setNext(newFirst);
+        newFirst.setPrev(last);
 
         --size;
 
@@ -264,28 +267,28 @@ public class CircularDoublyLinkedList<E> implements List<E> {
      * Complejidad: O(1)
      */
     @Override
-    public final E removeLast() {
+    public E removeLast() {
         if (isEmpty()) {
             return null;
-        } else if (getFirst() == getLast()) {
-            final E oldVal = getLast().getData();
-            getLast().setData(null);
+        } else if (getFirst() == last) {
+            final E oldVal = last.getData();
+            last.setData(null);
             setFirst(null);
-            setLast(null);
+            last = null;
 
             --size;
 
             return oldVal;
         }
 
-        final E oldVal = getLast().getData();
-        final Node<E> newLast = getLast().getPrev();
-        newLast.setNext(getLast().getNext());
-        getLast().getNext().setPrev(newLast);
-        getLast().setData(null);
-        getLast().setNext(null);
-        getLast().setPrev(null);
-        setLast(newLast);
+        final E oldVal = last.getData();
+        final Node<E> newLast = last.getPrev();
+        newLast.setNext(last.getNext());
+        last.getNext().setPrev(newLast);
+        last.setData(null);
+        last.setNext(null);
+        last.setPrev(null);
+        last = newLast;
 
         --size;
 
@@ -298,8 +301,8 @@ public class CircularDoublyLinkedList<E> implements List<E> {
      * Complejidad: O(n)
      */
     @Override
-    public final E remove(final int idx) {
-        checkRange(idx);
+    public E remove(final int idx) {
+        rangeCheck(idx);
 
         /* reducir complejidad */
         if (isEmpty()) {
@@ -333,19 +336,19 @@ public class CircularDoublyLinkedList<E> implements List<E> {
      * Complejidad: O(n)
      */
     @Override
-    public final E get(final int idx) {
+    public E get(final int idx) {
         return node(idx).getData();
     }
 
     @Override
-    public E set(int idx, E e) {
+    public E set(final int idx, final E e) {
         // TODO
 
         return null;
     }
 
     @Override
-    public boolean keepOnly(int from, int to) {
+    public boolean keepOnly(final int from, final int to) {
         // TODO
 
         return false;
@@ -357,26 +360,26 @@ public class CircularDoublyLinkedList<E> implements List<E> {
     }
 
     @Override
-    public List<E> insertAt(List<E> xs, int idx) {
+    public List<E> insertAt(final List<E> xs, final int idx) {
         // TODO
 
         return null;
     }
 
     @Override
-    public boolean sortedInsert(E e, Comparator<E> cmp) {
+    public boolean sortedInsert(final E e, final Comparator<E> cmp) {
         // TODO
         return false;
     }
 
     @Override
-    public Iterator<E> iteratorStep(int start, int step) {
+    public Iterator<E> iteratorStep(final int start, final int step) {
         // TODO
         return null;
     }
 
     @Override
-    public boolean isReverse(List<E> xs) {
+    public boolean isReverse(final List<E> xs) {
         // TODO
         return false;
     }
@@ -387,23 +390,23 @@ public class CircularDoublyLinkedList<E> implements List<E> {
      * Complejidad: O(n)
      */
     @Override
-    public final String toString() {
+    public String toString() {
         if (isEmpty()) {
             return "[]";
         } else if (size == 1) {
-            return "[" + getLast().getData() + "]";
+            return "[" + last.getData() + "]";
         }
 
-        final StringBuilder str = new StringBuilder();
+        final StringBuilder strBld = new StringBuilder(size);
 
-        str.append("[");
-        for (Node<E> n = getFirst(); n != getLast(); n = n.getNext()) {
-            str.append(n.getData()).append(", ");
+        strBld.append("[");
+        for (Node<E> ptr = getFirst(); ptr != last; ptr = ptr.getNext()) {
+            strBld.append(ptr.getData()).append(", ");
         }
-        str.append(getLast().getData());
-        str.append("]");
+        strBld.append(last.getData());
+        strBld.append("]");
 
-        return str.toString();
+        return strBld.toString();
     }
 
     /**
@@ -416,9 +419,9 @@ public class CircularDoublyLinkedList<E> implements List<E> {
     @Override
     public Iterator<E> iterator() {
 
-        return new Iterator<E>() {
+        return new Iterator<>() {
             private Node<E> ptr = getFirst();
-            private boolean isStarted = false;
+            private boolean isStarted;
 
             /**
              * {@inheritDoc}

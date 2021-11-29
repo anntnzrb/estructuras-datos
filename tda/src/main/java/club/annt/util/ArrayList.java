@@ -4,16 +4,18 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "ClassWithTooManyMethods", "EqualsAndHashcode"})
 public final class ArrayList<E> implements List<E> {
     /**
      * Capacidad inicial de la colección por defecto.
      */
     private static final int DEFAULT_CAPACITY = 10;
+
     /**
      * Buffer de la colección en donde se almacenan los elementos del ArrayList.
      */
     private E[] elems;
+
     /**
      * Cantidad de elementos de la colección.
      */
@@ -25,7 +27,7 @@ public final class ArrayList<E> implements List<E> {
     private int size;
 
     /* constructores */
-    public ArrayList(final int minCapacity) {
+    ArrayList(final int minCapacity) {
         capacity = minCapacity;
         elems = (E[]) new Object[capacity];
         size = 0;
@@ -62,7 +64,9 @@ public final class ArrayList<E> implements List<E> {
      */
     @Override
     public void clear() {
-        if (isEmpty()) { return; }
+        if (isEmpty()) {
+            return;
+        }
 
         for (int i = 0; i < size; ++i) {
             elems[i] = null;
@@ -83,7 +87,7 @@ public final class ArrayList<E> implements List<E> {
      *
      * @param idx índice a verificar
      */
-    private void checkRange(final int idx) {
+    private void rangeCheck(final int idx) {
         if (idx >= size) {
             throw new ArrayIndexOutOfBoundsException(idx);
         }
@@ -160,7 +164,7 @@ public final class ArrayList<E> implements List<E> {
      * Complejidad: O(n)
      */
     @Override
-    public final boolean addFirst(final E e) {
+    public boolean addFirst(final E e) {
         if (e == null) {
             return false;
         } else if (isEmpty()) {
@@ -188,7 +192,7 @@ public final class ArrayList<E> implements List<E> {
      * Complejidad: O(1)
      */
     @Override
-    public final boolean addLast(final E e) {
+    public boolean addLast(final E e) {
         if (e == null) {
             return false;
         } else if (isFull()) {
@@ -207,7 +211,7 @@ public final class ArrayList<E> implements List<E> {
      */
     @Override
     public void add(final int idx, final E e) {
-        checkRange(idx);
+        rangeCheck(idx);
 
         if (isFull()) {
             grow();
@@ -225,8 +229,10 @@ public final class ArrayList<E> implements List<E> {
      * Complejidad: O(n)
      */
     @Override
-    public final E removeFirst() {
-        if (isEmpty()) { return null; }
+    public E removeFirst() {
+        if (isEmpty()) {
+            return null;
+        }
 
         final E oldVal = elems[0];
 
@@ -246,8 +252,10 @@ public final class ArrayList<E> implements List<E> {
      * Complejidad: O(1)
      */
     @Override
-    public final E removeLast() {
-        if (isEmpty()) { return null; }
+    public E removeLast() {
+        if (isEmpty()) {
+            return null;
+        }
 
         final E oldVal = elems[--size];
         elems[size] = null;
@@ -261,9 +269,11 @@ public final class ArrayList<E> implements List<E> {
      * Complejidad: O(n)
      */
     @Override
-    public final E remove(final int idx) {
-        checkRange(idx);
-        if (isEmpty()) { return null; }
+    public E remove(final int idx) {
+        rangeCheck(idx);
+        if (isEmpty()) {
+            return null;
+        }
 
         final E oldVal = elems[idx];
 
@@ -283,8 +293,8 @@ public final class ArrayList<E> implements List<E> {
      * Complejidad: O(1)
      */
     @Override
-    public final E get(final int idx) {
-        checkRange(idx);
+    public E get(final int idx) {
+        rangeCheck(idx);
 
         return elems[idx];
     }
@@ -299,8 +309,8 @@ public final class ArrayList<E> implements List<E> {
      * @return el elemento previo a ser reemplazado
      */
     @Override
-    public final E set(final int idx, final E e) {
-        checkRange(idx);
+    public E set(final int idx, final E e) {
+        rangeCheck(idx);
 
         final E oldVal = elems[idx];
         elems[idx] = e;
@@ -314,9 +324,9 @@ public final class ArrayList<E> implements List<E> {
      * Complejidad: O(n)
      */
     @Override
-    public final boolean keepOnly(final int from, final int to) {
-        checkRange(from - 1);
-        checkRange(to - 1);
+    public boolean keepOnly(final int from, final int to) {
+        rangeCheck(from - 1);
+        rangeCheck(to - 1);
         if (to < from) {
             return false;
         }
@@ -342,15 +352,15 @@ public final class ArrayList<E> implements List<E> {
      * Complejidad: O(n/2)
      */
     @Override
-    public final void reverse() {
+    public void reverse() {
         if (!isEmpty()) {
             reverse(0, size - 1);
         }
     }
 
     private void reverse(final int i, final int j) {
-        checkRange(i);
-        checkRange(j);
+        rangeCheck(i);
+        rangeCheck(j);
 
         if (j >= i) {
             final E tmp = elems[i];
@@ -370,8 +380,8 @@ public final class ArrayList<E> implements List<E> {
      * @return la lista modificada
      */
     @Override
-    public final List<E> insertAt(final List<E> xs, final int idx) {
-        checkRange(idx);
+    public List<E> insertAt(final List<E> xs, final int idx) {
+        rangeCheck(idx);
 
         /* incrementar capacidad si es necesario */
         final int xsSize = xs.size();
@@ -394,19 +404,19 @@ public final class ArrayList<E> implements List<E> {
     }
 
     @Override
-    public boolean sortedInsert(E e, Comparator<E> cmp) {
+    public boolean sortedInsert(final E e, final Comparator<E> cmp) {
         // TODO
         return false;
     }
 
     @Override
-    public Iterator<E> iteratorStep(int start, int step) {
+    public Iterator<E> iteratorStep(final int start, final int step) {
         // TODO
         return null;
     }
 
     @Override
-    public boolean isReverse(List<E> xs) {
+    public boolean isReverse(final List<E> xs) {
         // TODO
         return false;
     }
@@ -417,12 +427,16 @@ public final class ArrayList<E> implements List<E> {
      * Complejidad: O(1)
      */
     @Override
-    public final boolean equals(final Object o) {
-        if (this == o) { return true; }
-        if (o == null || getClass() != o.getClass()) { return false; }
-        final ArrayList<?> arr = (ArrayList<?>) o;
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        final ArrayList<?> arr = (ArrayList<?>) obj;
         return capacity == arr.capacity && size == arr.size
-                && Arrays.equals(elems, arr.elems);
+               && Arrays.equals(elems, arr.elems);
     }
 
     /**
@@ -431,26 +445,26 @@ public final class ArrayList<E> implements List<E> {
      * Complejidad: O(n)
      */
     @Override
-    public final String toString() {
+    public String toString() {
         if (isEmpty()) {
             return "[]";
         } else if (size == 1) {
             return "[" + elems[0] + "]";
         }
 
-        final StringBuilder str = new StringBuilder();
+        final StringBuilder strBld = new StringBuilder(size);
 
-        str.append("[");
+        strBld.append("[");
         for (int idx = 0; idx < size; ++idx) {
-            if (idx != (size - 1)) {
-                str.append(elems[idx]).append(", ");
+            if (idx == (size - 1)) {
+                strBld.append(elems[idx]);
             } else {
-                str.append(elems[idx]);
+                strBld.append(elems[idx]).append(", ");
             }
         }
-        str.append("]");
+        strBld.append("]");
 
-        return str.toString();
+        return strBld.toString();
     }
 
     /**
@@ -462,8 +476,8 @@ public final class ArrayList<E> implements List<E> {
      */
     @Override
     public Iterator<E> iterator() {
-        return new Iterator<E>() {
-            private int cursor = 0;
+        return new Iterator<>() {
+            private int cursor;
 
             /**
              * {@inheritDoc}

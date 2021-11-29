@@ -7,10 +7,11 @@ import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ArrayListTest {
-    List<Integer> as; /* lista no vacía */
-    List<Integer> bs; /* lista no vacía (1 elemento) */
-    List<Integer> zs; /* lista vacía */
+@SuppressWarnings({"ClassHasNoToStringMethod", "ClassWithoutConstructor", "AssertWithoutMessage", "JUnitTestMethodWithNoAssertions", "NonBooleanMethodNameMayNotStartWithQuestion"})
+final class ArrayListTest {
+    private List<Integer> as; /* lista no vacía */
+    private List<Integer> bs; /* lista no vacía (1 elemento) */
+    private List<Integer> zs; /* lista vacía */
 
     @BeforeEach
     void setUp() {
@@ -75,27 +76,27 @@ class ArrayListTest {
     @Test
     void addFirst() {
         assertEquals(10, as.size());
-        assertEquals(as.get(0), 0);
+        assertEquals(0, as.get(0));
         as.addFirst(9);
-        assertEquals(as.get(0), 9);
+        assertEquals(9, as.get(0));
         assertEquals(11, as.size());
     }
 
     @Test
     void addLast() {
         assertEquals(10, as.size());
-        assertEquals(as.get(as.size() - 1), 9);
+        assertEquals(9, as.get(as.size() - 1));
         as.addLast(11);
-        assertEquals(as.get(as.size() - 1), 11);
+        assertEquals(11, as.get(as.size() - 1));
         assertEquals(11, as.size());
     }
 
     @Test
     void add() {
         assertEquals(10, as.size());
-        assertEquals(as.get(2), 2);
+        assertEquals(2, as.get(2));
         as.add(2, 11);
-        assertEquals(as.get(2), 11);
+        assertEquals(11, as.get(2));
         assertEquals(11, as.size());
     }
 

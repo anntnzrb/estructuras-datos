@@ -3,7 +3,8 @@ package club.annt.util;
 import java.util.Comparator;
 import java.util.Iterator;
 
-public class DoublyLinkedList<E> implements List<E> {
+@SuppressWarnings("ClassWithTooManyMethods")
+public final class DoublyLinkedList<E> implements List<E> {
     /**
      * Puntero al primer nodo.
      */
@@ -31,7 +32,7 @@ public class DoublyLinkedList<E> implements List<E> {
      * Complejidad: O(n)
      */
     @Override
-    public final int size() {
+    public int size() {
         return size;
     }
 
@@ -41,7 +42,7 @@ public class DoublyLinkedList<E> implements List<E> {
      * Complejidad: O(1)
      */
     @Override
-    public final boolean isEmpty() {
+    public boolean isEmpty() {
         return first == null && last == null;
     }
 
@@ -56,12 +57,12 @@ public class DoublyLinkedList<E> implements List<E> {
             return;
         }
 
-        for (Node<E> n = first; n != null; ) {
-            final Node<E> nextNode = n.getNext();
-            n.setData(null);
-            n.setPrev(null);
-            n.setNext(null);
-            n = nextNode;
+        for (Node<E> node = first; node != null; ) {
+            final Node<E> nextNode = node.getNext();
+            node.setData(null);
+            node.setPrev(null);
+            node.setNext(null);
+            node = nextNode;
         }
         first = last = null;
     }
@@ -75,7 +76,7 @@ public class DoublyLinkedList<E> implements List<E> {
      *
      * @param idx índice a verificar
      */
-    private void checkRange(final int idx) {
+    private void rangeCheck(final int idx) {
         if (idx >= size) {
             throw new ArrayIndexOutOfBoundsException(idx);
         }
@@ -90,7 +91,7 @@ public class DoublyLinkedList<E> implements List<E> {
      * @return nodo en el índice indicado
      */
     private Node<E> node(final int idx) {
-        checkRange(idx);
+        rangeCheck(idx);
 
         /* reducir complejidad */
         if (isEmpty()) {
@@ -104,20 +105,20 @@ public class DoublyLinkedList<E> implements List<E> {
         /* índice menor que mitad de colección -> buscar desde inicio
          * caso contrario -> buscar desde el final
          */
-        Node<E> n;
+        Node<E> node;
         if (idx < (size >> 1)) {
-            n = first;
+            node = first;
             for (int i = 0; i < idx; ++i) {
-                n = n != null ? n.getNext() : null;
+                node = node != null ? node.getNext() : null;
             }
         } else {
-            n = last;
+            node = last;
             for (int i = (size - 1); i > idx; --i) {
-                n = n != null ? n.getPrev() : null;
+                node = node != null ? node.getPrev() : null;
             }
         }
 
-        return n;
+        return node;
     }
 
     /**
@@ -126,7 +127,7 @@ public class DoublyLinkedList<E> implements List<E> {
      * Complejidad: O(1)
      */
     @Override
-    public final boolean addFirst(final E e) {
+    public boolean addFirst(final E e) {
         if (e == null) {
             return false;
         }
@@ -158,7 +159,7 @@ public class DoublyLinkedList<E> implements List<E> {
      * Complejidad: O(1)
      */
     @Override
-    public final boolean addLast(final E e) {
+    public boolean addLast(final E e) {
         if (e == null) {
             return false;
         }
@@ -188,8 +189,8 @@ public class DoublyLinkedList<E> implements List<E> {
      * Complejidad: O(n)
      */
     @Override
-    public final void add(final int idx, final E e) {
-        checkRange(idx);
+    public void add(final int idx, final E e) {
+        rangeCheck(idx);
 
         /* reducir complejidad */
         if (e == null) {
@@ -220,7 +221,7 @@ public class DoublyLinkedList<E> implements List<E> {
      * Complejidad: O(1)
      */
     @Override
-    public final E removeFirst() {
+    public E removeFirst() {
         if (isEmpty()) {
             return null;
         } else if (first == last) {
@@ -252,7 +253,7 @@ public class DoublyLinkedList<E> implements List<E> {
      * Complejidad: O(1)
      */
     @Override
-    public final E removeLast() {
+    public E removeLast() {
         if (isEmpty()) {
             return null;
         } else if (first == last) {
@@ -282,8 +283,8 @@ public class DoublyLinkedList<E> implements List<E> {
      * Complejidad: O(n)
      */
     @Override
-    public final E remove(final int idx) {
-        checkRange(idx);
+    public E remove(final int idx) {
+        rangeCheck(idx);
 
         if (isEmpty()) {
             return null;
@@ -317,7 +318,7 @@ public class DoublyLinkedList<E> implements List<E> {
      * Complejidad: O(n)
      */
     @Override
-    public final E get(final int idx) {
+    public E get(final int idx) {
         return node(idx).getData();
     }
 
@@ -424,7 +425,7 @@ public class DoublyLinkedList<E> implements List<E> {
      * Complejidad: O(n)
      */
     @Override
-    public final String toString() {
+    public String toString() {
         if (isEmpty()) {
             return "[]";
         } else if (size == 1) {
@@ -433,19 +434,19 @@ public class DoublyLinkedList<E> implements List<E> {
             }
         }
 
-        final StringBuilder str = new StringBuilder();
+        final StringBuilder strBld = new StringBuilder(size);
 
-        str.append("[");
-        for (Node<E> n = first; n != null; n = n.getNext()) {
-            if (n != last) {
-                str.append(n.getData()).append(", ");
+        strBld.append("[");
+        for (Node<E> node = first; node != null; node = node.getNext()) {
+            if (node == last) {
+                strBld.append(node.getData());
             } else {
-                str.append(n.getData());
+                strBld.append(node.getData()).append(", ");
             }
         }
-        str.append("]");
+        strBld.append("]");
 
-        return str.toString();
+        return strBld.toString();
     }
 
     /**
@@ -457,7 +458,7 @@ public class DoublyLinkedList<E> implements List<E> {
      */
     @Override
     public Iterator<E> iterator() {
-        return new Iterator<E>() {
+        return new Iterator<>() {
             private Node<E> ptr = first;
 
             /**

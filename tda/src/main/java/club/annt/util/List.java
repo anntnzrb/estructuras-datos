@@ -3,6 +3,7 @@ package club.annt.util;
 import java.util.Comparator;
 import java.util.Iterator;
 
+@SuppressWarnings({"NonBooleanMethodNameMayNotStartWithQuestion", "BooleanMethodNameMustStartWithQuestion", "unused"})
 public interface List<E> extends Iterable<E> {
     /**
      * Retorna el número de elementos en la colección.
@@ -125,9 +126,11 @@ public interface List<E> extends Iterable<E> {
     /**
      * Verifica si la colección es el reverso de la colección pasada por
      * parámetro.
+     * <p>
+     * NOTA: Este método es parte de un ejercicio de exámen exclusivamente.
      *
      * @param xs colección a ser procesada
      * @return {@code true} sí se realizó la operación correctamente
      */
-   boolean isReverse(final List<E> xs);
+    boolean isReverse(final List<E> xs);
 }

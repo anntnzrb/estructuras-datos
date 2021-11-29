@@ -5,8 +5,9 @@ package club.annt.util;
  *
  * @param <E> tipo de dato para el Node
  */
-public class Node<E> {
-    private E data;
+@SuppressWarnings("ClassHasNoToStringMethod")
+public final class Node<E> {
+    private E       data;
     private Node<E> next;
     private Node<E> prev;
 
@@ -26,27 +27,27 @@ public class Node<E> {
     }
 
     /* getters & setters */
-    public final E getData() {
+    public E getData() {
         return data;
     }
 
-    public final void setData(final E data) {
+    public void setData(final E data) {
         this.data = data;
     }
 
-    public final Node<E> getNext() {
+    public Node<E> getNext() {
         return next;
     }
 
-    public final void setNext(final Node<E> next) {
+    public void setNext(final Node<E> next) {
         this.next = next;
     }
 
-    public final Node<E> getPrev() {
+    public Node<E> getPrev() {
         return prev;
     }
 
-    public final void setPrev(final Node<E> prev) {
+    public void setPrev(final Node<E> prev) {
         this.prev = prev;
     }
 }

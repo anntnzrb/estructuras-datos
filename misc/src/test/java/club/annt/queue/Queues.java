@@ -3,9 +3,7 @@ package club.annt.queue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Comparator;
-import java.util.PriorityQueue;
-import java.util.Queue;
+import java.util.*;
 
 class Queues {
     Repartidor rep1;
@@ -60,5 +58,13 @@ class Queues {
         while (!repPQ.isEmpty()) {
             System.out.println(repPQ.poll());
         }
+    }
+
+    @Test
+    void qux() {
+        final Map<String, Integer> map = new HashMap<>();
+        map.put("foo", 1);
+        map.put("bar", 2);
+
     }
 }

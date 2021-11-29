@@ -3,7 +3,8 @@ package club.annt.util;
 import java.util.Comparator;
 import java.util.Iterator;
 
-public class SinglyLinkedList<E> implements List<E> {
+@SuppressWarnings("ClassWithTooManyMethods")
+public final class SinglyLinkedList<E> implements List<E> {
     /**
      * Puntero al primer nodo.
      */
@@ -42,7 +43,7 @@ public class SinglyLinkedList<E> implements List<E> {
      * Complejidad: O(n)
      */
     @Override
-    public final int size() {
+    public int size() {
         return size;
     }
 
@@ -52,7 +53,7 @@ public class SinglyLinkedList<E> implements List<E> {
      * Complejidad: O(1)
      */
     @Override
-    public final boolean isEmpty() {
+    public boolean isEmpty() {
         return first == null && last == null;
     }
 
@@ -62,16 +63,16 @@ public class SinglyLinkedList<E> implements List<E> {
      * Complejidad: O(n)
      */
     @Override
-    public final void clear() {
+    public void clear() {
         if (isEmpty()) {
             return;
         }
 
-        for (SinglyNode<E> n = first; n != null; ) {
-            final SinglyNode<E> nextNode = n.getNext();
-            n.setData(null);
-            n.setNext(null);
-            n = nextNode;
+        for (SinglyNode<E> node = first; node != null; ) {
+            final SinglyNode<E> nextNode = node.getNext();
+            node.setData(null);
+            node.setNext(null);
+            node = nextNode;
         }
         first = last = null;
     }
@@ -85,7 +86,7 @@ public class SinglyLinkedList<E> implements List<E> {
      *
      * @param idx índice a verificar
      */
-    private void checkRange(final int idx) {
+    private void rangeCheck(final int idx) {
         if (idx >= size) {
             throw new ArrayIndexOutOfBoundsException(idx);
         }
@@ -106,9 +107,11 @@ public class SinglyLinkedList<E> implements List<E> {
             return null;
         }
 
-        for (SinglyNode<E> n = first; n != null; n = n.getNext()) {
-            if (n.getNext() == node) {
-                return n;
+        for (SinglyNode<E> nodePtr = first;
+             nodePtr != null;
+             nodePtr = nodePtr.getNext()) {
+            if (nodePtr.getNext() == node) {
+                return nodePtr;
             }
         }
 
@@ -121,7 +124,7 @@ public class SinglyLinkedList<E> implements List<E> {
      * Complejidad: O(1)
      */
     @Override
-    public final boolean addFirst(final E e) {
+    public boolean addFirst(final E e) {
         final SinglyNode<E> newNode = new SinglyNode<>(e);
 
         if (e == null) {
@@ -146,7 +149,7 @@ public class SinglyLinkedList<E> implements List<E> {
      * Complejidad: O(1)
      */
     @Override
-    public final boolean addLast(final E e) {
+    public boolean addLast(final E e) {
         final SinglyNode<E> newNode = new SinglyNode<>(e);
 
         if (e == null) {
@@ -172,7 +175,7 @@ public class SinglyLinkedList<E> implements List<E> {
      * Complejidad: O(n)
      */
     @Override
-    public final void add(final int idx, final E e) {
+    public void add(final int idx, final E e) {
         /* reducir complejidad */
         if (e == null) {
             return;
@@ -186,12 +189,12 @@ public class SinglyLinkedList<E> implements List<E> {
 
         /* se empieza a recorrer desde idx = 1 */
         int i = 1;
-        for (SinglyNode<E> n = first;
-             n != null;
-             n = n.getNext(), ++i) {
+        for (SinglyNode<E> nodePtr = first;
+             nodePtr != null;
+             nodePtr = nodePtr.getNext(), ++i) {
             if (idx == i) {
-                newNode.setNext(n.getNext());
-                n.setNext(newNode);
+                newNode.setNext(nodePtr.getNext());
+                nodePtr.setNext(newNode);
             }
         }
 
@@ -204,7 +207,7 @@ public class SinglyLinkedList<E> implements List<E> {
      * Complejidad: O(1)
      */
     @Override
-    public final E removeFirst() {
+    public E removeFirst() {
         /* reducir complejidad */
         if (isEmpty()) {
             return null;
@@ -236,7 +239,7 @@ public class SinglyLinkedList<E> implements List<E> {
      * Complejidad: O(n) por {@link #getPrevious(SinglyNode)}
      */
     @Override
-    public final E removeLast() {
+    public E removeLast() {
         if (isEmpty()) {
             return null;
         } else if (first == last) {
@@ -267,8 +270,8 @@ public class SinglyLinkedList<E> implements List<E> {
      * Complejidad: O(n)
      */
     @Override
-    public final E remove(final int idx) {
-        checkRange(idx);
+    public E remove(final int idx) {
+        rangeCheck(idx);
 
         /* reducir complejidad */
         if (isEmpty()) {
@@ -303,8 +306,8 @@ public class SinglyLinkedList<E> implements List<E> {
      * Complejidad: O(n)
      */
     @Override
-    public final E get(final int idx) {
-        checkRange(idx);
+    public E get(final int idx) {
+        rangeCheck(idx);
 
         /* reducir complejidad */
         if (isEmpty()) {
@@ -317,11 +320,11 @@ public class SinglyLinkedList<E> implements List<E> {
 
         /* se empieza a recorrer desde idx = 1 */
         int i = 1;
-        for (SinglyNode<E> n = first != null ? first.getNext() : null;
-             n != null;
-             n = n.getNext(), ++i) {
+        for (SinglyNode<E> nodePtr = first != null ? first.getNext() : null;
+             nodePtr != null;
+             nodePtr = nodePtr.getNext(), ++i) {
             if (idx == i) {
-                return n.getData();
+                return nodePtr.getData();
             }
         }
 
@@ -329,24 +332,24 @@ public class SinglyLinkedList<E> implements List<E> {
     }
 
     @Override
-    public final E set(final int idx, final E e) {
+    public E set(final int idx, final E e) {
         // TODO
         return null;
     }
 
     @Override
-    public final boolean keepOnly(final int from, final int to) {
+    public boolean keepOnly(final int from, final int to) {
         // TODO
         return false;
     }
 
     @Override
-    public final void reverse() {
+    public void reverse() {
         // TODO
     }
 
     @Override
-    public final List<E> insertAt(final List<E> xs, final int idx) {
+    public List<E> insertAt(final List<E> xs, final int idx) {
         // TODO
         return null;
     }
@@ -363,7 +366,7 @@ public class SinglyLinkedList<E> implements List<E> {
      * Complejidad: O(n)
      */
     @Override
-    public final String toString() {
+    public String toString() {
         if (isEmpty()) {
             return "[]";
         } else if (size == 1) {
@@ -372,19 +375,21 @@ public class SinglyLinkedList<E> implements List<E> {
             }
         }
 
-        final StringBuilder str = new StringBuilder();
+        final StringBuilder strBld = new StringBuilder(size);
 
-        str.append("[");
-        for (SinglyNode<E> n = first; n != null; n = n.getNext()) {
-            if (n != last) {
-                str.append(n.getData()).append(", ");
+        strBld.append("[");
+        for (SinglyNode<E> nodePtr = first;
+             nodePtr != null;
+             nodePtr = nodePtr.getNext()) {
+            if (nodePtr == last) {
+                strBld.append(nodePtr.getData());
             } else {
-                str.append(n.getData());
+                strBld.append(nodePtr.getData()).append(", ");
             }
         }
-        str.append("]");
+        strBld.append("]");
 
-        return str.toString();
+        return strBld.toString();
     }
 
     /**

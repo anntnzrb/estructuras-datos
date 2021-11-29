@@ -5,8 +5,9 @@ package club.annt.util;
  *
  * @param <E> tipo de dato para el SinglyNode
  */
-public class SinglyNode<E> {
-    private E data;
+@SuppressWarnings("ClassHasNoToStringMethod")
+public final class SinglyNode<E> {
+    private E             data;
     private SinglyNode<E> next;
 
     /* constructores */
@@ -24,19 +25,19 @@ public class SinglyNode<E> {
     }
 
     /* getters & setters */
-    public final E getData() {
+    public E getData() {
         return data;
     }
 
-    public final void setData(final E data) {
+    public void setData(final E data) {
         this.data = data;
     }
 
-    public final SinglyNode<E> getNext() {
+    public SinglyNode<E> getNext() {
         return next;
     }
 
-    public final void setNext(final SinglyNode<E> next) {
+    public void setNext(final SinglyNode<E> next) {
         this.next = next;
     }
 }

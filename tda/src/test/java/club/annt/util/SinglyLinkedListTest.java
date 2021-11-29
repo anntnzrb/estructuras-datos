@@ -8,10 +8,11 @@ import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class SinglyLinkedListTest {
-    List<Integer> as; /* lista no vacía */
-    List<Integer> bs; /* lista no vacía (1 elemento) */
-    List<Integer> zs; /* lista vacía */
+@SuppressWarnings({"ClassHasNoToStringMethod", "ClassWithoutConstructor", "AssertWithoutMessage", "JUnitTestMethodWithNoAssertions", "NonBooleanMethodNameMayNotStartWithQuestion"})
+final class SinglyLinkedListTest {
+    private List<Integer> as; /* lista no vacía */
+    private List<Integer> bs; /* lista no vacía (1 elemento) */
+    private List<Integer> zs; /* lista vacía */
 
     @BeforeEach
     void setUp() {
@@ -76,27 +77,27 @@ class SinglyLinkedListTest {
     @Test
     void addFirst() {
         assertEquals(10, as.size());
-        assertEquals(as.get(0), 0);
+        assertEquals(0, as.get(0));
         as.addFirst(9);
-        assertEquals(as.get(0), 9);
+        assertEquals(9, as.get(0));
         assertEquals(11, as.size());
     }
 
     @Test
     void addLast() {
         assertEquals(10, as.size());
-        assertEquals(as.get(as.size() - 1), 9);
+        assertEquals(9, as.get(as.size() - 1));
         as.addLast(11);
-        assertEquals(as.get(as.size() - 1), 11);
+        assertEquals(11, as.get(as.size() - 1));
         assertEquals(11, as.size());
     }
 
     @Test
     void add() {
         assertEquals(10, as.size());
-        assertEquals(as.get(2), 2);
+        assertEquals(2, as.get(2));
         as.add(2, 11);
-        assertEquals(as.get(2), 11);
+        assertEquals(11, as.get(2));
         assertEquals(11, as.size());
     }
 
@@ -231,14 +232,14 @@ class SinglyLinkedListTest {
 
     @Test
     void isReverseRecursivo() {
-        final SinglyLinkedList<Integer> xs = new SinglyLinkedList<>();
+        final List<Integer> xs = new SinglyLinkedList<>();
         xs.addLast(22);
         xs.addLast(2);
         xs.addLast(77);
         xs.addLast(6);
         xs.addLast(30);
 
-        final SinglyLinkedList<Integer> ys = new SinglyLinkedList<>();
+        final List<Integer> ys = new SinglyLinkedList<>();
         ys.addLast(30);
         ys.addLast(6);
         ys.addLast(77);
