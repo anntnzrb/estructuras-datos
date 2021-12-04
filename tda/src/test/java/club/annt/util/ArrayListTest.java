@@ -7,7 +7,9 @@ import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SuppressWarnings({"ClassHasNoToStringMethod", "ClassWithoutConstructor", "AssertWithoutMessage", "JUnitTestMethodWithNoAssertions", "NonBooleanMethodNameMayNotStartWithQuestion"})
+@SuppressWarnings({"ClassHasNoToStringMethod", "ClassWithoutConstructor",
+        "AssertWithoutMessage", "JUnitTestMethodWithNoAssertions",
+        "NonBooleanMethodNameMayNotStartWithQuestion"})
 final class ArrayListTest {
     private List<Integer> as; /* lista no vacía */
     private List<Integer> bs; /* lista no vacía (1 elemento) */

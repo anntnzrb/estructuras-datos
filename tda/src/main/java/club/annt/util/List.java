@@ -3,7 +3,8 @@ package club.annt.util;
 import java.util.Comparator;
 import java.util.Iterator;
 
-@SuppressWarnings({"NonBooleanMethodNameMayNotStartWithQuestion", "BooleanMethodNameMustStartWithQuestion", "unused"})
+@SuppressWarnings({"NonBooleanMethodNameMayNotStartWithQuestion",
+        "BooleanMethodNameMustStartWithQuestion", "unused"})
 public interface List<E> extends Iterable<E> {
     /**
      * Retorna el número de elementos en la colección.
