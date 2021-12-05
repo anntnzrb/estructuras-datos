@@ -14,6 +14,10 @@ public final class BinaryTree<E> {
         this.root = root;
     }
 
+    public BinaryTree(final E data) {
+        root = new NodeBinaryTree<>(data);
+    }
+
     /**
      * Verifica si el arbol está vació.
      * <p>
@@ -181,5 +185,62 @@ public final class BinaryTree<E> {
 
     public void setRoot(final NodeBinaryTree<E> root) {
         this.root = root;
+    }
+
+    public BinaryTree<E> getLeft() {
+        return root.getLeft();
+    }
+
+    public void setLeft(final BinaryTree<E> tree) {
+        root.setLeft(tree);
+    }
+
+    public BinaryTree<E> getRight() {
+        return root.getRight();
+    }
+
+    public void setRight(final BinaryTree<E> tree) {
+        root.setRight(tree);
+    }
+
+    private static final class NodeBinaryTree<E> {
+        private E             data;
+        private BinaryTree<E> left;
+        private BinaryTree<E> right;
+
+        /* constructores */
+        NodeBinaryTree() {}
+
+        NodeBinaryTree(final E data, final BinaryTree<E> left,
+                       final BinaryTree<E> right) {
+            this.data = data;
+            this.left = left;
+            this.right = right;
+        }
+
+        NodeBinaryTree(final E elem) {
+            this(elem, null, null);
+        }
+
+        /* getters & setters */
+        public E getData() {
+            return data;
+        }
+
+        public BinaryTree<E> getLeft() {
+            return left;
+        }
+
+        public void setLeft(final BinaryTree<E> left) {
+            this.left = left;
+        }
+
+        public BinaryTree<E> getRight() {
+            return right;
+        }
+
+        public void setRight(final BinaryTree<E> right) {
+            this.right = right;
+        }
     }
 }
