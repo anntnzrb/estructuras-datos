@@ -1,6 +1,7 @@
 package club.annt.tree;
 
 import java.util.ArrayDeque;
+import java.util.Comparator;
 import java.util.Deque;
 
 @SuppressWarnings("ClassHasNoToStringMethod")
@@ -88,7 +89,6 @@ public final class BinaryTree<E> {
         if (root.getRight() != null) {
             root.getRight().recorrerEnOrdenRecursive();
         }
-
     }
 
     /**
@@ -177,6 +177,103 @@ public final class BinaryTree<E> {
 
         return totalLeaves;
     }
+
+    public NodeBinaryTree<E> searchRecursive(final E data,
+                                             final Comparator<E> cmp) {
+        if (isEmpty()) {
+            return null;
+        } else if (cmp.compare(root.getData(), data) == 0) {
+            return root;
+        }
+
+        NodeBinaryTree<E> tmp = null;
+        if (root.getLeft() != null) {
+            tmp = root.getLeft().searchRecursive(data, cmp);
+        }
+        if (tmp == null && root.getRight() != null) {
+            return root.getRight().searchRecursive(data, cmp);
+        }
+
+        return tmp;
+    }
+
+    @SuppressWarnings({"MethodCallInLoopCondition",
+            "CollectionWithoutInitialCapacity"})
+    public NodeBinaryTree<E> searchIterative(final E data,
+                                             final Comparator<E> cmp) {
+        if (isEmpty()) {
+            return null;
+        }
+
+        final Deque<NodeBinaryTree<E>> stackBN = new ArrayDeque<>();
+        stackBN.push(root);
+        while (!stackBN.isEmpty()) {
+            final NodeBinaryTree<E> tmp = stackBN.pop();
+            if (cmp.compare(tmp.getData(), data) == 0) {
+                return root;
+            }
+            if (tmp.getLeft() != null) {
+                stackBN.push(tmp.getLeft().root);
+            }
+            if (tmp.getRight() != null) {
+                stackBN.push(tmp.getRight().root);
+            }
+        }
+
+        return null;
+    }
+
+    public E getMinRecursive(final Comparator<E> cmp) {
+        if (isEmpty()) {
+            return null;
+        }
+
+        E minElem = root.getData();
+        if (root.getLeft() != null) {
+            final E minLeft = root.getLeft().getMinRecursive(cmp);
+            if (cmp.compare(root.getData(), minLeft) > 0) {
+                minElem = minLeft;
+            }
+        }
+        if (root.getRight() != null) {
+            final E minRight = root.getRight().getMinRecursive(cmp);
+            if (cmp.compare(root.getData(), minRight) > 0) {
+                minElem = minRight;
+            }
+        }
+
+        return minElem;
+    }
+
+    @SuppressWarnings({"CollectionWithoutInitialCapacity",
+            "MethodCallInLoopCondition"})
+    public E getMinIterative(final Comparator<E> cmp) {
+        if (isEmpty()) {
+            return null;
+        }
+
+        E minElem = root.getData();
+        final Deque<NodeBinaryTree<E>> stack = new ArrayDeque<>();
+        stack.push(root);
+
+        while (!stack.isEmpty()) {
+            final NodeBinaryTree<E> tmp = stack.pop();
+            if (cmp.compare(minElem, tmp.getData()) > 0) {
+                stack.pop();
+                minElem = tmp.getData();
+            }
+            if (root.getLeft() != null) {
+                stack.push(root.getLeft().root);
+            }
+
+            if (root.getRight() != null) {
+                stack.push(root.getRight().root);
+            }
+        }
+
+        return minElem;
+    }
+
 
     /* getters & setters */
     public NodeBinaryTree<E> getRoot() {
