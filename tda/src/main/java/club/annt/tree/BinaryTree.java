@@ -6,17 +6,17 @@ import java.util.Deque;
 
 @SuppressWarnings("ClassHasNoToStringMethod")
 public final class BinaryTree<E> {
-    private NodeBinaryTree<E> root;
+    private BinaryTreeNode<E> root;
 
     /* constructores */
     public BinaryTree() {}
 
-    public BinaryTree(final NodeBinaryTree<E> root) {
+    public BinaryTree(final BinaryTreeNode<E> root) {
         this.root = root;
     }
 
     public BinaryTree(final E data) {
-        root = new NodeBinaryTree<>(data);
+        root = new BinaryTreeNode<>(data);
     }
 
     /**
@@ -178,7 +178,16 @@ public final class BinaryTree<E> {
         return totalLeaves;
     }
 
-    public NodeBinaryTree<E> searchRecursive(final E data,
+    /**
+     * Busca el elemento pasado por parámetro en el árbol
+     * <p>
+     * NOTA: Éste método está implentado de forma "recursiva".
+     *
+     * @param data elemento a buscar
+     * @param cmp  {@link Comparator}
+     * @return {@link BinaryTreeNode} que contiene al elemento
+     */
+    public BinaryTreeNode<E> searchRecursive(final E data,
                                              final Comparator<E> cmp) {
         if (isEmpty()) {
             return null;
@@ -186,7 +195,7 @@ public final class BinaryTree<E> {
             return root;
         }
 
-        NodeBinaryTree<E> tmp = null;
+        BinaryTreeNode<E> tmp = null;
         if (root.getLeft() != null) {
             tmp = root.getLeft().searchRecursive(data, cmp);
         }
@@ -197,18 +206,31 @@ public final class BinaryTree<E> {
         return tmp;
     }
 
-    @SuppressWarnings({"MethodCallInLoopCondition",
-            "CollectionWithoutInitialCapacity"})
-    public NodeBinaryTree<E> searchIterative(final E data,
+    /**
+     * Busca el elemento pasado por parámetro en el árbol
+     * <p>
+     * NOTA: Éste método está implentado de forma "iterativa".
+     *
+     * @param data elemento a buscar
+     * @param cmp  {@link Comparator}
+     * @return {@link BinaryTreeNode} que contiene al elemento
+     */
+    @SuppressWarnings("CollectionWithoutInitialCapacity")
+    public BinaryTreeNode<E> searchIterative(final E data,
                                              final Comparator<E> cmp) {
         if (isEmpty()) {
             return null;
         }
 
-        final Deque<NodeBinaryTree<E>> stackBN = new ArrayDeque<>();
+        final Deque<BinaryTreeNode<E>> stackBN = new ArrayDeque<>();
         stackBN.push(root);
-        while (!stackBN.isEmpty()) {
-            final NodeBinaryTree<E> tmp = stackBN.pop();
+        while (true) {
+            final boolean isStackEmpty = stackBN.isEmpty();
+            if (isStackEmpty) {
+                break;
+            }
+
+            final BinaryTreeNode<E> tmp = stackBN.pop();
             if (cmp.compare(tmp.getData(), data) == 0) {
                 return root;
             }
@@ -223,6 +245,14 @@ public final class BinaryTree<E> {
         return null;
     }
 
+    /**
+     * Retorna el mínimo valor del árbol.
+     * <p>
+     * NOTA: Éste método está implentado de forma "recursiva".
+     *
+     * @param cmp {@link Comparator}
+     * @return el valor mínimo del arbol
+     */
     public E getMinRecursive(final Comparator<E> cmp) {
         if (isEmpty()) {
             return null;
@@ -245,42 +275,53 @@ public final class BinaryTree<E> {
         return minElem;
     }
 
-    @SuppressWarnings({"CollectionWithoutInitialCapacity",
-            "MethodCallInLoopCondition"})
+    /**
+     * Retorna el mínimo valor del árbol.
+     * <p>
+     * NOTA: Éste método está implentado de forma "iterativa".
+     *
+     * @param cmp {@link Comparator}
+     * @return el valor mínimo del arbol
+     */
+    @SuppressWarnings("CollectionWithoutInitialCapacity")
     public E getMinIterative(final Comparator<E> cmp) {
         if (isEmpty()) {
             return null;
         }
 
         E minElem = root.getData();
-        final Deque<NodeBinaryTree<E>> stack = new ArrayDeque<>();
-        stack.push(root);
+        final Deque<BinaryTree<E>> stack = new ArrayDeque<>();
+        stack.push(this);
 
-        while (!stack.isEmpty()) {
-            final NodeBinaryTree<E> tmp = stack.pop();
-            if (cmp.compare(minElem, tmp.getData()) > 0) {
-                stack.pop();
-                minElem = tmp.getData();
-            }
-            if (root.getLeft() != null) {
-                stack.push(root.getLeft().root);
+        while (true) {
+            final boolean isStackEmpty = stack.isEmpty();
+            if (isStackEmpty) {
+                break;
             }
 
-            if (root.getRight() != null) {
-                stack.push(root.getRight().root);
+            final BinaryTree<E> subBT = stack.pop();
+            final E data = subBT.root.getData();
+
+            minElem = cmp.compare(minElem, data) > 0 ? data : minElem;
+
+            if (subBT.root.getLeft() != null) {
+                stack.push(subBT.root.getRight());
+            }
+
+            if (subBT.root.getRight() != null) {
+                stack.push(subBT.root.getRight());
             }
         }
 
         return minElem;
     }
 
-
     /* getters & setters */
-    public NodeBinaryTree<E> getRoot() {
+    public BinaryTreeNode<E> getRoot() {
         return root;
     }
 
-    public void setRoot(final NodeBinaryTree<E> root) {
+    public void setRoot(final BinaryTreeNode<E> root) {
         this.root = root;
     }
 
@@ -300,22 +341,22 @@ public final class BinaryTree<E> {
         root.setRight(tree);
     }
 
-    private static final class NodeBinaryTree<E> {
+    private static final class BinaryTreeNode<E> {
         private E             data;
         private BinaryTree<E> left;
         private BinaryTree<E> right;
 
         /* constructores */
-        NodeBinaryTree() {}
+        BinaryTreeNode() {}
 
-        NodeBinaryTree(final E data, final BinaryTree<E> left,
+        BinaryTreeNode(final E data, final BinaryTree<E> left,
                        final BinaryTree<E> right) {
             this.data = data;
             this.left = left;
             this.right = right;
         }
 
-        NodeBinaryTree(final E elem) {
+        BinaryTreeNode(final E elem) {
             this(elem, null, null);
         }
 

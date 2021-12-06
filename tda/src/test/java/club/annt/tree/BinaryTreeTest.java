@@ -54,7 +54,7 @@ final class BinaryTreeTest {
         // root-der-der
         binaryTree3.getRight().setRight(new BinaryTree<>(6));
         // root-der-der-der
-        binaryTree3.getRight().getRight().setRight(new BinaryTree<>(7));
+        binaryTree3.getRight().getRight().setRight(new BinaryTree<>(0));
 
         /* *********************************************************************
          * BinaryTree #4
@@ -233,6 +233,7 @@ final class BinaryTreeTest {
 
     @Test
     void getMinRecursive() {
+        /* BinaryTree #3 */
         assertEquals(0, binaryTree3.getMinRecursive(Integer::compareTo));
     }
 
