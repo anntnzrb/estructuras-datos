@@ -22,8 +22,6 @@ public final class BinaryTree<E> {
 
     /**
      * Verifica si el arbol está vació.
-     * <p>
-     * Complejidad: O(1)
      *
      * @return {@code true} si el árbol está vacío, {@code false} caso contrario
      */
@@ -33,8 +31,6 @@ public final class BinaryTree<E> {
 
     /**
      * Verifica si el árbol es una hoja.
-     * <p>
-     * Complejidad: O(1)
      *
      * @return {@code true} si el árbol es hoja , {@code false} caso contrario
      */
@@ -458,8 +454,7 @@ public final class BinaryTree<E> {
             return 1;
         }
 
-        int levelsLeft = 0;
-        int levelsRight = 0;
+        int levels = 0;
         final Deque<BinaryTree<E>> stack = new ArrayDeque<>();
         stack.push(this);
         while (true) {
@@ -471,15 +466,14 @@ public final class BinaryTree<E> {
             final BinaryTree<E> subBT = stack.pop();
             if (subBT.getLeft() != null) {
                 stack.push(subBT.getLeft());
-                ++levelsLeft;
             }
             if (subBT.getRight() != null) {
                 stack.push(subBT.getRight());
-                ++levelsRight;
             }
+            ++levels;
         }
 
-        return Math.min(levelsLeft, levelsRight) + 1;
+        return levels;
     }
 
     /**
@@ -605,6 +599,196 @@ public final class BinaryTree<E> {
     public boolean isIdenticalIterative(final BinaryTree<E> tree) {
         // TODO
         return false;
+    }
+
+    public E largestValueOfEachLevelRecursive() {
+        return null;
+    }
+
+    public E largestValueOfEachLevelIterative() {
+        return null;
+    }
+
+    /**
+     * Retorna el número de nodos que contienen únicamente 1 hijo.
+     * <p>
+     * NOTA: Éste método está implentado de forma "recursiva".
+     * <p>
+     * Referencias:
+     * - (método corto) https://stackoverflow.com/a/37935129
+     * - (método explícito) https://stackoverflow.com/a/37936804
+     *
+     * @return número de nodos que tienen 1 solo hijo
+     */
+    public int countNodesWithOnlyChildRecursive() {
+        if (isEmpty()) {
+            return 0;
+        }
+
+        /*
+         * (^) === disyunción exclusiva
+         *
+         * se inicia el contador en 1 si es que:
+         * => NO hay hijo izquierdo, y SI hay hijo derecho
+         * ó
+         * => SI hay hijo izquierdo, y NO hay hijo derecho
+         *
+         * se inicia el contador en 0 si es que:
+         * => SI hay hijo izquierdo, y SI hay hijo derecho
+         * ó
+         * => NO hay hijo izquierdo, y NO hay hijo derecho
+         */
+        int count = getLeft() != null ^ getRight() != null ? 1 : 0;
+        if (getLeft() != null) {
+            count += getLeft().countNodesWithOnlyChildRecursive();
+        }
+        if (getRight() != null) {
+            count += getRight().countNodesWithOnlyChildRecursive();
+        }
+
+        return count;
+    }
+
+    /**
+     * Retorna el número de nodos que contienen únicamente 1 hijo.
+     * <p>
+     * NOTA: Éste método está implentado de forma "iterativa".
+     * <p>
+     *
+     * @return número de nodos que tienen 1 solo hijo
+     */
+    @SuppressWarnings("CollectionWithoutInitialCapacity")
+    public int countNodesWithOnlyChildIterative() {
+        if (isEmpty()) {
+            return 0;
+        }
+
+        int count = 0;
+        final Deque<BinaryTree<E>> stack = new ArrayDeque<>();
+        stack.push(this);
+        while (true) {
+            final boolean isStackEmpty = stack.isEmpty();
+            if (isStackEmpty) {
+                break;
+            }
+
+            final BinaryTree<E> subBT = stack.pop();
+
+            count = subBT.getLeft() != null ^ subBT.getRight() != null
+                    ? count + 1
+                    : count;
+
+            if (subBT.getLeft() != null) {
+                stack.push(subBT.getLeft());
+            }
+            if (subBT.getRight() != null) {
+                stack.push(subBT.getRight());
+            }
+        }
+
+        return count;
+    }
+
+    /**
+     * Verifica si la altura del árbol está balanceada.
+     * <p>
+     * Un árbol no vacío está balanceado en altura si:
+     * 1. Su sub-árbol izquierdo está balanceado
+     * 2. Su sub-árbol derecho está balanceado
+     * 3. La diferencia entre las alturas de sus sub-árboles izquierdo y derecho
+     * es menor que 1.
+     * <p>
+     * NOTA: Un árbol vacío siempre está balanceado en altura.
+     * <p>
+     * NOTA: Éste método está implentado de forma "recursiva".
+     *
+     * @return {@code true} si el árbol está balanceado en altura,
+     * {@code false} caso contrario
+     */
+    public boolean isHeightBalancedRecursive() {
+        if (isEmpty()) {
+            return true;
+        }
+
+        /*
+         * tiene hijo izquierdo, pero éste no está balanceado
+         * ó
+         * tiene hijo derecho, pero éste no está balanceado
+         * --------------------------------------------------------------------
+         * ==> false
+         */
+        if ((getLeft() != null && !getLeft().isHeightBalancedRecursive())
+            || (getRight() != null
+                && !getRight().isHeightBalancedRecursive())) {
+            return false;
+        }
+
+        /*
+         * no tiene hijo izquierdo
+         * ó
+         * no tiene hijo derecho
+         * ó
+         * La diferencia entre las alturas de izquierda y derecha es menor o
+         * igual a 1
+         * --------------------------------------------------------------------
+         * ==> false
+         */
+        return getLeft() == null
+               || getRight() == null
+               || Math.abs(getLeft().getHeight() - getRight().getHeight()) <= 1;
+    }
+
+    /**
+     * Verifica si la altura del árbol está balanceada.
+     * <p>
+     * Un árbol no vacío está balanceado en altura si:
+     * 1. Su sub-árbol izquierdo está balanceado
+     * 2. Su sub-árbol derecho está balanceado
+     * 3. La diferencia entre las alturas de sus sub-árboles izquierdo y derecho
+     * es menor que 1.
+     * <p>
+     * NOTA: Un árbol vacío siempre está balanceado en altura.
+     * <p>
+     * NOTA: Éste método está implentado de forma "iterativa".
+     *
+     * @return {@code true} si el árbol está balanceado en altura,
+     * {@code false} caso contrario
+     */
+    @SuppressWarnings("CollectionWithoutInitialCapacity")
+    public boolean isHeightBalancedIterative() {
+        if (isEmpty()) {
+            return true;
+        }
+
+        final Deque<BinaryTree<E>> stack = new ArrayDeque<>();
+        stack.push(this);
+        while (true) {
+            final boolean isStackEmpty = stack.isEmpty();
+            if (isStackEmpty) {
+                break;
+            }
+
+            final BinaryTree<E> subBT = stack.pop();
+            if (subBT.getLeft() != null) {
+                stack.push(subBT.getLeft());
+            }
+            if (subBT.getRight() != null) {
+                stack.push(subBT.getRight());
+            }
+
+            // TODO
+        }
+
+        return false;
+    }
+
+    /**
+     * Obtiene la altura de un árbol
+     *
+     * @return altura del árbol
+     */
+    private int getHeight() {
+        return countLevelsRecursive() - 1;
     }
 
     @Override

@@ -9,15 +9,18 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SuppressWarnings({"AssertWithoutMessage", "ClassWithoutConstructor",
         "ClassHasNoToStringMethod", "JUnitTestMethodWithNoAssertions",
-        "NonBooleanMethodNameMayNotStartWithQuestion"})
+        "NonBooleanMethodNameMayNotStartWithQuestion",
+        "DuplicateStringLiteralInspection", "ClassWithTooManyMethods"})
 final class BinaryTreeTest {
     private BinaryTree<Integer> binaryTree0; /* BT vacío */
     private BinaryTree<Integer> binaryTree1; /* BT no-vacío */
     private BinaryTree<Integer> binaryTree2; /* BT no-vacío */
     private BinaryTree<Integer> binaryTree3; /* BT no-vacío */
     private BinaryTree<String>  binaryTree4; /* BT no-vacío */
-    private BinaryTree<Integer>  binaryTree5; /* BT no-vacío */
+    private BinaryTree<Integer> binaryTree5; /* BT no-vacío */
+    private BinaryTree<Integer> binaryTree6; /* BT no-vacío */
 
+    @SuppressWarnings("OverlyLongMethod")
     @BeforeEach
     void setUp() {
         /* *********************************************************************
@@ -74,12 +77,14 @@ final class BinaryTreeTest {
         binaryTree4.getRight().setRight(new BinaryTree<>("Five"));
 
         /* *********************************************************************
-         * BinaryTree #3
+         * BinaryTree #5
          * ****************************************************************** */
         // root
         binaryTree5 = new BinaryTree<>(8);
         // root-izq
         binaryTree5.setLeft(new BinaryTree<>(3));
+        // root-der
+        binaryTree5.setRight(new BinaryTree<>(10));
         // root-izq-izq
         binaryTree5.getLeft().setLeft(new BinaryTree<>(1));
         // root-izq-der
@@ -88,10 +93,22 @@ final class BinaryTreeTest {
         binaryTree5.getLeft().getRight().setLeft(new BinaryTree<>(4));
         // root-izq-der-der
         binaryTree5.getLeft().getRight().setRight(new BinaryTree<>(7));
-        // root-der
-        binaryTree5.setRight(new BinaryTree<>(10));
         // root-der-der
         binaryTree5.getRight().setRight(new BinaryTree<>(14));
+
+        /* *********************************************************************
+         * BinaryTree #6
+         * ****************************************************************** */
+        // root
+        binaryTree6 = new BinaryTree<>(11);
+        // root-izq
+        binaryTree6.setLeft(new BinaryTree<>(21));
+        // root-der
+        binaryTree6.setRight(new BinaryTree<>(2));
+        // root-izq-izq
+        binaryTree6.getLeft().setLeft(new BinaryTree<>(10));
+        // root-izq-izq-izq
+        binaryTree6.getLeft().getLeft().setLeft(new BinaryTree<>(14));
     }
 
     @Test
@@ -101,6 +118,8 @@ final class BinaryTreeTest {
         assertFalse(binaryTree2.isEmpty());
         assertFalse(binaryTree3.isEmpty());
         assertFalse(binaryTree4.isEmpty());
+        assertFalse(binaryTree5.isEmpty());
+        assertFalse(binaryTree6.isEmpty());
     }
 
     @Test
@@ -123,6 +142,16 @@ final class BinaryTreeTest {
         /* BinaryTree #4 */
         assertFalse(binaryTree4.getLeft().isLeaf());
         assertTrue(binaryTree4.getLeft().getLeft().isLeaf());
+
+        /* BinaryTree #5 */
+        assertFalse(binaryTree5.isLeaf());
+        assertFalse(binaryTree5.getLeft().isLeaf());
+        assertTrue(binaryTree5.getRight().getRight().isLeaf());
+
+        /* BinaryTree #6 */
+        assertFalse(binaryTree6.isLeaf());
+        assertTrue(binaryTree6.getRight().isLeaf());
+        assertTrue(binaryTree6.getLeft().getLeft().getLeft().isLeaf());
     }
 
     @Test
@@ -138,6 +167,12 @@ final class BinaryTreeTest {
 
         System.out.println("BinaryTree #4:");
         binaryTree4.recorrerPreOrdenRecursive();
+
+        System.out.println("BinaryTree #5:");
+        binaryTree5.recorrerPreOrdenRecursive();
+
+        System.out.println("BinaryTree #6:");
+        binaryTree6.recorrerPreOrdenRecursive();
     }
 
     @Test
@@ -153,6 +188,12 @@ final class BinaryTreeTest {
 
         System.out.println("BinaryTree #4:");
         binaryTree4.recorrerEnOrdenRecursive();
+
+        System.out.println("BinaryTree #5:");
+        binaryTree5.recorrerEnOrdenRecursive();
+
+        System.out.println("BinaryTree #6:");
+        binaryTree6.recorrerEnOrdenRecursive();
     }
 
     @Test
@@ -168,6 +209,12 @@ final class BinaryTreeTest {
 
         System.out.println("BinaryTree #4:");
         binaryTree4.recorrerPostOrdenRecursive();
+
+        System.out.println("BinaryTree #5:");
+        binaryTree5.recorrerPostOrdenRecursive();
+
+        System.out.println("BinaryTree #6:");
+        binaryTree6.recorrerPostOrdenRecursive();
     }
 
     @Test
@@ -186,6 +233,12 @@ final class BinaryTreeTest {
 
         /* BinaryTree #4 */
         assertEquals(3, binaryTree4.countLeavesRecursive());
+
+        /* BinaryTree #5 */
+        assertEquals(4, binaryTree5.countLeavesRecursive());
+
+        /* BinaryTree #6 */
+        assertEquals(2, binaryTree6.countLeavesRecursive());
     }
 
     @Test
@@ -204,6 +257,12 @@ final class BinaryTreeTest {
 
         /* BinaryTree #4 */
         assertEquals(3, binaryTree4.countLeavesIterative());
+
+        /* BinaryTree #5 */
+        assertEquals(4, binaryTree5.countLeavesIterative());
+
+        /* BinaryTree #6 */
+        assertEquals(2, binaryTree6.countLeavesIterative());
     }
 
     @Test
@@ -227,6 +286,14 @@ final class BinaryTreeTest {
                                                   Comparator.comparingInt(String::length)));
         assertNull(binaryTree4.searchRecursive("TooLong",
                                                Comparator.comparingInt(String::length)));
+
+        /* BinaryTree #5 */
+        assertNotNull(binaryTree5.searchRecursive(1, Integer::compareTo));
+        assertNull(binaryTree5.searchRecursive(-1, Integer::compareTo));
+
+        /* BinaryTree #6 */
+        assertNotNull(binaryTree6.searchRecursive(14, Integer::compareTo));
+        assertNull(binaryTree6.searchRecursive(32, Integer::compareTo));
     }
 
     @Test
@@ -250,6 +317,14 @@ final class BinaryTreeTest {
                                                   Comparator.comparingInt(String::length)));
         assertNull(binaryTree4.searchIterative("TooLong",
                                                Comparator.comparingInt(String::length)));
+
+        /* BinaryTree #5 */
+        assertNotNull(binaryTree5.searchIterative(1, Integer::compareTo));
+        assertNull(binaryTree5.searchIterative(-1, Integer::compareTo));
+
+        /* BinaryTree #6 */
+        assertNotNull(binaryTree6.searchIterative(14, Integer::compareTo));
+        assertNull(binaryTree6.searchIterative(32, Integer::compareTo));
     }
 
     @Test
@@ -265,6 +340,12 @@ final class BinaryTreeTest {
 
         /* BinaryTree #4 */
         assertEquals("Five", binaryTree4.getMinRecursive(String::compareTo));
+
+        /* BinaryTree #5 */
+        assertEquals(1, binaryTree5.getMinRecursive(Integer::compareTo));
+
+        /* BinaryTree #6 */
+        assertEquals(2, binaryTree6.getMinRecursive(Integer::compareTo));
     }
 
     @Test
@@ -280,6 +361,12 @@ final class BinaryTreeTest {
 
         /* BinaryTree #4 */
         assertEquals("Five", binaryTree4.getMinIterative(String::compareTo));
+
+        /* BinaryTree #5 */
+        assertEquals(1, binaryTree5.getMinIterative(Integer::compareTo));
+
+        /* BinaryTree #6 */
+        assertEquals(2, binaryTree6.getMinIterative(Integer::compareTo));
     }
 
     @Test
@@ -295,6 +382,12 @@ final class BinaryTreeTest {
 
         /* BinaryTree #4 */
         assertEquals(5, binaryTree4.countDescendantsRecursive());
+
+        /* BinaryTree #5 */
+        assertEquals(7, binaryTree5.countDescendantsRecursive());
+
+        /* BinaryTree #6 */
+        assertEquals(4, binaryTree6.countDescendantsRecursive());
     }
 
     @Test
@@ -310,6 +403,12 @@ final class BinaryTreeTest {
 
         /* BinaryTree #4 */
         assertEquals(5, binaryTree4.countDescendantsIterative());
+
+        /* BinaryTree #5 */
+        assertEquals(7, binaryTree5.countDescendantsIterative());
+
+        /* BinaryTree #6 */
+        assertEquals(4, binaryTree6.countDescendantsIterative());
     }
 
     @Test
@@ -328,6 +427,12 @@ final class BinaryTreeTest {
 
         /* BinaryTree #4 */
         assertEquals(3, binaryTree4.countLevelsRecursive());
+
+        /* BinaryTree #5 */
+        assertEquals(4, binaryTree5.countLevelsRecursive());
+
+        /* BinaryTree #6 */
+        assertEquals(4, binaryTree6.countLevelsRecursive());
     }
 
     @Test
@@ -346,6 +451,12 @@ final class BinaryTreeTest {
 
         /* BinaryTree #4 */
         assertEquals(3, binaryTree4.countLevelsIterative());
+
+        /* BinaryTree #5 */
+        assertEquals(4, binaryTree5.countLevelsIterative());
+
+        /* BinaryTree #6 */
+        assertEquals(4, binaryTree6.countLevelsIterative());
     }
 
     @Test
@@ -367,6 +478,9 @@ final class BinaryTreeTest {
 
         /* BinaryTree #5 */
         assertFalse(binaryTree5.isLeftyRecursive());
+
+        /* BinaryTree #6 */
+        assertTrue(binaryTree6.isLeftyRecursive());
     }
 
     @Test
@@ -388,6 +502,9 @@ final class BinaryTreeTest {
 
         /* BinaryTree #5 */
         assertFalse(binaryTree5.isLeftyIterative());
+
+        /* BinaryTree #6 */
+        assertTrue(binaryTree6.isLeftyIterative());
     }
 
     @Test
@@ -408,6 +525,14 @@ final class BinaryTreeTest {
 
         /* BinaryTree #4 */
         assertTrue(binaryTree4.isIdenticalRecursive(binaryTree4));
+
+        /* BinaryTree #5 */
+        assertTrue(binaryTree5.isIdenticalRecursive(binaryTree5));
+        assertFalse(binaryTree5.isIdenticalRecursive(binaryTree2));
+
+        /* BinaryTree #6 */
+        assertTrue(binaryTree6.isIdenticalRecursive(binaryTree6));
+        assertFalse(binaryTree6.isIdenticalRecursive(binaryTree5));
     }
 
     @Test
@@ -428,5 +553,109 @@ final class BinaryTreeTest {
 
         /* BinaryTree #4 */
         assertTrue(binaryTree4.isIdenticalIterative(binaryTree4));
+
+        /* BinaryTree #5 */
+        assertTrue(binaryTree5.isIdenticalIterative(binaryTree5));
+        assertFalse(binaryTree5.isIdenticalIterative(binaryTree2));
+
+        /* BinaryTree #6 */
+        assertTrue(binaryTree6.isIdenticalIterative(binaryTree6));
+        assertFalse(binaryTree6.isIdenticalIterative(binaryTree5));
+    }
+
+    @Test
+    void isHeightBalancedRecursive() {
+        /* BinaryTree #0 */
+        assertTrue(binaryTree0.isHeightBalancedRecursive());
+
+        /* BinaryTree #1 */
+        assertTrue(binaryTree1.isHeightBalancedRecursive());
+
+        /* BinaryTree #2 */
+        assertTrue(binaryTree2.isHeightBalancedRecursive());
+
+        /* BinaryTree #3 */
+        assertTrue(binaryTree3.isHeightBalancedRecursive());
+
+        /* BinaryTree #4 */
+        assertTrue(binaryTree4.isHeightBalancedRecursive());
+
+        /* BinaryTree #5 */
+        assertTrue(binaryTree5.isHeightBalancedRecursive());
+
+        /* BinaryTree #6 */
+        assertFalse(binaryTree6.isHeightBalancedRecursive());
+    }
+
+    @Test
+    void isHeightBalancedIterative() {
+        /* BinaryTree #0 */
+        assertTrue(binaryTree0.isHeightBalancedIterative());
+
+        /* BinaryTree #1 */
+        assertTrue(binaryTree1.isHeightBalancedIterative());
+
+        /* BinaryTree #2 */
+        assertTrue(binaryTree2.isHeightBalancedIterative());
+
+        /* BinaryTree #3 */
+        assertTrue(binaryTree3.isHeightBalancedIterative());
+
+        /* BinaryTree #4 */
+        assertTrue(binaryTree4.isHeightBalancedIterative());
+
+        /* BinaryTree #5 */
+        assertTrue(binaryTree5.isHeightBalancedIterative());
+
+        /* BinaryTree #6 */
+        assertFalse(binaryTree6.isHeightBalancedIterative());
+    }
+
+    @Test
+    void countNodesWithOnlyChildRecursive() {
+        /* BinaryTree #0 */
+        assertEquals(0, binaryTree0.countNodesWithOnlyChildRecursive());
+
+        /* BinaryTree #1 */
+        assertEquals(0, binaryTree1.countNodesWithOnlyChildRecursive());
+
+        /* BinaryTree #2 */
+        assertEquals(0, binaryTree2.countNodesWithOnlyChildRecursive());
+
+        /* BinaryTree #3 */
+        assertEquals(1, binaryTree3.countNodesWithOnlyChildRecursive());
+
+        /* BinaryTree #4 */
+        assertEquals(1, binaryTree4.countNodesWithOnlyChildRecursive());
+
+        /* BinaryTree #5 */
+        assertEquals(1, binaryTree5.countNodesWithOnlyChildRecursive());
+
+        /* BinaryTree #6 */
+        assertEquals(2, binaryTree6.countNodesWithOnlyChildRecursive());
+    }
+
+    @Test
+    void countNodesWithOnlyChildIterative() {
+        /* BinaryTree #0 */
+        assertEquals(0, binaryTree0.countNodesWithOnlyChildIterative());
+
+        /* BinaryTree #1 */
+        assertEquals(0, binaryTree1.countNodesWithOnlyChildIterative());
+
+        /* BinaryTree #2 */
+        assertEquals(0, binaryTree2.countNodesWithOnlyChildIterative());
+
+        /* BinaryTree #3 */
+        assertEquals(1, binaryTree3.countNodesWithOnlyChildIterative());
+
+        /* BinaryTree #4 */
+        assertEquals(1, binaryTree4.countNodesWithOnlyChildIterative());
+
+        /* BinaryTree #5 */
+        assertEquals(1, binaryTree5.countNodesWithOnlyChildIterative());
+
+        /* BinaryTree #6 */
+        assertEquals(2, binaryTree6.countNodesWithOnlyChildIterative());
     }
 }
