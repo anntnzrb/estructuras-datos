@@ -538,29 +538,40 @@ final class BinaryTreeTest {
     @Test
     void isIdenticalIterative() {
         /* BinaryTree #0 */
-        assertTrue(binaryTree0.isIdenticalIterative(binaryTree0));
+        assertTrue(binaryTree0.isIdenticalIterative(binaryTree0,
+                                                    Integer::compareTo));
 
         /* BinaryTree #1 */
-        assertTrue(binaryTree1.isIdenticalIterative(binaryTree1));
+        assertTrue(binaryTree1.isIdenticalIterative(binaryTree1,
+                                                    Integer::compareTo));
 
         /* BinaryTree #2 */
-        assertTrue(binaryTree2.isIdenticalIterative(binaryTree2));
-        assertFalse(binaryTree2.isIdenticalIterative(binaryTree1));
+        assertTrue(binaryTree2.isIdenticalIterative(binaryTree2,
+                                                    Integer::compareTo));
+        assertFalse(binaryTree2.isIdenticalIterative(binaryTree1,
+                                                     Integer::compareTo));
 
         /* BinaryTree #3 */
-        assertTrue(binaryTree3.isIdenticalIterative(binaryTree3));
-        assertFalse(binaryTree3.isIdenticalIterative(binaryTree2));
+        assertTrue(binaryTree3.isIdenticalIterative(binaryTree3,
+                                                    Integer::compareTo));
+        assertFalse(binaryTree3.isIdenticalIterative(binaryTree2,
+                                                     Integer::compareTo));
 
         /* BinaryTree #4 */
-        assertTrue(binaryTree4.isIdenticalIterative(binaryTree4));
+        assertTrue(binaryTree4.isIdenticalIterative(binaryTree4,
+                                                    String::compareTo));
 
         /* BinaryTree #5 */
-        assertTrue(binaryTree5.isIdenticalIterative(binaryTree5));
-        assertFalse(binaryTree5.isIdenticalIterative(binaryTree2));
+        assertTrue(binaryTree5.isIdenticalIterative(binaryTree5,
+                                                    Integer::compareTo));
+        assertFalse(binaryTree5.isIdenticalIterative(binaryTree2,
+                                                     Integer::compareTo));
 
         /* BinaryTree #6 */
-        assertTrue(binaryTree6.isIdenticalIterative(binaryTree6));
-        assertFalse(binaryTree6.isIdenticalIterative(binaryTree5));
+        assertTrue(binaryTree6.isIdenticalIterative(binaryTree6,
+                                                    Integer::compareTo));
+        assertFalse(binaryTree6.isIdenticalIterative(binaryTree5,
+                                                     Integer::compareTo));
     }
 
     @Test

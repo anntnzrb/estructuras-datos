@@ -637,9 +637,44 @@ public final class BinaryTree<E> {
      * @return {@code true} si el árbol es idéntico, {@code false} caso
      * contrario
      */
-    public boolean isIdenticalIterative(final BinaryTree<E> tree) {
-        // TODO
-        return false;
+    @SuppressWarnings({"CollectionWithoutInitialCapacity",
+            "MethodCallInLoopCondition"})
+    public boolean isIdenticalIterative(final BinaryTree<E> tree,
+                                        final Comparator<E> cmp) {
+        if (isEmpty() && tree.isEmpty()) {
+            return true;
+        }
+
+        final Deque<BinaryTree<E>> stackThis = new ArrayDeque<>();
+        final Deque<BinaryTree<E>> stackOther = new ArrayDeque<>();
+
+        stackThis.push(this);
+        stackOther.push(tree);
+
+        while (!stackThis.isEmpty() && !stackOther.isEmpty()) {
+            final BinaryTree<E> tTree = stackThis.pop();
+            final BinaryTree<E> oTree = stackOther.pop();
+
+            if (cmp.compare(tTree.getData(), oTree.getData()) != 0) {
+                return false;
+            }
+
+            if (tTree.getLeft() != null) {
+                stackThis.push(tTree.getLeft());
+            }
+            if (oTree.getLeft() != null) {
+                stackOther.push(oTree.getLeft());
+            }
+
+            if (tTree.getRight() != null) {
+                stackThis.push(tTree.getRight());
+            }
+            if (oTree.getRight() != null) {
+                stackOther.push(oTree.getRight());
+            }
+        }
+
+        return stackThis.isEmpty() && stackOther.isEmpty();
     }
 
     public void largestValueOfEachLevelRecursive(final Comparator<BinaryTree<E>> cmp) {
