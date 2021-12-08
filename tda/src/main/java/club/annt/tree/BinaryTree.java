@@ -1,11 +1,10 @@
 package club.annt.tree;
 
-import java.util.ArrayDeque;
-import java.util.Comparator;
-import java.util.Deque;
-import java.util.Objects;
+import java.util.*;
 
-@SuppressWarnings("ClassHasNoToStringMethod")
+@SuppressWarnings({"ClassHasNoToStringMethod", "EqualsAndHashcode",
+        "ClassWithTooManyMethods", "OverlyComplexClass", "BoundedWildcard",
+        "unused"})
 public final class BinaryTree<E> {
     private BinaryTreeNode<E> root;
 
@@ -403,8 +402,42 @@ public final class BinaryTree<E> {
      * @param binaryTreeNode {@link BinaryTreeNode} al cual buscar el padre
      * @return {@link BinaryTreeNode} padre
      */
-    public BinaryTreeNode<E> findParentIterative(final BinaryTreeNode<E> binaryTreeNode) {
-        return null;
+    @SuppressWarnings("CollectionWithoutInitialCapacity")
+    public BinaryTreeNode<E> findParentIterative(final E binaryTreeNode,
+                                                 final Comparator<E> cmp) {
+
+        final Deque<BinaryTree<E>> stack = new ArrayDeque<>();
+        stack.push(this);
+
+        if (!isEmpty() && !isLeaf()) {
+            while (true) {
+                final boolean isStackEmpty = stack.isEmpty();
+                if (isStackEmpty) {
+                    break;
+                }
+
+                final BinaryTree<E> subBT = stack.pop();
+
+                if (subBT.getLeft() != null) {
+                    if (cmp.compare(binaryTreeNode, subBT.getLeft().getData())
+                        == 0) {
+                        return subBT.root;
+                    }
+                    stack.push(subBT.getLeft());
+                }
+
+                if (subBT.getRight() != null) {
+                    if (cmp.compare(binaryTreeNode, subBT.getRight().getData())
+                        == 0) {
+                        return subBT.root;
+                    }
+
+                    stack.push(subBT.getRight());
+                }
+            }
+        }
+
+        return stack.pop().root;
     }
 
     /**
@@ -526,18 +559,15 @@ public final class BinaryTree<E> {
      *
      * @return {@code true} si el árbol es zurdo, {@code false} caso contrario
      */
-    @SuppressWarnings("CollectionWithoutInitialCapacity")
+    @SuppressWarnings({"CollectionWithoutInitialCapacity", "rawtypes"})
     public boolean isLeftyIterative() {
         if (isEmpty() || isLeaf()) {
             return true;
         }
 
-        if (getLeft() == null) {
-            return false;
-        }
-
         final Deque<BinaryTree<E>> stack = new ArrayDeque<>();
         stack.push(this);
+
         while (true) {
             final boolean isStackEmpty = stack.isEmpty();
             if (isStackEmpty) {
@@ -545,12 +575,23 @@ public final class BinaryTree<E> {
             }
 
             final BinaryTree<E> subBT = stack.pop();
+            final int descendants = subBT.countDescendantsRecursive();
+            if (subBT.getLeft() != null) {
+                final int leftDescendants = subBT.getLeft()
+                                                 .countDescendantsRecursive();
+                if ((descendants >> 1) >= leftDescendants + 1) {
+                    return false;
+                }
 
+                stack.push(subBT.getLeft());
+
+                if (subBT.getRight() != null) {
+                    stack.push(subBT.getRight());
+                }
+            }
         }
 
-
-        // TODO
-        return false;
+        return true;
     }
 
     /**
@@ -601,12 +642,38 @@ public final class BinaryTree<E> {
         return false;
     }
 
-    public E largestValueOfEachLevelRecursive() {
-        return null;
+    public void largestValueOfEachLevelRecursive(final Comparator<BinaryTree<E>> cmp) {
+        if (isEmpty()) {
+            return;
+        }
     }
 
-    public E largestValueOfEachLevelIterative() {
-        return null;
+    @SuppressWarnings({"ObjectAllocationInLoop", "MethodCallInLoopCondition",
+            "OverlyLongLambda"})
+    public void largestValueOfEachLevelIterative(final Comparator<BinaryTree<E>> cmp) {
+        if (isEmpty()) {
+            return;
+        }
+
+        final Queue<BinaryTree<E>> pqBT = new PriorityQueue<>(cmp);
+        pqBT.offer(this);
+
+        while (!pqBT.isEmpty()) {
+            System.out.println(pqBT.peek().getData());
+            final Collection<BinaryTree<E>> listSubTrees = new LinkedList<>();
+            while (!pqBT.isEmpty()) {
+                listSubTrees.add(pqBT.poll());
+            }
+
+            listSubTrees.forEach(subBT -> {
+                if (subBT.getLeft() != null) {
+                    pqBT.offer(subBT.getLeft());
+                }
+                if (subBT.getRight() != null) {
+                    pqBT.offer(subBT.getRight());
+                }
+            });
+        }
     }
 
     /**

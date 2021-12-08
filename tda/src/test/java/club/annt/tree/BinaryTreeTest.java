@@ -658,4 +658,58 @@ final class BinaryTreeTest {
         /* BinaryTree #6 */
         assertEquals(2, binaryTree6.countNodesWithOnlyChildIterative());
     }
+
+    @Test
+    void largestValueOfEachLevelRecursive() {
+        System.out.println("BinaryTree #1:");
+        binaryTree1.largestValueOfEachLevelRecursive(
+                (bt1, bt2) -> bt2.getData() - bt1.getData());
+
+        System.out.println("BinaryTree #2:");
+        binaryTree2.largestValueOfEachLevelRecursive(
+                (bt1, bt2) -> bt2.getData() - bt1.getData());
+
+        System.out.println("BinaryTree #3:");
+        binaryTree3.largestValueOfEachLevelRecursive(
+                (bt1, bt2) -> bt2.getData() - bt1.getData());
+
+        System.out.println("BinaryTree #4:");
+        binaryTree4.largestValueOfEachLevelRecursive(
+                Comparator.comparing(BinaryTree::getData));
+
+        System.out.println("BinaryTree #5:");
+        binaryTree5.largestValueOfEachLevelRecursive(
+                (bt1, bt2) -> bt2.getData() - bt1.getData());
+
+        System.out.println("BinaryTree #6:");
+        binaryTree6.largestValueOfEachLevelRecursive(
+                (bt1, bt2) -> bt2.getData() - bt1.getData());
+    }
+
+    @Test
+    void largestValueOfEachLevelIterative() {
+        System.out.println("BinaryTree #1:");
+        binaryTree1.largestValueOfEachLevelIterative(
+                (bt1, bt2) -> bt2.getData() - bt1.getData());
+
+        System.out.println("BinaryTree #2:");
+        binaryTree2.largestValueOfEachLevelIterative(
+                (bt1, bt2) -> bt2.getData() - bt1.getData());
+
+        System.out.println("BinaryTree #3:");
+        binaryTree3.largestValueOfEachLevelIterative(
+                (bt1, bt2) -> bt2.getData() - bt1.getData());
+
+        System.out.println("BinaryTree #4:");
+        binaryTree4.largestValueOfEachLevelIterative(
+                Comparator.comparing(BinaryTree::getData));
+
+        System.out.println("BinaryTree #5:");
+        binaryTree5.largestValueOfEachLevelIterative(
+                (bt1, bt2) -> bt2.getData() - bt1.getData());
+
+        System.out.println("BinaryTree #6:");
+        binaryTree6.largestValueOfEachLevelIterative(
+                (bt1, bt2) -> bt2.getData() - bt1.getData());
+    }
 }
