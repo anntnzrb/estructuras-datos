@@ -60,20 +60,20 @@ public final class BSTree<E, K> {
         return root.getData();
     }
 
-    public BSTree<E, K> getLeft() {
-        return root.getLeft();
-    }
-
-    public BSTree<E, K> getRight() {
-        return root.getRight();
-    }
-
     public void setData(final E data) {
         root.data = data;
     }
 
+    public BSTree<E, K> getLeft() {
+        return root.getLeft();
+    }
+
     public void setLeft(final BSTree<E, K> left) {
         root.left = left;
+    }
+
+    public BSTree<E, K> getRight() {
+        return root.getRight();
     }
 
     public void setRight(final BSTree<E, K> right) {
@@ -104,20 +104,20 @@ public final class BSTree<E, K> {
             return data;
         }
 
-        public BSTree<E, K> getLeft() {
-            return left;
-        }
-
-        public BSTree<E, K> getRight() {
-            return right;
-        }
-
         public void setData(final E data) {
             this.data = data;
         }
 
+        public BSTree<E, K> getLeft() {
+            return left;
+        }
+
         public void setLeft(final BSTree<E, K> left) {
             this.left = left;
+        }
+
+        public BSTree<E, K> getRight() {
+            return right;
         }
 
         public void setRight(final BSTree<E, K> right) {

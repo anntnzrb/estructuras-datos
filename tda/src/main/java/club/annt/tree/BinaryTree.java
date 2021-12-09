@@ -450,7 +450,8 @@ public final class BinaryTree<E> {
     public int countLevelsRecursive() {
         if (isEmpty()) {
             return 0;
-        } else if (isLeaf()) {
+        }
+        if (isLeaf()) {
             return 1;
         }
 
@@ -479,34 +480,40 @@ public final class BinaryTree<E> {
      *
      * @return cantidad de niveles del árbol
      */
-    @SuppressWarnings("CollectionWithoutInitialCapacity")
+    @SuppressWarnings({"CollectionWithoutInitialCapacity",
+            "MethodCallInLoopCondition", "OverlyLongLambda",
+            "ObjectAllocationInLoop"})
     public int countLevelsIterative() {
         if (isEmpty()) {
             return 0;
-        } else if (isLeaf()) {
+        }
+        if (isLeaf()) {
             return 1;
         }
 
-        int levels = 0;
         final Deque<BinaryTree<E>> stack = new ArrayDeque<>();
         stack.push(this);
-        while (true) {
-            final boolean isStackEmpty = stack.isEmpty();
-            if (isStackEmpty) {
-                break;
+
+        int level = 0;
+        while (!stack.isEmpty()) {
+            ++level;
+            final Collection<BinaryTree<E>> subTrees = new LinkedList<>();
+
+            while (!stack.isEmpty()) {
+                subTrees.add(stack.pop());
             }
 
-            final BinaryTree<E> subBT = stack.pop();
-            if (subBT.getLeft() != null) {
-                stack.push(subBT.getLeft());
-            }
-            if (subBT.getRight() != null) {
-                stack.push(subBT.getRight());
-            }
-            ++levels;
+            subTrees.forEach(subTree -> {
+                if (subTree.getLeft() != null) {
+                    stack.push(subTree.getLeft());
+                }
+                if (subTree.getRight() != null) {
+                    stack.push(subTree.getRight());
+                }
+            });
         }
 
-        return levels;
+        return level;
     }
 
     /**
@@ -677,10 +684,30 @@ public final class BinaryTree<E> {
         return stackThis.isEmpty() && stackOther.isEmpty();
     }
 
-    public void largestValueOfEachLevelRecursive(final Comparator<BinaryTree<E>> cmp) {
+    @SuppressWarnings("CollectionWithoutInitialCapacity")
+    public void largestValueOfEachLevelRecursive(final Comparator<E> cmp) {
+        findLevelLargestLevelRecursive(new ArrayList<>(), 0, cmp);
+    }
+
+    private void findLevelLargestLevelRecursive(final List<E> res,
+                                                final int level,
+                                                final Comparator<E> cmp) {
         if (isEmpty()) {
             return;
         }
+
+        if (res.size() < (level + 1)) {
+            res.add(level, getData());
+        } else if (cmp.compare(getData(), res.get(level)) > 0) {
+            res.remove(level);
+            res.add(level, getData());
+        }
+
+        System.out.println(res.get(level));
+
+        getLeft().findLevelLargestLevelRecursive(res, level + 1, cmp);
+        getRight().findLevelLargestLevelRecursive(res, level + 1, cmp);
+
     }
 
     @SuppressWarnings({"ObjectAllocationInLoop", "MethodCallInLoopCondition",
@@ -864,6 +891,7 @@ public final class BinaryTree<E> {
 
         final Deque<BinaryTree<E>> stack = new ArrayDeque<>();
         stack.push(this);
+
         while (true) {
             final boolean isStackEmpty = stack.isEmpty();
             if (isStackEmpty) {
@@ -871,17 +899,22 @@ public final class BinaryTree<E> {
             }
 
             final BinaryTree<E> subBT = stack.pop();
+            if (subBT.getLeft() != null
+                && subBT.getRight() != null
+                && Math.abs(subBT.getLeft().getHeight()
+                            - subBT.getRight().getHeight()) > 1) {
+                return false;
+            }
+
             if (subBT.getLeft() != null) {
                 stack.push(subBT.getLeft());
             }
             if (subBT.getRight() != null) {
                 stack.push(subBT.getRight());
             }
-
-            // TODO
         }
 
-        return false;
+        return true;
     }
 
     /**

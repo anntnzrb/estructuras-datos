@@ -670,31 +670,26 @@ final class BinaryTreeTest {
         assertEquals(2, binaryTree6.countNodesWithOnlyChildIterative());
     }
 
+    @SuppressWarnings("SubtractionInCompareTo")
     @Test
     void largestValueOfEachLevelRecursive() {
         System.out.println("BinaryTree #1:");
-        binaryTree1.largestValueOfEachLevelRecursive(
-                (bt1, bt2) -> bt2.getData() - bt1.getData());
+        binaryTree1.largestValueOfEachLevelRecursive(Integer::compareTo);
 
         System.out.println("BinaryTree #2:");
-        binaryTree2.largestValueOfEachLevelRecursive(
-                (bt1, bt2) -> bt2.getData() - bt1.getData());
+        binaryTree2.largestValueOfEachLevelRecursive(Integer::compareTo);
 
         System.out.println("BinaryTree #3:");
-        binaryTree3.largestValueOfEachLevelRecursive(
-                (bt1, bt2) -> bt2.getData() - bt1.getData());
+        binaryTree3.largestValueOfEachLevelRecursive(Integer::compareTo);
 
         System.out.println("BinaryTree #4:");
-        binaryTree4.largestValueOfEachLevelRecursive(
-                Comparator.comparing(BinaryTree::getData));
+        binaryTree4.largestValueOfEachLevelRecursive(String::compareTo);
 
         System.out.println("BinaryTree #5:");
-        binaryTree5.largestValueOfEachLevelRecursive(
-                (bt1, bt2) -> bt2.getData() - bt1.getData());
+        binaryTree5.largestValueOfEachLevelRecursive(Integer::compareTo);
 
         System.out.println("BinaryTree #6:");
-        binaryTree6.largestValueOfEachLevelRecursive(
-                (bt1, bt2) -> bt2.getData() - bt1.getData());
+        binaryTree5.largestValueOfEachLevelRecursive(Integer::compareTo);
     }
 
     @Test
