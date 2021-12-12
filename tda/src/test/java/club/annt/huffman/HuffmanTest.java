@@ -1,6 +1,14 @@
 package club.annt.huffman;
 
+import club.annt.tree.BinaryTree;
 import org.junit.jupiter.api.Test;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -17,11 +25,36 @@ class HuffmanTest {
 
     @Test
     void buildHuffmanTree() {
-        final var map = Huffman.getFrecuencies("ABACCDA");
+        final Map<Character, Integer> map = Huffman.getFrecuencies("ABACCDA");
+        final BinaryTree<HuffmanInfo> huffBT = Huffman.buildHuffmanTree(map);
 
-        var bt = Huffman.buildHuffmanTree(map);
-        System.out.println(bt.getData().getText());
-        System.out.println(bt.getLeft().getData().getText());
-        System.out.println(bt.getRight().getData().getText());
+        System.out.println(huffBT.getData().getText());
+        System.out.println(huffBT.getLeft().getData().getText());
+        System.out.println(huffBT.getRight().getData().getText());
+    }
+
+    @Test
+    void getHuffmanCodes() {
+        final Map<Character, String> map1 = new HashMap<>();
+        final Map<String, Character> map2 = new HashMap<>();
+        final List<Character> charList = List.of('H', 'O', 'L', 'A');
+        final BinaryTree<HuffmanInfo> huffBT =
+                Huffman.buildHuffmanTree(Huffman.getFrecuencies(
+                        "ABACCDA"));
+
+        Huffman.getHuffmanCodes(charList, huffBT, map1, map2);
+
+        //System.out.println(map1);
+        //System.out.println(map2);
+    }
+
+    @Test
+    void fileRead() {
+        try (final BufferedReader br =
+                     new BufferedReader(
+                             new InputStreamReader(Huffman.class.getResourceAsStream("lol.txt")))) {
+        } catch (final IOException ioEx) {
+            ioEx.printStackTrace();
+        }
     }
 }

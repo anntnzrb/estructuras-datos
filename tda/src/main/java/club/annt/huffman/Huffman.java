@@ -21,8 +21,8 @@ public final class Huffman {
     }
 
     @SuppressWarnings("ObjectAllocationInLoop")
-    public static BinaryTree<HuffmanInfo> buildHuffmanTree(final Map<Character,
-            Integer> map) {
+    public static BinaryTree<HuffmanInfo> buildHuffmanTree(
+            final Map<Character, Integer> map) {
         /* PQ con frecuencias del contenido de cada raíz (ascendentemente) */
         final Queue<BinaryTree<HuffmanInfo>> pq =
                 new PriorityQueue<>(Comparator.comparingInt(huffBT -> huffBT.getData()
@@ -58,13 +58,64 @@ public final class Huffman {
         return huffBT;
     }
 
+    public static void getHuffmanCodes(final List<Character> charList,
+                                       final BinaryTree<HuffmanInfo> huffBT,
+                                       final Map<Character, String> map1,
+                                       final Map<String, Character> map2) {
+        final Map<Character, String> map3 = new HashMap<>();
+        final Queue<BinaryTree<HuffmanInfo>> pq = new ArrayDeque<>();
+        pq.offer(huffBT);
+
+        StringBuilder strBldLeft = new StringBuilder();
+        StringBuilder strBldRight = new StringBuilder();
+        while (true) {
+            final boolean isQueueEmpty = pq.isEmpty();
+            if (isQueueEmpty) {
+                break;
+            }
+
+            final BinaryTree<HuffmanInfo> subBT = pq.poll();
+            if (subBT.getRight().isLeaf() && subBT.getLeft().isLeaf()) {
+                map3.put(subBT.getLeft().getData().getText().charAt(0),
+                         strBldLeft.append("0").toString());
+                map3.put(subBT.getRight().getData().getText().charAt(0),
+                         strBldRight.append("1").toString());
+                break;
+            }
+            if (subBT.getLeft().isLeaf() && !subBT.getRight().isLeaf()) {
+                map3.put(subBT.getLeft().getData().getText().charAt(0),
+                         strBldLeft.append("0").toString());
+                strBldRight.append("1");
+                strBldLeft = new StringBuilder(strBldRight);
+
+                pq.offer(subBT.getRight());
+            }
+            if (subBT.getRight().isLeaf() && !subBT.getLeft().isLeaf()) {
+                map3.put(subBT.getRight().getData().getText().charAt(0),
+                         strBldRight.append("1").toString());
+                strBldLeft.append("0");
+                strBldRight = new StringBuilder(strBldLeft);
+
+                pq.offer(subBT.getLeft());
+            }
+        }
+
+        System.out.println(map3);
+
+        charList.forEach(ch -> {
+            map1.put(ch, map3.get(ch));
+            map2.put(map3.get(ch), ch);
+        });
+    }
+
+    /* métodos auxiliares */
     private static String huffStrCat(final BinaryTree<HuffmanInfo> huffBT1,
-                              final BinaryTree<HuffmanInfo> huffBT2) {
+                                     final BinaryTree<HuffmanInfo> huffBT2) {
         return huffBT1.getData().getText() + huffBT2.getData().getText();
     }
 
     private static int huffFreqSum(final BinaryTree<HuffmanInfo> huffBT1,
-                            final BinaryTree<HuffmanInfo> huffBT2) {
+                                   final BinaryTree<HuffmanInfo> huffBT2) {
         return huffBT1.getData().getFrequency()
                + huffBT2.getData().getFrequency();
     }
