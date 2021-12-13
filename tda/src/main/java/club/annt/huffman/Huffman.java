@@ -4,8 +4,10 @@ import club.annt.tree.BinaryTree;
 
 import java.util.*;
 
+@SuppressWarnings({"BoundedWildcard", "CollectionWithoutInitialCapacity",
+        "StringBufferWithoutInitialCapacity"})
 public final class Huffman {
-    public static Map<Character, Integer> getFrecuencies(final String str) {
+    public static Map<Character, Integer> getFrequencies(final String str) {
         final Map<Character, Integer> map = new LinkedHashMap<>(str.length());
 
         /* iterar a través del string */
@@ -25,8 +27,7 @@ public final class Huffman {
             final Map<Character, Integer> map) {
         /* PQ con frecuencias del contenido de cada raíz (ascendentemente) */
         final Queue<BinaryTree<HuffmanInfo>> pq =
-                new PriorityQueue<>(Comparator.comparingInt(huffBT -> huffBT.getData()
-                                                                            .getFrequency()));
+                new PriorityQueue<>(Comparator.comparing(BinaryTree::getData));
 
         /* crear y guardar en la PQ un BinaryTree con los datos del map */
         map.forEach((k, v) -> {
@@ -34,20 +35,20 @@ public final class Huffman {
                     new HuffmanInfo(Character.toString(k), v)));
         });
 
-        BinaryTree<HuffmanInfo> huffBT = null;
         while (true) {
-            final int pqSize = pq.size();
-            if (pqSize < 2) {
+            final int isQueueEmpty = pq.size();
+            if (isQueueEmpty <= 1) {
                 break;
             }
 
-            final BinaryTree<HuffmanInfo> rightTree = pq.poll();
             final BinaryTree<HuffmanInfo> leftTree = pq.poll();
+            final BinaryTree<HuffmanInfo> rightTree = pq.poll();
 
             /* crear un nuevo árbol contieniendo la unión sus 2 hijos */
-            huffBT = new BinaryTree<>(new HuffmanInfo(
-                    huffStrCat(rightTree, leftTree),
-                    huffFreqSum(rightTree, leftTree)));
+            final BinaryTree<HuffmanInfo> huffBT =
+                    new BinaryTree<>(new HuffmanInfo(
+                            huffStrCat(leftTree, rightTree),
+                            huffFreqSum(leftTree, rightTree)));
 
             huffBT.setLeft(leftTree);
             huffBT.setRight(rightTree);
@@ -55,52 +56,15 @@ public final class Huffman {
             pq.offer(huffBT);
         }
 
-        return huffBT;
+        return pq.poll();
     }
 
-    public static void getHuffmanCodes(final List<Character> charList,
+    public static void getHuffmanCodes(final Iterable<Character> charList,
                                        final BinaryTree<HuffmanInfo> huffBT,
                                        final Map<Character, String> map1,
                                        final Map<String, Character> map2) {
         final Map<Character, String> map3 = new HashMap<>();
-        final Queue<BinaryTree<HuffmanInfo>> pq = new ArrayDeque<>();
-        pq.offer(huffBT);
-
-        StringBuilder strBldLeft = new StringBuilder();
-        StringBuilder strBldRight = new StringBuilder();
-        while (true) {
-            final boolean isQueueEmpty = pq.isEmpty();
-            if (isQueueEmpty) {
-                break;
-            }
-
-            final BinaryTree<HuffmanInfo> subBT = pq.poll();
-            if (subBT.getRight().isLeaf() && subBT.getLeft().isLeaf()) {
-                map3.put(subBT.getLeft().getData().getText().charAt(0),
-                         strBldLeft.append("0").toString());
-                map3.put(subBT.getRight().getData().getText().charAt(0),
-                         strBldRight.append("1").toString());
-                break;
-            }
-            if (subBT.getLeft().isLeaf() && !subBT.getRight().isLeaf()) {
-                map3.put(subBT.getLeft().getData().getText().charAt(0),
-                         strBldLeft.append("0").toString());
-                strBldRight.append("1");
-                strBldLeft = new StringBuilder(strBldRight);
-
-                pq.offer(subBT.getRight());
-            }
-            if (subBT.getRight().isLeaf() && !subBT.getLeft().isLeaf()) {
-                map3.put(subBT.getRight().getData().getText().charAt(0),
-                         strBldRight.append("1").toString());
-                strBldLeft.append("0");
-                strBldRight = new StringBuilder(strBldLeft);
-
-                pq.offer(subBT.getLeft());
-            }
-        }
-
-        System.out.println(map3);
+        huffmanCodes(huffBT, map3, "");
 
         charList.forEach(ch -> {
             map1.put(ch, map3.get(ch));
@@ -108,7 +72,45 @@ public final class Huffman {
         });
     }
 
+    public static String encode(final String input,
+                                final Map<Character, String> map) {
+        final StringBuilder strBld = new StringBuilder();
+        for (final char ch : input.toCharArray()) {
+            strBld.append(map.get(ch));
+        }
+
+        return strBld.toString();
+    }
+
+    public static String decode(final String input,
+                                final Map<String, Character> map) {
+        final StringBuilder decoded = new StringBuilder();
+        final StringBuilder strBld2 = new StringBuilder();
+
+        for (final char ch : input.toCharArray()) {
+            strBld2.append(ch);
+            if (map.containsKey(strBld2.toString())) {
+                decoded.append(map.get(strBld2.toString()));
+                strBld2.setLength(0);
+            }
+        }
+
+        return decoded.toString();
+    }
+
     /* métodos auxiliares */
+    private static void huffmanCodes(final BinaryTree<HuffmanInfo> huffBT,
+                                     final Map<Character, String> map,
+                                     final String code) {
+        if (huffBT.isLeaf()) {
+            map.put(huffBT.getData().getText().charAt(0), code);
+            return;
+        }
+
+        huffmanCodes(huffBT.getLeft(), map, code + "0");
+        huffmanCodes(huffBT.getRight(), map, code + "1");
+    }
+
     private static String huffStrCat(final BinaryTree<HuffmanInfo> huffBT1,
                                      final BinaryTree<HuffmanInfo> huffBT2) {
         return huffBT1.getData().getText() + huffBT2.getData().getText();
