@@ -4,8 +4,6 @@ import club.annt.tree.BinaryTree;
 
 import java.util.*;
 
-@SuppressWarnings({"BoundedWildcard", "CollectionWithoutInitialCapacity",
-        "StringBufferWithoutInitialCapacity"})
 public final class Huffman {
     public static Map<Character, Integer> getFrequencies(final String str) {
         final Map<Character, Integer> map = new LinkedHashMap<>(str.length());
@@ -22,7 +20,6 @@ public final class Huffman {
         return map;
     }
 
-    @SuppressWarnings("ObjectAllocationInLoop")
     public static BinaryTree<HuffmanInfo> buildHuffmanTree(
             final Map<Character, Integer> map) {
         /* PQ con frecuencias del contenido de cada raíz (ascendentemente) */

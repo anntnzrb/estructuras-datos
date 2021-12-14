@@ -1,11 +1,10 @@
 package club.annt.huffman;
 
-@SuppressWarnings("ComparableImplementedButEqualsNotOverridden")
 public final class HuffmanInfo implements Comparable<HuffmanInfo> {
     private String text;
     private int    frequency;
 
-    /* constructor */
+    /* constructores */
     private HuffmanInfo() {}
 
     public HuffmanInfo(final String text, final int frequency) {
@@ -26,13 +25,10 @@ public final class HuffmanInfo implements Comparable<HuffmanInfo> {
         return "{" + text + ":" + frequency + "}";
     }
 
-    @SuppressWarnings({"SubtractionInCompareTo",
-            "CallToSuspiciousStringMethod"})
     @Override
     public int compareTo(final HuffmanInfo otherHuff) {
         return frequency - otherHuff.frequency == 0
                ? text.compareTo(otherHuff.text)
                : frequency - otherHuff.frequency;
     }
-
 }
