@@ -2,7 +2,8 @@ package club.annt.tree;
 
 import java.util.Comparator;
 
-@SuppressWarnings("ClassHasNoToStringMethod")
+@SuppressWarnings({"ClassHasNoToStringMethod",
+        "BooleanMethodNameMustStartWithQuestion"})
 public final class BSTree<E, K extends Comparable<K>> {
     private BSTreeNode<E, K> root;
     private Comparator<K>    cmp;
@@ -65,11 +66,12 @@ public final class BSTree<E, K extends Comparable<K>> {
             return true;
         }
 
-        if (cmp.compare(key, getKey()) == 0) {
+        final int keyCmp = cmp.compare(key, getKey());
+        if (keyCmp == 0) {
             return false;
         }
 
-        if (cmp.compare(key, getKey()) < 0) {
+        if (keyCmp < 0) {
             if (getLeft() == null) {
                 setLeft(elem, key);
             } else {
