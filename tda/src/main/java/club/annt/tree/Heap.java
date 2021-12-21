@@ -41,9 +41,11 @@ public final class Heap<E extends Comparable<E>> {
     @SuppressWarnings({"unchecked", "ConstantConditions"})
     public Heap(final Comparator<E> cmp, final boolean isMax,
                 final int initCapacity) {
-        queue = (E[]) new Object[initCapacity];
+        queue = (E[]) new Comparable[capacity = initCapacity];
         this.isMax = isMax;
-        this.cmp = isMax ? cmp.reversed() : cmp;
+        this.cmp = this.isMax ? cmp : cmp.reversed();
+
+        size = 0;
     }
 
     public Heap(final Comparator<E> cmp) {
@@ -52,6 +54,10 @@ public final class Heap<E extends Comparable<E>> {
 
     public Heap(final boolean isMax, final int initCapacity) {
         this(Comparator.naturalOrder(), isMax, initCapacity);
+    }
+
+    public Heap(final Comparator<E> cmp, final boolean isMax) {
+        this(cmp, isMax, INIT_CAPACITY);
     }
 
     public Heap() {
@@ -79,14 +85,23 @@ public final class Heap<E extends Comparable<E>> {
     }
 
     /**
+     * Retorna el número de elementos en la colección.
+     *
+     * @return el número de elementos en la colección
+     */
+    public int size() {
+        return size;
+    }
+
+    /**
      * Verifica si el elemento dado a partir del índice es una hoja.
      *
      * @param idx Índice a verificar
      * @return {@code true} si el elemento es una hoja,
      * {@code false} caso contrario
      */
-    public boolean isLeaf(final int idx) {
-        return idx <= (size >> 1) - 1;
+    private boolean isLeaf(final int idx) {
+        return idx > (size >> 1) - 1;
     }
 
     /**
@@ -151,7 +166,7 @@ public final class Heap<E extends Comparable<E>> {
      */
     private void fixDownward(final int idx) {
         // no hay nada que arreglar si es hoja
-        if (!checkRange(idx) || isLeaf(idx)) { return; }
+        if (isLeaf(idx)) { return; }
 
         int maxIdx = idx;
         final int leftIdx = getLeftIdx(idx);
@@ -211,7 +226,7 @@ public final class Heap<E extends Comparable<E>> {
     @SuppressWarnings({"unchecked", "ConstantConditions"})
     private void grow() {
         final int newCap = size + (size >> 1);
-        System.arraycopy(queue, 0, queue = (E[]) new Object[newCap], 0, size);
+        System.arraycopy(queue, 0, queue = (E[]) new Comparable[newCap], 0, size);
 
         capacity = newCap;
     }
