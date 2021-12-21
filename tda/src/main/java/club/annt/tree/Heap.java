@@ -1,5 +1,6 @@
 package club.annt.tree;
 
+import java.util.Arrays;
 import java.util.Comparator;
 
 public final class Heap<E extends Comparable<E>> {
@@ -89,6 +90,61 @@ public final class Heap<E extends Comparable<E>> {
     }
 
     /**
+     * Inserta el elemento pasado en el {@link Heap}.
+     *
+     * @param e elemento a insertar al final del arreglo
+     * @return el mismo {@link Heap} (para concatenar operaciones)
+     */
+    public Heap<E> offer(final E e) {
+        if (e == null) { return null; }
+
+        // aumentar capacidad si es necesario
+        if (isFull()) { grow(); }
+
+        queue[size++] = e;
+        fixUpward();
+
+        return this;
+    }
+
+    /**
+     * Retorna el mayor (o menor) elemento del {@link Heap}.
+     *
+     * @return el mayor (o menor) elemento del {@link Heap}.
+     */
+    public E peek() {
+        if (isEmpty()) { return null; }
+
+        return queue[0];
+    }
+
+    /**
+     * Remueve todos los elementos del arreglo.
+     */
+    public void clear() {
+        if (isEmpty()) { return; }
+
+        Arrays.fill(queue, null);
+
+        size = 0;
+    }
+
+    /**
+     * Remueve y retorna el mayor (o menor) elemento del {@link Heap}.
+     *
+     * @return elemento eliminado
+     */
+    public E poll() {
+        if (isEmpty()) { return null; }
+
+        final E oldVal = queue[0];
+        swap(0, --size);
+        fixDownward(0);
+
+        return oldVal;
+    }
+
+    /**
      * Arregla el ordenamiento del Heap hacia abajo.
      *
      * @param idx índice del root a arreglar
@@ -122,11 +178,9 @@ public final class Heap<E extends Comparable<E>> {
 
     /**
      * Arregla el ordenamiento del Heap hacia arrib.
-     *
-     * @param idx índice del root a arreglar
      */
-    private void fixUpward(final int idx) {
-        for (int i = (size >> 1) - 1; i >= 0 ; --i) {
+    private void fixUpward() {
+        for (int i = (size >> 1) - 1; i >= 0; --i) {
             fixDownward(i);
         }
     }
@@ -137,10 +191,6 @@ public final class Heap<E extends Comparable<E>> {
 
     private int getRightIdx(final int idx) {
         return (idx << 1) + 2;
-    }
-
-    private int getParentIdx(final int idx) {
-        return (idx - 1) >> 1;
     }
 
     /**
@@ -159,7 +209,7 @@ public final class Heap<E extends Comparable<E>> {
      * Aumenta la capacidad del arreglo, multiplica su capacidad 1.5 veces.
      */
     @SuppressWarnings({"unchecked", "ConstantConditions"})
-    private void resize() {
+    private void grow() {
         final int newCap = size + (size >> 1);
         System.arraycopy(queue, 0, queue = (E[]) new Object[newCap], 0, size);
 
