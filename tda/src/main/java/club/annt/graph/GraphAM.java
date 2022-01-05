@@ -2,6 +2,7 @@ package club.annt.graph;
 
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Objects;
 import java.util.stream.IntStream;
 
 public final class GraphAM<V extends Comparable<V>> {
@@ -93,15 +94,15 @@ public final class GraphAM<V extends Comparable<V>> {
      */
     private boolean contains(final V data) {
         return data != null && Arrays.stream(vertices)
+                                     .filter(Objects::nonNull)
                                      .anyMatch(v -> cmp.compare(v, data) == 0);
-
     }
 
     /**
      * Retorna el índice del vertice pasado por parámetro.
      *
      * @param vert vértice al cual se consulta el índice
-     * @return índice del vérticce consultado
+     * @return índice del vértice consultado
      */
     private int indexOf(final V vert) {
         return IntStream.range(0, size)
@@ -144,11 +145,18 @@ public final class GraphAM<V extends Comparable<V>> {
     /**
      * Desplaza los nodos de la colección hacia la izquierda.
      *
-     * @param idx índice a partir del cual se iniciará el desplazamiento
+     * @param idx índice del elemento del arreglo desde donde empezar a mover
+     * @param arr arreglo a modificar
+     * @param <T> tipo de dato del arreglo
      */
     private <T> void shiftLeft(final T[] arr, final int idx) {
         System.arraycopy(arr, idx + 1, arr, idx, size - idx);
         arr[size - 1] = null;
+    }
+
+    private void shiftLeft(final int[] arr, final int idx) {
+        System.arraycopy(arr, idx + 1, arr, idx, size - idx);
+        arr[size - 1] = DEFAULT_INIT_VAL;
     }
 
     /**
@@ -235,7 +243,52 @@ public final class GraphAM<V extends Comparable<V>> {
 
         final V oldVal = vertices[vertIdx];
         shiftLeft(vertices, vertIdx);
+        shiftLeft(adjMatrix, vertIdx);
+
+        --size;
+        for (int i = 0; i < size; ++i) {
+            shiftLeft(adjMatrix[i], vertIdx);
+        }
 
         return oldVal;
+    }
+
+    /**
+     * Retorna el número de conexiones de entrada que tiene un vértice.
+     *
+     * @param vert vértice a analizar
+     * @return número de de conexiones de entrada del vértice
+     */
+    public int inDegree(final V vert) {
+        final int vertIdx = indexOf(vert);
+        if (vertIdx == -1) { return -1; }
+
+        return (int) IntStream.range(0, size)
+                              .filter(i -> adjMatrix[i][vertIdx] != DEFAULT_INIT_VAL)
+                              .count();
+    }
+
+    /**
+     * Retorna el número de conexiones de salida que tiene un vértice.
+     *
+     * @param vert vértice a analizar
+     * @return número de de conexiones de salida del vértice
+     */
+    public int outDegree(final V vert) {
+        final int vertIdx = indexOf(vert);
+        if (vertIdx == -1) { return -1; }
+
+        return (int) Arrays.stream(adjMatrix[vertIdx])
+                           .filter(i -> i != DEFAULT_INIT_VAL)
+                           .count();
+    }
+
+    /**
+     * Imprime los vértices del grafo.
+     */
+    public void print() {
+        Arrays.stream(vertices)
+              .filter(Objects::nonNull)
+              .forEach(System.out::println);
     }
 }
