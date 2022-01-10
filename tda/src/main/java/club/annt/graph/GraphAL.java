@@ -1,6 +1,7 @@
 package club.annt.graph;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("ClassHasNoToStringMethod")
 public final class GraphAL<V extends Comparable<V>, E> {
@@ -107,6 +108,13 @@ public final class GraphAL<V extends Comparable<V>, E> {
         return true;
     }
 
+    public List<List<V>> getPaths() {
+        return vertices.stream()
+                       .filter(v -> !v.isVisited())
+                       .map(v -> bfs(v.getContent()))
+                       .collect(Collectors.toCollection(LinkedList::new));
+    }
+
     /**
      * "Breadth First Search" (BFS) -> "Búsqueda en anchura".
      *
@@ -133,18 +141,16 @@ public final class GraphAL<V extends Comparable<V>, E> {
             }
         }
 
-        /* re-establecer vértices como no visitados */
-        vertices.forEach(v -> v.setVisited(false));
-
         return listVertexContent;
     }
 
     public void printBFS(final V vert) {
         bfs(vert).forEach(System.out::println);
+        resetVisited();
     }
 
     public void printBFS() {
-        bfs(vertices.get(0).getContent()).forEach(System.out::println);
+        printBFS(vertices.get(0).getContent());
     }
 
     /**
@@ -173,18 +179,23 @@ public final class GraphAL<V extends Comparable<V>, E> {
             }
         }
 
-        /* re-establecer vértices como no visitados */
-        vertices.forEach(v -> v.setVisited(false));
-
         return listVertexContent;
     }
 
     public void printDFS(final V vert) {
         dfs(vert).forEach(System.out::println);
+        resetVisited();
     }
 
     public void printDFS() {
-        dfs(vertices.get(0).getContent()).forEach(System.out::println);
+        printDFS(vertices.get(0).getContent());
+    }
+
+    /**
+     * Re-establece vértices como no visitados.
+     */
+    private void resetVisited() {
+        vertices.forEach(v -> v.setVisited(false));
     }
 
     /* ************************************************************************
