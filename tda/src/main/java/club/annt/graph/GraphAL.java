@@ -1,60 +1,190 @@
 package club.annt.graph;
 
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @SuppressWarnings("ClassHasNoToStringMethod")
 public final class GraphAL<V extends Comparable<V>, E> {
-    private List<Vertex<V, E>> vertices;
-    private boolean            isDirected;
-    private Comparator<V>      cmp;
+    private final List<Vertex<V, E>> vertices;
+    private final boolean            isDirected;
+    private final Comparator<V>      cmp;
 
     /* constructores */
-    private GraphAL() { }
-
-    public GraphAL(final Comparator<V> cmp, final boolean isDirected) {
-        vertices = new LinkedList<>();
+    GraphAL(final Comparator<V> cmp, final boolean isDirected) {
         this.isDirected = isDirected;
         this.cmp = cmp;
+
+        vertices = new LinkedList<>();
     }
 
-    public GraphAL(final Comparator<V> cmp) {
+    GraphAL(final Comparator<V> cmp) {
         this(cmp, false);
     }
 
+    GraphAL(final boolean isDirected) {
+        this(Comparator.naturalOrder(), isDirected);
+    }
+
+    GraphAL() {
+        this(Comparator.naturalOrder(), false);
+    }
+
+    /**
+     * Retorna el vértice que contiene la data del vértice pasado por parámetro.
+     *
+     * @param vert data del vértice pasado
+     * @return el vértice de la data pasada
+     */
     private Vertex<V, E> getVertexByContent(final V vert) {
         return vertices.stream()
-                       .filter(v -> cmp.compare(v.getData(), vert) == 0)
+                       .filter(Objects::nonNull) // TODO :: check
+                       .filter(v -> cmp.compare(v.getContent(), vert) == 0)
                        .findFirst()
                        .orElse(null);
     }
 
+    /**
+     * Agrega un nuevo vértice al grafo.
+     *
+     * @param vert vértice a agregar
+     * @return éste objeto
+     */
     public GraphAL<V, E> add(final V vert) {
         if (vert == null || getVertexByContent(vert) != null) { return this; }
 
-        vertices.add(new Vertex<V, E>(vert));
+        vertices.add(new Vertex<>(vert));
 
         return this;
     }
 
+    /**
+     * Conecta dos vértices en el grafo.
+     *
+     * @param vert1  primer vértice a conectar
+     * @param vert2  segundo vértice a conectar
+     * @param data   valor del vértice
+     * @param weight factor de peso del vértice
+     * @return éste objeto
+     */
     public GraphAL<V, E> connect(final V vert1,
                                  final V vert2,
                                  final E data,
                                  final int weight) {
         if (vert1 == null || vert2 == null) { return this; }
 
-        final Vertex<V, E> newVert1 = getVertexByContent(vert1);
-        final Vertex<V, E> newVert2 = getVertexByContent(vert2);
-        if (newVert1 == null || newVert2 == null) { return this; }
+        final Vertex<V, E> sourceVert = getVertexByContent(vert1);
+        final Vertex<V, E> targetVert = getVertexByContent(vert2);
+        if (sourceVert == null || targetVert == null) { return this; }
 
-        newVert1.getEdges().add(new Edge<>(newVert1, newVert2, data, weight));
+        sourceVert.getEdges().add(new Edge<>(sourceVert, targetVert, data, weight));
 
         if (!isDirected) {
-            newVert2.getEdges().add(new Edge<>(newVert2, newVert1, data, weight));
+            targetVert.getEdges().add(new Edge<>(targetVert, sourceVert, data, weight));
         }
 
         return this;
+    }
+
+    public GraphAL<V, E> connect(final V vert1,
+                                 final V vert2) {
+        return connect(vert1, vert2, null, 1);
+    }
+
+    public boolean disconnect(final V source, final V target) {
+        if (source == null || target == null) { return false; }
+
+        final Vertex<V, E> sourceVertex = getVertexByContent(source);
+        final Vertex<V, E> targetVertex = getVertexByContent(target);
+        if (sourceVertex == null || targetVertex == null) { return false; }
+
+        sourceVertex.getEdges()
+                    .removeIf(e -> cmp.compare(e.getTarget().getContent(), targetVertex.getContent()) == 0);
+
+        if (!isDirected) {
+            targetVertex.getEdges()
+                        .removeIf(e -> cmp.compare(e.getTarget().getContent(), sourceVertex.getContent()) == 0);
+        }
+
+        return true;
+    }
+
+    /**
+     * "Breadth First Search" (BFS) -> "Búsqueda en anchura".
+     *
+     * @param vert vértice desde donde empezar la búsqueda
+     * @return lista de vértices encontradados
+     */
+    private List<V> bfs(final V vert) {
+        if (vert == null || getVertexByContent(vert) == null) { return null; }
+
+        final List<V> listVertexContent = new LinkedList<>();
+        final Queue<Vertex<V, E>> vertQueue = new ArrayDeque<>();
+        vertQueue.offer(getVertexByContent(vert));
+
+        while (true) {
+            final boolean isQueueEmpty = vertQueue.isEmpty();
+            if (isQueueEmpty) { break; }
+
+            final Vertex<V, E> vertex = vertQueue.poll();
+            if (!vertex.isVisited()) {
+                vertex.setVisited(true);
+                listVertexContent.add(vertex.getContent());
+                vertex.getEdges()
+                      .forEach(e -> vertQueue.offer(e.getTarget()));
+            }
+        }
+
+        /* re-establecer vértices como no visitados */
+        vertices.forEach(v -> v.setVisited(false));
+
+        return listVertexContent;
+    }
+
+    public void printBFS(final V vert) {
+        bfs(vert).forEach(System.out::println);
+    }
+
+    public void printBFS() {
+        bfs(vertices.get(0).getContent()).forEach(System.out::println);
+    }
+
+    /**
+     * "Depth First Search" (DFS) -> "Búsqueda en profundidad".
+     *
+     * @param vert vértice desde donde empezar la búsqueda
+     * @return lista de vértices encontradados
+     */
+    private List<V> dfs(final V vert) {
+        if (vert == null || getVertexByContent(vert) == null) { return null; }
+
+        final List<V> listVertexContent = new LinkedList<>();
+        final Deque<Vertex<V, E>> stack = new ArrayDeque<>();
+        stack.push(getVertexByContent(vert));
+
+        while (true) {
+            final boolean isStackEmpty = stack.isEmpty();
+            if (isStackEmpty) { break; }
+
+            final Vertex<V, E> vertex = stack.pop();
+            if (!vertex.isVisited()) {
+                vertex.setVisited(true);
+                listVertexContent.add(vertex.getContent());
+                vertex.getEdges()
+                      .forEach(e -> stack.push(e.getTarget()));
+            }
+        }
+
+        /* re-establecer vértices como no visitados */
+        vertices.forEach(v -> v.setVisited(false));
+
+        return listVertexContent;
+    }
+
+    public void printDFS(final V vert) {
+        dfs(vert).forEach(System.out::println);
+    }
+
+    public void printDFS() {
+        dfs(vertices.get(0).getContent()).forEach(System.out::println);
     }
 
     /* ************************************************************************
@@ -70,19 +200,29 @@ public final class GraphAL<V extends Comparable<V>, E> {
      * @param <E>
      */
     private static final class Vertex<V, E> {
+        private V                content;
+        private boolean          isVisited;
         private List<Edge<V, E>> edges;
-        private V                data;
 
         /* constructores */
         Vertex() { }
 
         Vertex(final V data) {
-            this.data = data;
+            content = data;
+            isVisited = false;
             edges = new LinkedList<>();
         }
 
-        public V getData() {
-            return data;
+        public V getContent() {
+            return content;
+        }
+
+        public boolean isVisited() {
+            return isVisited;
+        }
+
+        public void setVisited(final boolean visited) {
+            isVisited = visited;
         }
 
         public List<Edge<V, E>> getEdges() {
@@ -100,13 +240,16 @@ public final class GraphAL<V extends Comparable<V>, E> {
      * @param <E>
      */
     private static final class Edge<V, E> {
-        private Vertex<V, E> source;
-        private Vertex<V, E> target;
-        private E            data;
-        private int          weight;
+        private final Vertex<V, E> source;
+        private final Vertex<V, E> target;
+        private final E            data;
+        private final int          weight;
 
         /* constructores */
-        Edge() { }
+        Edge(final Vertex<V, E> source,
+             final Vertex<V, E> target) {
+            this(source, target, null, 1);
+        }
 
         Edge(final Vertex<V, E> source,
              final Vertex<V, E> target,
@@ -116,6 +259,10 @@ public final class GraphAL<V extends Comparable<V>, E> {
             this.target = target;
             this.data = data;
             this.weight = weight;
+        }
+
+        public Vertex<V, E> getTarget() {
+            return target;
         }
     }
 }
