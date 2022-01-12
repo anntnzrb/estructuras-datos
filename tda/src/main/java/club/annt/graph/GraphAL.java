@@ -60,20 +60,20 @@ public final class GraphAL<V extends Comparable<V>, E> {
     /**
      * Conecta dos vértices en el grafo.
      *
-     * @param vert1  primer vértice a conectar
-     * @param vert2  segundo vértice a conectar
+     * @param source primer vértice a conectar
+     * @param target segundo vértice a conectar
      * @param data   valor del vértice
      * @param weight factor de peso del vértice
      * @return éste objeto
      */
-    public GraphAL<V, E> connect(final V vert1,
-                                 final V vert2,
+    public GraphAL<V, E> connect(final V source,
+                                 final V target,
                                  final E data,
                                  final int weight) {
-        if (vert1 == null || vert2 == null) { return this; }
+        if (source == null || target == null) { return this; }
 
-        final Vertex<V, E> sourceVert = getVertexByContent(vert1);
-        final Vertex<V, E> targetVert = getVertexByContent(vert2);
+        final Vertex<V, E> sourceVert = getVertexByContent(source);
+        final Vertex<V, E> targetVert = getVertexByContent(target);
         if (sourceVert == null || targetVert == null) { return this; }
 
         sourceVert.getEdges().add(new Edge<>(sourceVert, targetVert, data, weight));
@@ -85,17 +85,27 @@ public final class GraphAL<V extends Comparable<V>, E> {
         return this;
     }
 
+    /**
+     * Wrapper de {@link #connect(Comparable, Comparable, Object, int)}.
+     */
     public GraphAL<V, E> connect(final V vert1,
                                  final V vert2) {
         return connect(vert1, vert2, null, 1);
     }
 
-    public boolean disconnect(final V source, final V target) {
-        if (source == null || target == null) { return false; }
+    /**
+     * Desconecta dos vértices del grafo.
+     *
+     * @param source primer vértice a descconectar
+     * @param target segundo vértice a desconectar
+     * @return éste objeto
+     */
+    public GraphAL<V, E> disconnect(final V source, final V target) {
+        if (source == null || target == null) { return this; }
 
         final Vertex<V, E> sourceVertex = getVertexByContent(source);
         final Vertex<V, E> targetVertex = getVertexByContent(target);
-        if (sourceVertex == null || targetVertex == null) { return false; }
+        if (sourceVertex == null || targetVertex == null) { return this; }
 
         sourceVertex.getEdges()
                     .removeIf(e -> cmp.compare(e.getTarget().getContent(), targetVertex.getContent()) == 0);
@@ -105,14 +115,47 @@ public final class GraphAL<V extends Comparable<V>, E> {
                         .removeIf(e -> cmp.compare(e.getTarget().getContent(), sourceVertex.getContent()) == 0);
         }
 
-        return true;
+        return this;
     }
 
+    /**
+     * Retorna una lista con las componentes conexas del grafo.
+     *
+     * @return lista de caminos del grafo
+     */
     public List<List<V>> getPaths() {
         return vertices.stream()
                        .filter(v -> !v.isVisited())
                        .map(v -> bfs(v.getContent()))
                        .collect(Collectors.toCollection(LinkedList::new));
+    }
+
+    public boolean isRelated() {
+        return getPaths().size() == 1;
+    }
+
+    /**
+     * Remueve un vértice del grafo.
+     *
+     * @param vert vértice a eliminar
+     * @return éste objeto
+     */
+    public GraphAL<V, E> remove(final V vert) {
+        if (vert == null) { return this; }
+
+        final Vertex<V, E> vertex = getVertexByContent(vert);
+        if (vertex == null) { return this; }
+
+        /*
+         * recorrer la lista de adyacencia y remover las conexiones que tengan
+         * como target el vértice que se va a remover.
+         */
+        vertices.forEach(v -> v.getEdges().removeIf(e -> cmp.compare(vert, e.getTarget().getContent()) == 0));
+
+        /* remover vértice de la lista de vértices */
+        vertices.remove(vertex);
+
+        return this;
     }
 
     /**
@@ -144,11 +187,19 @@ public final class GraphAL<V extends Comparable<V>, E> {
         return listVertexContent;
     }
 
+    /**
+     * Imprime en pantalla el grafo usando el algoritmo "BFS"
+     *
+     * @param vert vértice desde donde imprimir
+     */
     public void printBFS(final V vert) {
         bfs(vert).forEach(System.out::println);
         resetVisited();
     }
 
+    /**
+     * Wrapper de {@link #printBFS(Comparable)}.
+     */
     public void printBFS() {
         printBFS(vertices.get(0).getContent());
     }
@@ -182,11 +233,19 @@ public final class GraphAL<V extends Comparable<V>, E> {
         return listVertexContent;
     }
 
+    /**
+     * Imprime en pantalla el grafo usando el algoritmo "DFS".
+     *
+     * @param vert vértice desde donde imprimir
+     */
     public void printDFS(final V vert) {
         dfs(vert).forEach(System.out::println);
         resetVisited();
     }
 
+    /**
+     * Wrapper de {@link #printDFS(Comparable)}.
+     */
     public void printDFS() {
         printDFS(vertices.get(0).getContent());
     }

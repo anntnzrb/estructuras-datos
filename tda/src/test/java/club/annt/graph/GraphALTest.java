@@ -11,8 +11,8 @@ final class GraphALTest {
     void setUp() {
         graph1 = new GraphAL<>(true);
         graph1.add("D")
-              .add("B")
               .add("C")
+              .add("B")
               .add("A")
               .add("H")
               .add("T")
@@ -32,6 +32,12 @@ final class GraphALTest {
     void disconnect() {
         graph1.disconnect("C", "R");
         graph1.printBFS();
+    }
+
+    @Test
+    void remove() {
+        graph1.remove("D");
+        graph1.printDFS();
     }
 
     @Test
